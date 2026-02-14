@@ -1,0 +1,71 @@
+package org.example.tigerboard.data;
+
+import org.springframework.stereotype.Component;
+
+@Component
+public class user {
+    private int iD;
+    private String firstName;
+    private String lastName;
+    private String passwordHash;
+    public enum role {
+        Student,
+        Driver,
+        Supervisor,
+        Admin
+    }
+    private role userRole;
+
+    public user() {}
+
+    public int getiD() {
+        return iD;
+    }
+
+    public void setiD(int iD) {
+        this.iD = iD;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public String getPasswordHash() {
+        return passwordHash;
+    }
+
+    public void setPasswordHash(String passwordHash) {
+        this.passwordHash = passwordHash;
+    }
+
+    public role getUserRole() {
+        return userRole;
+    }
+
+    public void setUserRole(role userRole) {
+        this.userRole = userRole;
+    }
+
+    @Override
+    public String toString() {
+        return "user{" +
+                "iD=" + iD +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", passwordHash='" + passwordHash + '\'' +
+                ", userRole=" + userRole +
+                '}';
+    }
+}
