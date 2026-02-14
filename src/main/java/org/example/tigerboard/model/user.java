@@ -1,4 +1,4 @@
-package org.example.tigerboard.data;
+package org.example.tigerboard.model;
 
 import org.springframework.stereotype.Component;
 
