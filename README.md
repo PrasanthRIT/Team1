@@ -1,10 +1,12 @@
 Group Members
+
 Prasanth Sathiyanarayanan - 749002698
 Mohammed Baahir Yusuf -  744005062
 Manognya Kumar Dandala - 412002881
 Hussain Aliasagar Dahodwala - 418008681
 
 Project Description
+
 TigerBoard is a Commuter Management System designed to optimize RIT's commuting experience
 for both students and the drivers in RIT Dubai. The web application streamlines communication
 between commuter students and transportation services to a dedicated portal where both the students
