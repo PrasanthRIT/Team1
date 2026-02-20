@@ -6,7 +6,7 @@ import java.util.Arrays;
 
 @Component
 public class Bus {
-    private Integer id;
+    private Integer id;  // Unique ID for the bus
     private String busNumber;
     private Integer capacity;
     private String route;

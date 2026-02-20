@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 public class Student {
     //Attributes
     private String name;
-    private int studID; // References Student User
+    private int userId; // References Student User from User class
     private String commutePlan; // "MORNING_ONLY", "EVENING_ONLY", "ROUND_TRIP"
     private String location;
 
@@ -16,12 +16,12 @@ public class Student {
         return name;
     }
 
-    public int getStudID() {
-        return studID;
+    public int getUserId() {
+        return userId;
     }
 
-    public void setStudID(int studID) {
-        this.studID = studID;
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 
     public String getCommutePlan() {
@@ -48,7 +48,7 @@ public class Student {
     public String toString() {
         return "Student{" +
                 "name='" + name + '\'' +
-                ", studID=" + studID +
+                ", userId=" + userId +
                 ", commutePlan='" + commutePlan + '\'' +
                 ", location='" + location + '\'' +
                 '}';

@@ -4,7 +4,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class User {
-    private int iD;
+    private int id;
     private String firstName;
     private String lastName;
     private String passwordHash;
@@ -16,14 +16,12 @@ public class User {
     }
     private role userRole;
 
-    public User() {}
-
-    public int getiD() {
-        return iD;
+    public int getId() {
+        return id;
     }
 
-    public void setiD(int iD) {
-        this.iD = iD;
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getFirstName() {
@@ -61,7 +59,7 @@ public class User {
     @Override
     public String toString() {
         return "user{" +
-                "iD=" + iD +
+                "id=" + id +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", passwordHash='" + passwordHash + '\'' +

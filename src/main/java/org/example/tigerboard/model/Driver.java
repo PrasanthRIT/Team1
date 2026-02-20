@@ -4,8 +4,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class Driver {
-    private Integer id;
-    private String userID; //references User
+    private int userId; //references Driver User from User class
     private String name;
     private String licenseNumber;
     private String[] busAssigned; //drivers code for what bus the driver is driving
@@ -13,14 +12,6 @@ public class Driver {
 
 
     //getters and setters
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
     public String getName() {
         return name;
     }
@@ -51,29 +42,24 @@ public class Driver {
         this.phoneNumber = phoneNumber;
     }
 
-    public String getUserID() {
-            return userID;
+    public int getUserId() {
+            return userId;
     }
 
-    public void setUserID(String userID) {
-            this.userID = userID;
+    public void setUserId(int userId) {
+            this.userId = userId;
     }
 
      @Override
     public String toString() {
          return "Driver{" +
-                 "id=" + id +
-                 ", userID='" + userID + "'" +
+                 ", userID='" + userId + "'" +
                  ", name='" + name + "'" +
                  ", licenseNumber='" + licenseNumber + "'" +
                  ", busAssigned=[" + String.join(", ", busAssigned) + "]" +
                  ", phoneNumber='" + phoneNumber + "'" +
                  '}';
     }
-
-
-
-
 }
 
 
