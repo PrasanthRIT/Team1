@@ -2,13 +2,15 @@ package org.example.tigerboard.model;
 
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+
 @Component
 public class Driver {
 
     private int userId; //references Driver User from User class
     private String name;
     private String licenseNumber;
-    private String[] busAssigned; //drivers code for what bus the driver is driving
+    private ArrayList<Bus> busesAssigned; //drivers code for what bus the driver is driving
     private String phoneNumber;
 
 
@@ -28,12 +30,12 @@ public class Driver {
         this.licenseNumber = licenseNumber;
     }
 
-    public String[] getBusAssigned() {
-        return busAssigned;
+    public ArrayList<Bus> getBusesAssigned() {
+        return busesAssigned;
     }
 
-    public void setBusAssigned(String[] busAssigned) {
-        this.busAssigned = busAssigned;
+    public void setBusAssigned(ArrayList<Bus> busesAssigned) {
+        this.busesAssigned = busesAssigned;
     }
 
     public String getPhoneNumber() {
@@ -58,7 +60,7 @@ public class Driver {
                  ", userID='" + userId + "'" +
                  ", name='" + name + "'" +
                  ", licenseNumber='" + licenseNumber + "'" +
-                 ", busAssigned=[" + String.join(", ", busAssigned) + "]" +
+                 ", busAssigned=" + busesAssigned +
                  ", phoneNumber='" + phoneNumber + "'" +
                  '}';
     }

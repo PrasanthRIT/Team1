@@ -2,7 +2,7 @@ package org.example.tigerboard.model;
 
 import org.springframework.stereotype.Component;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 
 @Component
 public class Bus {
@@ -12,8 +12,8 @@ public class Bus {
     private Integer capacity;
     private String route;
     private Boolean isActive;
-    private Driver[] drivers;
-    private Student[] students;
+    private ArrayList<Driver> drivers;
+    private ArrayList<Student> students;
 
     //getters and setters
     public Integer getId() {
@@ -56,19 +56,19 @@ public class Bus {
         this.isActive = isActive;
     }
 
-    public Driver[] getDriver() {
+    public ArrayList<Driver> getDriver() {
         return drivers;
     }
 
-    public void setDriver(Driver[] driver) {
+    public void setDriver(ArrayList<Driver> driver) {
         this.drivers = driver;
     }
 
-    public Student[] getStudents() {
+    public ArrayList<Student> getStudents() {
         return students;
     }
 
-    public void setStudents(Student[] students) {
+    public void setStudents(ArrayList<Student> students) {
         this.students = students;
     }
 
@@ -80,8 +80,8 @@ public class Bus {
                 ", capacity=" + capacity +
                 ", route='" + route + "'" +
                 ", isActive=" + isActive +
-                ", drivers=" + Arrays.toString(drivers) +
-                ", students=" + Arrays.toString(students) +
+                ", drivers=" + drivers +
+                ", students=" + students +
                 '}';
     }
 }
