@@ -56,11 +56,11 @@ public class Bus {
         this.isActive = isActive;
     }
 
-    public ArrayList<Driver> getDriver() {
+    public ArrayList<Driver> getDrivers() {
         return drivers;
     }
 
-    public void setDriver(ArrayList<Driver> driver) {
+    public void setDrivers(ArrayList<Driver> driver) {
         this.drivers = driver;
     }
 

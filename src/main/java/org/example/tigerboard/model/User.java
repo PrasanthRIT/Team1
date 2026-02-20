@@ -9,13 +9,13 @@ public class User {
     private String firstName;
     private String lastName;
     private String passwordHash;
-    public enum role {
+    public enum Role {
         Student,
         Driver,
         Supervisor,
         Admin
     }
-    private role userRole;
+    private Role userRole;
 
     public int getId() {
         return id;
@@ -49,17 +49,17 @@ public class User {
         this.passwordHash = passwordHash;
     }
 
-    public role getUserRole() {
+    public Role getUserRole() {
         return userRole;
     }
 
-    public void setUserRole(role userRole) {
+    public void setUserRole(Role userRole) {
         this.userRole = userRole;
     }
 
     @Override
     public String toString() {
-        return "user{" +
+        return "User{" +
                 "id=" + id +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +

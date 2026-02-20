@@ -34,7 +34,7 @@ public class Driver {
         return busesAssigned;
     }
 
-    public void setBusAssigned(ArrayList<Bus> busesAssigned) {
+    public void setBusesAssigned(ArrayList<Bus> busesAssigned) {
         this.busesAssigned = busesAssigned;
     }
 
@@ -60,7 +60,7 @@ public class Driver {
                  ", userID='" + userId + "'" +
                  ", name='" + name + "'" +
                  ", licenseNumber='" + licenseNumber + "'" +
-                 ", busAssigned=" + busesAssigned +
+                 ", busesAssigned=" + busesAssigned +
                  ", phoneNumber='" + phoneNumber + "'" +
                  '}';
     }
