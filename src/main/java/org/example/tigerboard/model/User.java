@@ -3,7 +3,7 @@ package org.example.tigerboard.model;
 import org.springframework.stereotype.Component;
 
 @Component
-public class user {
+public class User {
     private int iD;
     private String firstName;
     private String lastName;
@@ -16,7 +16,7 @@ public class user {
     }
     private role userRole;
 
-    public user() {}
+    public User() {}
 
     public int getiD() {
         return iD;
