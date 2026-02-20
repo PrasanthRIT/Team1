@@ -2,6 +2,8 @@ package org.example.tigerboard.model;
 
 import org.springframework.stereotype.Component;
 
+import java.util.Arrays;
+
 @Component
 public class Bus {
     private Integer id;
@@ -9,7 +11,7 @@ public class Bus {
     private Integer capacity;
     private String route;
     private Boolean isActive;
-    private Driver driver;
+    private Driver[] drivers;
     private Student[] students;
 
     //getters and setters
@@ -53,12 +55,12 @@ public class Bus {
         this.isActive = isActive;
     }
 
-    public Driver getDriver() {
-        return driver;
+    public Driver[] getDriver() {
+        return drivers;
     }
 
-    public void setDriver(Driver driver) {
-        this.driver = driver;
+    public void setDriver(Driver[] driver) {
+        this.drivers = driver;
     }
 
     public Student[] getStudents() {
@@ -69,5 +71,17 @@ public class Bus {
         this.students = students;
     }
 
+    @Override
+    public String toString() {
+        return "Bus{" +
+                "id=" + id +
+                ", busNumber='" + busNumber + "'" +
+                ", capacity=" + capacity +
+                ", route='" + route + "'" +
+                ", isActive=" + isActive +
+                ", drivers=" + Arrays.toString(drivers) +
+                ", students=" + Arrays.toString(students) +
+                '}';
+    }
 }
 
