@@ -4,6 +4,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class Student {
+
     //Attributes
     private String name;
     private int userId; // References Student User from User class
@@ -11,7 +12,7 @@ public class Student {
     private String location;
 
 
-//Getters and Setters
+    //getters and setters
     public String getName() {
         return name;
     }

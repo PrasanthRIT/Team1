@@ -4,6 +4,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class Driver {
+
     private int userId; //references Driver User from User class
     private String name;
     private String licenseNumber;
@@ -26,6 +27,7 @@ public class Driver {
     public void setLicenseNumber(String licenseNumber) {
         this.licenseNumber = licenseNumber;
     }
+
     public String[] getBusAssigned() {
         return busAssigned;
     }
@@ -43,14 +45,14 @@ public class Driver {
     }
 
     public int getUserId() {
-            return userId;
+        return userId;
     }
 
     public void setUserId(int userId) {
-            this.userId = userId;
+        this.userId = userId;
     }
 
-     @Override
+    @Override
     public String toString() {
          return "Driver{" +
                  ", userID='" + userId + "'" +
