@@ -2,7 +2,6 @@ package org.example.tigerboard.model;
 
 import org.springframework.stereotype.Component;
 
-@Component
 public class User {
 
     private int id;
