@@ -1,14 +1,12 @@
 package org.example.tigerboard.model;
 
-import org.springframework.stereotype.Component;
-
-@Component
 public class Student {
 
     /*
     Enums representing the valid commute plan options for students.
     Restricting commutePlan to predefined constant values only
      */
+
     public enum CommutePlan {
         MORNING_ONLY,   // Student commutes in the morning only
         EVENING_ONLY,   // Student commutes in the evening only
@@ -16,23 +14,30 @@ public class Student {
     }
 
     //Attributes
-    private String name;
-    private int userId; // References Student User from User class
+    private Integer id; // References Student User
+
+    private User user; //Linking User and Student Entities
+
     private CommutePlan commutePlan; // Restricted to CommutePlan enum values
     private String location;
 
 
     //getters and setters
-    public String getName() {
-        return name;
+
+    public Integer getId() {
+        return id;
     }
 
-    public int getUserId() {
-        return userId;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
-    public void setUserId(int userId) {
-        this.userId = userId;
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public CommutePlan getCommutePlan() {
@@ -43,10 +48,6 @@ public class Student {
         this.commutePlan = commutePlan;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public String getLocation() {
         return location;
     }
@@ -55,12 +56,13 @@ public class Student {
         this.location = location;
     }
 
+    //toString()
     @Override
     public String toString() {
         return "Student{" +
-                "name='" + name + '\'' +
-                ", userId=" + userId +
-                ", commutePlan='" + commutePlan + '\'' +
+                "id=" + id +
+                ", user=" + user +
+                ", commutePlan=" + commutePlan +
                 ", location='" + location + '\'' +
                 '}';
     }
