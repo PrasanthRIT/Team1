@@ -21,6 +21,12 @@ public class Student {
     private CommutePlan commutePlan; // Restricted to CommutePlan enum values
     private String location;
 
+    public Student(Integer id, User user, CommutePlan commutePlan, String location) {
+        this.id = id;
+        this.user = user;
+        this.commutePlan = commutePlan;
+        this.location = location;
+    }
 
     //getters and setters
 
