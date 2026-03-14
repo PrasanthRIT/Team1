@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+    <form class="ui form" method="post" action="/add-students">
+
+
+        <div class="field">
+            <label>Student ID</label>
+            <input type="text" name="id" placeholder="Student ID">
+        </div>
+
+        <div class="field">
+            <label>FName</label>
+            <input type="text" name="user.firstName" placeholder="FName">
+        </div>
+        <br>
+        <div class="field">
+            <label>LName</label>
+            <input type="text" name="user.lastName" placeholder="LName">
+        </div>
+
+        <div class="field">
+            <label>Password Hash</label>
+            <input type="text" name="user.passwordHash" placeholder="Password Hash">
+        </div>
+        <br>
+        <div class="field">
+            <label>Commute Plan</label>
+            <input type="text" name="commutePlan" placeholder="Commute Plan">
+        </div>
+
+        <br>
+
+        <div class="field">
+            <label>Location</label>
+            <input type="text" name="location" placeholder="Location">
+        </div>
+
+        <br>
+
+        <button class="ui button" type="submit">Add Record</button>
+
+    </form>
+
+</body>
+</html>

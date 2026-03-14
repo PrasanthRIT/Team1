@@ -21,9 +21,26 @@ public class TigerBoardService {
         //User Records - PlaceHolders (Note: Manognya, You could Parameterize
         //inside these objects,
         //After Adding a constructor in User Class Scope
+
+//        User u1 = new User();
+//        User u2 = new User();
+//        User u3 = new User();
+
+        //Placeholder - Delete once Modifying User Class - Replace with Parameterized constructor
         User u1 = new User();
+        u1.setFirstName("John");
+        u1.setLastName("Doe");
+        u1.setPasswordHash("abc123");
+
         User u2 = new User();
+        u2.setFirstName("John");
+        u2.setLastName("Doe");
+        u2.setPasswordHash("abc123");
+
         User u3 = new User();
+        u3.setFirstName("John");
+        u3.setLastName("Doe");
+        u3.setPasswordHash("abc123");
 
         //Student Records Initialization
         Student s1 = new Student(1,u1, Student.CommutePlan.MORNING_ONLY, "Sahara Center");
