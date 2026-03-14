@@ -21,6 +21,12 @@
         Controller Methods
          */
 
+        //Main Page
+        @GetMapping("/")
+        public String getHomePage() {
+            return "index";
+        }
+
         //Student
         @GetMapping("/students")
         public String getStudents(Model model){
