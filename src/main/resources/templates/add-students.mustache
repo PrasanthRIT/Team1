@@ -6,39 +6,54 @@
 </head>
 <body>
 
+    <h2 style="text-decoration: underline;">Add Student Records</h2>
+
     <form class="ui form" method="post" action="/add-students">
 
 
         <div class="field">
             <label>Student ID</label>
-            <input type="text" name="id" placeholder="Student ID">
+            <input type="text" name="id" placeholder="e.g. 101">
         </div>
 
-        <div class="field">
-            <label>FName</label>
-            <input type="text" name="user.firstName" placeholder="FName">
-        </div>
         <br>
+
         <div class="field">
-            <label>LName</label>
-            <input type="text" name="user.lastName" placeholder="LName">
+            <label>First Name</label>
+            <input type="text" name="user.firstName" placeholder="e.g. John">
         </div>
+
+        <br>
+
+        <div class="field">
+            <label>Last Name</label>
+            <input type="text" name="user.lastName" placeholder="e.g. Smith">
+        </div>
+
+        <br>
 
         <div class="field">
             <label>Password Hash</label>
-            <input type="text" name="user.passwordHash" placeholder="Password Hash">
+            <input type="text" name="user.passwordHash" placeholder="Enter Password Hash">
         </div>
         <br>
+
         <div class="field">
             <label>Commute Plan</label>
-            <input type="text" name="commutePlan" placeholder="Commute Plan">
+
+            <select name="commutePlan">
+                <option value="" disabled selected>Select a plan</option>
+                <option value="MORNING_ONLY">Morning Only</option>
+                <option value="EVENING_ONLY">Evening Only</option>
+                <option value="ROUND_TRIP">Round Trip</option>
+            </select>
         </div>
 
         <br>
 
         <div class="field">
             <label>Location</label>
-            <input type="text" name="location" placeholder="Location">
+            <input type="text" name="location" placeholder="e.g. Qasdsiya">
         </div>
 
         <br>
