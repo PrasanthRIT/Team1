@@ -1,17 +1,17 @@
 package org.example.tigerboard.model;
 
-import org.springframework.stereotype.Component;
+import org.apache.catalina.User;
 
-@Component
 public class Driver {
     private Integer id;
-    private String name;
+    private User user;
     private String licenseNumber;
-    private String[] busAssigned; //drivers code for what bus the driver is driving
+    private String[] busAssigned;
     private String phoneNumber;
 
+    public Driver() {
+    }
 
-    //getters and setters
     public Integer getId() {
         return id;
     }
@@ -20,13 +20,14 @@ public class Driver {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public User getUser() {
+        return user;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setUser(User user) {
+        this.user = user;
     }
+
     public String getLicenseNumber() {
         return licenseNumber;
     }
@@ -34,6 +35,7 @@ public class Driver {
     public void setLicenseNumber(String licenseNumber) {
         this.licenseNumber = licenseNumber;
     }
+
     public String[] getBusAssigned() {
         return busAssigned;
     }
@@ -49,13 +51,4 @@ public class Driver {
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
-
-
-
-
-
 }
-
-
-
-
