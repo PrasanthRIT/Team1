@@ -1,19 +1,24 @@
 package org.example.tigerboard.service;
 
 import org.example.tigerboard.TigerBoardApplication;
+import org.example.tigerboard.model.Bus;
 import org.example.tigerboard.model.Driver;
 import org.example.tigerboard.model.Student;
 import org.example.tigerboard.model.User;
 import org.springframework.stereotype.Service;
+import java.util.Random;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class TigerBoardService {
+
     List<User> users = new ArrayList<User>();
     List<Student> students = new ArrayList<Student>();
     List<Driver> drivers = new ArrayList<>();
+    List<Bus> buses = new ArrayList<>();
+
     public TigerBoardService(){
             seedData();
     }
@@ -52,7 +57,29 @@ public class TigerBoardService {
         students.add(s2);
         students.add(s3);
 
-        //Driver and Bus Records
+        //Driver Records
+
+
+
+
+
+        // Bus Records
+        Bus bus1 = new Bus();
+        bus1.setId(1);
+        bus1.setBusNumber("26");
+        bus1.setCapacity(30);
+        bus1.setRoute("Sharjah to Dubai");
+        bus1.setIsActive(true);
+
+        Bus bus2 = new Bus();
+        bus2.setId(2);
+        bus2.setBusNumber("25");
+        bus2.setCapacity(30);
+        bus2.setRoute("Sharjah to Dubai");
+        bus2.setIsActive(true);
+
+        buses.add(bus1);
+        buses.add(bus2);
 
     }
     //Student Methods to Fetch and Save Records
@@ -73,6 +100,19 @@ public class TigerBoardService {
 
     public void saveDrivers(Driver driver) {
         this.drivers.add(driver);
+    }
+
+    //Fetch all Buses
+    public List<Bus> getAllBuses() {
+        return this.buses;
+    }
+
+    //Save Bus with Randomly Generated ID between 1 and 10000
+    public void saveBus(Bus bus) {
+        Random random = new Random();
+        int Id = random.nextInt(10000) + 1;
+        bus.setId(Id);
+        this.buses.add(bus);
     }
 
 
