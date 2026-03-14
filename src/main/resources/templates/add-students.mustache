@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>TigerBoard | Student-User</title>
 </head>
 <body>
 
@@ -41,6 +41,8 @@
         <div class="field">
             <label>Commute Plan</label>
 
+        <!--Dropdown List that allows users to select a commute plan-->
+
             <select name="commutePlan">
                 <option value="" disabled selected>Select a plan</option>
                 <option value="MORNING_ONLY">Morning Only</option>
@@ -58,7 +60,15 @@
 
         <br>
 
-        <button class="ui button" type="submit">Add Record</button>
+    <!-- Div and Buttons - save new records and return to home page-->
+        <div style="display: flex; gap: 1rem;">
+
+            <button type="submit">Add Record</button>
+
+            <a href="index.html">
+                <button type="button">Home Page</button>
+            </a>
+        </div>
 
     </form>
 

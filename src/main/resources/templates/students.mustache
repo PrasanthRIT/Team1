@@ -2,55 +2,53 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>TigerBoard | Student-User</title>
 </head>
 <body>
-<h2 style="text-decoration: underline">Student Table</h2>
-<table border="1">
-    <!--header names-->
+    <h2 style="text-decoration: underline">Student Table</h2>
+    <table border="1">
+        <!--header names-->
 
-    <thead>
-    <tr>
-        <th>Student ID</th>
-        <th>FName</th>
-        <th>LName</th>
-        <th>Password Hash</th>
-        <th>Commute Plan</th>
-        <th>Location</th>
-    </tr>
-    </thead>
-
-    <tbody>
-
-    {{#StdList}}
+        <thead>
         <tr>
-            <td>{{id}}</td>
-            <td>{{user.firstName}}</td>
-            <td>{{user.lastName}}</td>
-            <td>{{user.passwordHash}}</td>
-            <td>{{commutePlan}}</td>
-            <td>{{location}}</td>
+            <th>Student ID</th>
+            <th>FName</th>
+            <th>LName</th>
+            <th>Password Hash</th>
+            <th>Commute Plan</th>
+            <th>Location</th>
         </tr>
-    {{/StdList}}
+        </thead>
 
-    </tbody>
+        <tbody>
 
-</table>
-<!--<br>-->
+        {{#StdList}}
+            <tr>
+                <td>{{id}}</td>
+                <td>{{user.firstName}}</td>
+                <td>{{user.lastName}}</td>
+                <td>{{user.passwordHash}}</td>
+                <td>{{commutePlan}}</td>
+                <td>{{location}}</td>
+            </tr>
+        {{/StdList}}
 
-<!--<form class="ui form" method="post">-->
-<!--    <div class="field">-->
-<!--        <label>Product Name</label>-->
-<!--        <input type="text" name="productName" placeholder="Product Name">-->
-<!--    </div>-->
-<!--    <br>-->
-<!--    <div class="field">-->
-<!--        <label>Product Price</label>-->
-<!--        <input type="text" name="productPrice" placeholder="Product Price">-->
-<!--    </div>-->
-<!--    <br>-->
-<!--    <button class="ui button" type="submit">Submit</button>-->
+        </tbody>
 
-<!--</form>-->
+    </table>
+
+    <br>
+
+    <!-- Div and Buttons -  To return to home page and redirect to add-students page-->
+    <div style="display: flex; gap: 1rem;">
+        <a href="index.html">
+            <button type="button">Home Page</button>
+        </a>
+
+        <a href="add-students">
+            <button type="button">Add more</button>
+        </a>
+    </div>
+
 </body>
 </html>
