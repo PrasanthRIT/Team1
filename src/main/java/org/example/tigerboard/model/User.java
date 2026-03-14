@@ -2,10 +2,10 @@ package org.example.tigerboard.model;
 
 import org.springframework.stereotype.Component;
 
-//@Component
 public class User {
 
     private int id;
+    private String emailID;
     private String firstName;
     private String lastName;
     private String passwordHash;
@@ -23,6 +23,14 @@ public class User {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public String getEmailID() {
+        return emailID;
+    }
+
+    public void setEmailID(String emailID) {
+        this.emailID = emailID;
     }
 
     public String getFirstName() {
