@@ -1,6 +1,7 @@
 package org.example.tigerboard.service;
 
 import org.example.tigerboard.TigerBoardApplication;
+import org.example.tigerboard.model.Driver;
 import org.example.tigerboard.model.Student;
 import org.example.tigerboard.model.User;
 import org.springframework.stereotype.Service;
@@ -12,8 +13,7 @@ import java.util.List;
 public class TigerBoardService {
     List<User> users = new ArrayList<User>();
     List<Student> students = new ArrayList<Student>();
-
-
+    List<Driver> drivers = new ArrayList<>();
     public TigerBoardService(){
             seedData();
     }
@@ -63,6 +63,16 @@ public class TigerBoardService {
 
     public void saveStudents(Student student){
         this.students.add(student);
+    }
+
+    //Driver Methods to Fetch and Save Records
+
+    public List<Driver> getAllDrivers() {
+        return this.drivers;
+    }
+
+    public void saveDrivers(Driver driver) {
+        this.drivers.add(driver);
     }
 
 
