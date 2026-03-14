@@ -24,7 +24,7 @@
         //Main Page
         @GetMapping("/")
         public String getHomePage() {
-            return "index";
+            return "forward:/index.html";
         }
 
         //Student
@@ -67,11 +67,5 @@
             model.addAttribute("driverList", this.tigerBoardService.getAllDrivers());
             return "redirect:/drivers";
         }
-
-
-
-
-
-
     }
 

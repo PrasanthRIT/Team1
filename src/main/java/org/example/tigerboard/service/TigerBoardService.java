@@ -74,4 +74,8 @@ public class TigerBoardService {
     public void saveDrivers(Driver driver) {
         this.drivers.add(driver);
     }
+
+    public List<User> getAllusers() {
+        return this.users;
+    }
 }
