@@ -2,28 +2,35 @@ package org.example.tigerboard.model;
 
 import org.springframework.stereotype.Component;
 
-@Component
-public class user {
-    private int iD;
+public class User {
+
+    private int id;
+    private String emailID;
     private String firstName;
     private String lastName;
     private String passwordHash;
-    public enum role {
+    public enum Role {
         Student,
         Driver,
         Supervisor,
         Admin
     }
-    private role userRole;
+    private Role userRole;
 
-    public user() {}
-
-    public int getiD() {
-        return iD;
+    public int getId() {
+        return id;
     }
 
-    public void setiD(int iD) {
-        this.iD = iD;
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getEmailID() {
+        return emailID;
+    }
+
+    public void setEmailID(String emailID) {
+        this.emailID = emailID;
     }
 
     public String getFirstName() {
@@ -50,18 +57,18 @@ public class user {
         this.passwordHash = passwordHash;
     }
 
-    public role getUserRole() {
+    public Role getUserRole() {
         return userRole;
     }
 
-    public void setUserRole(role userRole) {
+    public void setUserRole(Role userRole) {
         this.userRole = userRole;
     }
 
     @Override
     public String toString() {
-        return "user{" +
-                "iD=" + iD +
+        return "User{" +
+                "id=" + id +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", passwordHash='" + passwordHash + '\'' +

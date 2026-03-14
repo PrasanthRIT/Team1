@@ -1,0 +1,50 @@
+    package org.example.tigerboard.controller;
+
+    import org.example.tigerboard.model.Student;
+    import org.example.tigerboard.service.TigerBoardService;
+    import org.springframework.stereotype.Controller;
+    import org.springframework.web.bind.annotation.GetMapping;
+    import org.springframework.ui.Model;
+    import org.springframework.web.bind.annotation.PostMapping;
+
+    @Controller
+    public class TigerBoardController {
+
+        private final TigerBoardService tigerBoardService;
+
+        public TigerBoardController(TigerBoardService tigerBoardService) {
+            this.tigerBoardService = tigerBoardService;
+        }
+
+        /*
+        Controller Methods
+         */
+
+        //Student
+        @GetMapping("/students")
+        public String getStudents(Model model){
+            model.addAttribute("StdList", this.tigerBoardService.getAllStudents());
+
+            return "students";
+        }
+
+        @GetMapping("/add-students")
+        public String getStudentForm() {
+            return "add-students";  // name of your form template file
+        }
+
+        @PostMapping("/add-students")
+        public String saveStudents(Model model, Student student){
+
+            this.tigerBoardService.saveStudents(student);
+            model.addAttribute("StdList", this.tigerBoardService.getAllStudents());
+            return "redirect:students";
+        }
+
+
+
+
+
+
+    }
+
