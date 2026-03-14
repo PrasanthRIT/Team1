@@ -115,8 +115,26 @@ public class TigerBoardService {
         this.buses.add(bus);
     }
 
+    //Fetch Driver by ID (Assuming ID is correlated to the number of drivers in the list)
+    public Driver getDriverById(Integer id){
+        for (int i = 0; i<this.drivers.size(); i++){
+            Driver currentDriver = this.drivers.get(i);
+            if (currentDriver.getId().equals(id)){
+                return currentDriver;
+            }
+        }
+        return null;
+    }
 
-
-
+    //Fetch Student by ID (Assuming ID is correlated to the number of Students in the list)
+    public Student getStudentById(Integer id){
+        for (int i = 0; i<this.students.size(); i++){
+            Student currentStudent = this.students.get(i);
+            if (currentStudent.getId().equals(id)){
+                return currentStudent;
+            }
+        }
+        return null;
+    }
 
 }
