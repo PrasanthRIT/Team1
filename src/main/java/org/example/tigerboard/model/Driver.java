@@ -7,19 +7,7 @@ public class Driver {
     private String licenseNumber;
     private String[] busAssigned;
     private String phoneNumber;
-    private Driver driver;
 
-    public Driver(Driver driver) {
-        this.driver = driver;
-    }
-
-    public Driver getDriver() {
-        return driver;
-    }
-
-    public void setDriver(Driver driver) {
-        this.driver = driver;
-    }
 
 
     public Driver() {
