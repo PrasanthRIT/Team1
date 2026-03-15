@@ -40,6 +40,14 @@
             return "users";
         }
 
+        @GetMapping("/users/add")
+        public String getAddUserPage(Model model) {
+            model.addAttribute("isStudent", true);
+            model.addAttribute("isDriver", false);
+            model.addAttribute("busList", tigerBoardService.getAllBuses());
+            return "add-user";
+        }
+
         // Single POST handler for all user types
         @PostMapping("/users/add")
         public String addUser(

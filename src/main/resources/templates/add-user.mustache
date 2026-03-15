@@ -64,6 +64,9 @@
                     {{#busList}}
                         <option value="{{busNumber}}">Bus {{busNumber}} — {{route}}</option>
                     {{/busList}}
+                    {{^busList}}
+                        <option value="">No buses available</option>
+                    {{/busList}}
                 </select>
             </div>
         </div>
