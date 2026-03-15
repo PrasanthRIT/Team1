@@ -98,13 +98,10 @@
             return "add-bus";
         }
 
-        //Adds a bus with students and drivers based on the IDs selected by the User
+
         @PostMapping("/buses/add")
-        public String saveBus(Bus bus, @RequestParam ArrayList<Integer> studentsId, @RequestParam ArrayList<Integer> driversId){
-
-
+        public String saveBus(Bus bus){
             this.tigerBoardService.saveBus(bus);
-
             return "redirect:/add/success/bus";
         }
 
