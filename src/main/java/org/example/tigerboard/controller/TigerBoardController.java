@@ -134,7 +134,10 @@
             return "success";
         }
 
-
-
+        @GetMapping("/add/success/{entityName}")
+        public String showSuccess(@PathVariable String entityName, Model model) {
+            model.addAttribute("entityName", entityName);
+            return "success";
+        }
     }
 
