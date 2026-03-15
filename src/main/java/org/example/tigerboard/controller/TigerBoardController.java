@@ -102,8 +102,6 @@
         @PostMapping("/buses/add")
         public String saveBus(Bus bus, @RequestParam ArrayList<Integer> studentsId, @RequestParam ArrayList<Integer> driversId){
 
-            addStudentsToBus(bus, studentsId);
-            addDriversToBus(bus, driversId);
 
             this.tigerBoardService.saveBus(bus);
 
@@ -117,27 +115,7 @@
             return "success";
         }
 
-        //Adds all students to bus according to their IDs
-        private void addStudentsToBus(Bus bus, ArrayList<Integer> studentsId) {
-            for (int i = 0; i < studentsId.size(); i++) {
-                Integer tempStudentId = studentsId.get(i);
-                Student student = this.tigerBoardService.getStudentById(tempStudentId);
-                if (student != null) {
-                    bus.getStudents().add(student);
-                }
-            }
-        }
 
-        //Adds all drivers to bus according to their IDs
-        private void addDriversToBus(Bus bus, ArrayList<Integer> driversId) {
-            for (int i = 0; i < driversId.size(); i++) {
-                Integer tempDriverId = driversId.get(i);
-                Driver driver = this.tigerBoardService.getDriverById(tempDriverId);
-                if (driver != null) {
-                    bus.getDrivers().add(driver);
-                }
-            }
-        }
 
     }
 
