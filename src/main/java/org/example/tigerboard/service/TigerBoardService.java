@@ -96,8 +96,8 @@ public class TigerBoardService {
 
         //Student Records Initialization
 
-        Student s1 = new Student(u1,1, Student.CommutePlan.MORNING_ONLY, "Sahara Center");
-        Student s2 = new Student(u2, 2, Student.CommutePlan.EVENING_ONLY, "Lulu Village");
+        Student s1 = new Student(u1,"S7", Student.CommutePlan.MORNING_ONLY, "Sahara Center");
+        Student s2 = new Student(u2, "D1", Student.CommutePlan.EVENING_ONLY, "Lulu Village");
         //Student s3 = new Student(u3, bus3, Student.CommutePlan.ROUND_TRIP, "Pond Park");
 
         students.add(s1);
