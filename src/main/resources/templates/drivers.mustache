@@ -4,171 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Drivers</title>
-    <style>
-        :root {
-            --primary-orange: #f38220;
-            --primary-blue: #00a2e8;
-            --text-black: #111111;
-            --text-gray: #7a7a7a;
-            --bg-color: #f4f7f6;
-            --card-bg: #ffffff;
-            --border-color: #e0e0e0;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-        }
-
-        body {
-            background-color: var(--bg-color);
-            color: var(--text-black);
-            line-height: 1.6;
-        }
-
-        header {
-            background-color: var(--card-bg);
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-            padding: 1rem 2rem;
-            display: flex;
-            justify-content: flex-start;
-            align-items: center;
-            min-height: 96px;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-
-        .logo-container {
-            display: flex;
-            align-items: center;
-            text-decoration: none;
-        }
-
-        .logo-img {
-            height: 90px;
-            object-fit: contain;
-        }
-
-        main {
-            padding: 2rem;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .section-header {
-            margin-bottom: 1.5rem;
-        }
-
-        .section-header h2 {
-            font-size: 1.6rem;
-            color: var(--text-black);
-        }
-
-        .section-header p {
-            margin-top: 0.25rem;
-            color: var(--text-gray);
-            font-size: 0.95rem;
-        }
-
-        .content-card {
-            background-color: var(--card-bg);
-            border-radius: 10px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
-            border: 1px solid var(--border-color);
-            padding: 1.25rem;
-        }
-
-        .btn-row {
-            margin-top: 1.5rem;
-            margin-bottom: 1rem;
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-
-        .btn {
-            display: inline-block;
-            padding: 0.75rem 1.5rem;
-            border-radius: 6px;
-            text-align: center;
-            font-weight: 600;
-            text-decoration: none;
-            transition: background-color 0.2s, color 0.2s;
-            border: 1px solid transparent;
-        }
-
-        .btn-primary {
-            background-color: var(--primary-orange);
-            color: #ffffff;
-            border-color: var(--primary-orange);
-        }
-
-        .btn-primary:hover {
-            background-color: #e06e00;
-            border-color: #e06e00;
-        }
-
-        .btn-outline {
-            border-color: var(--primary-orange);
-            color: var(--primary-orange);
-            background-color: transparent;
-        }
-
-        .btn-outline:hover {
-            background-color: var(--primary-orange);
-            color: #ffffff;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 1rem;
-            overflow: hidden;
-            border-radius: 8px;
-        }
-
-        thead {
-            background-color: var(--primary-blue);
-            color: white;
-        }
-
-        th, td {
-            padding: 0.9rem 1rem;
-            text-align: left;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        tbody tr:hover {
-            background-color: #f9fcff;
-        }
-
-        .empty-state {
-            color: var(--text-gray);
-            padding: 1rem 0;
-        }
-
-        @media (max-width: 900px) {
-            header {
-                padding: 1rem;
-            }
-
-            .logo-img {
-                height: 72px;
-            }
-
-            main {
-                padding: 1rem;
-            }
-
-            th, td {
-                font-size: 0.9rem;
-                padding: 0.7rem;
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="/css/tigerboard-theme.css">
 </head>
 <body>
 
@@ -179,49 +15,49 @@
 </header>
 
 <main>
-    <div class="section-header">
+    <div class="section-header stack">
         <h2>Drivers List</h2>
-        <p>View all registered drivers in the system.</p>
+        <p class="section-subtitle">View all registered drivers in the system.</p>
     </div>
 
-    <div class="btn-row">
+    <div class="action-row">
         <a href="/" class="btn btn-outline">Home</a>
         <a href="/drivers/add" class="btn btn-primary">Add Driver</a>
     </div>
 
-    <div class="content-card">
-        <table>
-            <thead>
-            <tr>
-                <th>ID</th>
-                <th>First Name</th>
-                <th>Last Name</th>
-                <th>License Number</th>
-                <th>Phone</th>
-                <th>Assigned Buses</th>
-            </tr>
-            </thead>
-            <tbody>
-
-            {{#driverList}}
+    <div class="table-card">
+        <div class="table-responsive">
+            <table>
+                <thead>
                 <tr>
-                    <td>{{user.id}}</td>
-                    <td>{{user.firstName}}</td>
-                    <td>{{user.lastName}}</td>
-                    <td>{{licenseNumber}}</td>
-                    <td>{{phoneNumber}}</td>
-                    <td>{{#assignedBusNumbers}}{{.}} {{/assignedBusNumbers}}</td>
+                    <th>ID</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>License Number</th>
+                    <th>Phone</th>
+                    <th>Assigned Buses</th>
                 </tr>
-            {{/driverList}}
+                </thead>
+                <tbody>
+                {{#driverList}}
+                    <tr>
+                        <td>{{user.id}}</td>
+                        <td>{{user.firstName}}</td>
+                        <td>{{user.lastName}}</td>
+                        <td>{{licenseNumber}}</td>
+                        <td>{{phoneNumber}}</td>
+                        <td>{{#assignedBusNumbers}}{{.}} {{/assignedBusNumbers}}</td>
+                    </tr>
+                {{/driverList}}
 
-            {{^driverList}}
-                <tr>
-                    <td colspan="3" class="empty-state">No drivers available.</td>
-                </tr>
-            {{/driverList}}
-
-            </tbody>
-        </table>
+                {{^driverList}}
+                    <tr>
+                        <td colspan="6">No drivers available.</td>
+                    </tr>
+                {{/driverList}}
+                </tbody>
+            </table>
+        </div>
     </div>
 </main>
 
