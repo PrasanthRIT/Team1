@@ -40,6 +40,25 @@
             return "users";
         }
 
+        // Single POST handler for all user types
+        @PostMapping("/users/add")
+        public String addUser(
+                @RequestParam String firstName,
+                @RequestParam String lastName,
+                @RequestParam String email,
+                @RequestParam String role,
+                @RequestParam(required = false) String commutePlan,
+                @RequestParam(required = false) String location,
+                @RequestParam(required = false) String licenseNumber,
+                @RequestParam(required = false) String phoneNumber) {
+
+            tigerBoardService.addUserWithRole(
+                    firstName, lastName, email, role,
+                    commutePlan, location, licenseNumber, phoneNumber
+            );
+            return "redirect:/add/success/" + role.toLowerCase();
+        }
+
         //Student
         @GetMapping("/students")
         public String getStudents(Model model){
