@@ -1,7 +1,6 @@
 package org.example.tigerboard.controller;
 
 import org.example.tigerboard.model.Bus;
-import org.example.tigerboard.model.Driver;
 import org.example.tigerboard.model.Student;
 import org.example.tigerboard.service.TigerBoardService;
 import org.springframework.stereotype.Controller;
@@ -11,7 +10,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -79,11 +77,6 @@ public class TigerBoardController {
         return "students";
     }
 
-//        @GetMapping("/students/add")
-//        public String getStudentForm() {
-//            return "add-students";
-//        }
-
     @GetMapping("/students/add")
     public String getStudentForm(Model model) {
         model.addAttribute("isStudent", true);
@@ -147,26 +140,5 @@ public class TigerBoardController {
         model.addAttribute("isBuse", "buse".equalsIgnoreCase(entityName));
         return "success";
     }
-    //Adds all students to bus according to their IDs
-//        private void addStudentsToBus(Bus bus, ArrayList<Integer> studentsId) {
-//            for (int i = 0; i < studentsId.size(); i++) {
-//                Integer tempStudentId = studentsId.get(i);
-//                Student student = this.tigerBoardService.getStudentById(tempStudentId);
-//                if (student != null) {
-//                    bus.getStudents().add(student);
-//                }
-//            }
-//        }
-//
-//        //Adds all drivers to bus according to their IDs
-//        private void addDriversToBus(Bus bus, ArrayList<Integer> driversId) {
-//            for (int i = 0; i < driversId.size(); i++) {
-//                Integer tempDriverId = driversId.get(i);
-//                Driver driver = this.tigerBoardService.getDriverById(tempDriverId);
-//                if (driver != null) {
-//                    bus.getDrivers().add(driver);
-//                }
-//            }
-//        }
 
 }
