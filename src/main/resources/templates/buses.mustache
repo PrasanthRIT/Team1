@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>TigerBoard - Bus Fleet</title>
+
+    <link rel="stylesheet" href="/css/tigerboard-theme.css">
+
+    <style>
+        header .logo-img {
+            height: 50px;
+        }
+
+        .section-header {
+            display: grid;
+            grid-template-columns: auto 1fr auto;
+            align-items: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .section-header h2 {
+            text-align: center;
+        }
+
+    </style>
+</head>
+<body>
+
+<header>
+    <a href="/" class="logo-container">
+        <img src="/logo.jpg" alt="TigerBoard Logo" class="logo-img">
+        <p style="color: black; font-size: 26px; font-weight: bold">TigerBoard</p>
+    </a>
+</header>
+
+<main>
+    <div class="section-header">
+        <a href="/" class="btn btn-outline">Back to Home</a>
+        <h2>All Buses</h2>
+        <a href="/buses/add" class="btn btn-primary btn-add">Add New Bus</a>
+    </div>
+
+    <div class="table-card">
+        <div class="table-responsive">
+            <table>
+                <thead>
+                <tr>
+                    <th>Bus #</th>
+                    <th>Capacity</th>
+                    <th>Route</th>
+                    <th>Status</th>
+                </tr>
+                </thead>
+                <tbody>
+                {{#busList}}
+                    <tr>
+                        <td><strong>{{busNumber}}</strong></td>
+                        <td>{{capacity}} Seats</td>
+                        <td>{{route}}</td>
+                        <td>
+                            {{#isActive}}
+                                <span>Active</span>
+                            {{/isActive}}
+                            {{^isActive}}
+                                <span>Inactive</span>
+                            {{/isActive}}
+                        </td>
+                    </tr>
+                {{/busList}}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</main>
+
+</body>
+</html>
