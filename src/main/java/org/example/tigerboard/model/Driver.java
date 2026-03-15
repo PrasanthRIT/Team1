@@ -3,21 +3,12 @@ package org.example.tigerboard.model;
 import org.apache.catalina.User;
 
 public class Driver {
-    private Integer id;
     private User user;
     private String licenseNumber;
     private String[] busAssigned;
     private String phoneNumber;
 
     public Driver() {
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
     }
 
     public User getUser() {
