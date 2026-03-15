@@ -67,9 +67,17 @@
             return "students";
         }
 
+//        @GetMapping("/students/add")
+//        public String getStudentForm() {
+//            return "add-students";
+//        }
+
         @GetMapping("/students/add")
-        public String getStudentForm() {
-            return "add-students";
+        public String getStudentForm(Model model) {
+            model.addAttribute("isStudent", true);
+            model.addAttribute("isDriver", false);
+            model.addAttribute("busList", tigerBoardService.getAllBuses());
+            return "add-user";
         }
 
         @PostMapping("/students/add")

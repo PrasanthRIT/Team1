@@ -2,75 +2,126 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>TigerBoard | Student-User</title>
+    <title>TigerBoard | Add Student</title>
+
+    <link rel="stylesheet" href="/css/tigerboard-theme.css">
+
+    <style>
+        header .logo-img {
+            height: 50px;
+        }
+
+        .section-header {
+            justify-content: center;
+        }
+
+        .table-card {
+            padding: 2.5rem;
+        }
+
+        .field {
+            margin-bottom: 1.5rem;
+        }
+
+        .field-input {
+            width: 100%;
+            padding: 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            font-size: 1rem;
+            transition: all 0.25s;
+        }
+
+        .field-input:focus {
+            outline: none;
+            border-color: var(--primary-blue);
+            box-shadow: 0 0 0 4px rgba(0, 162, 232, 0.1);
+        }
+
+        .field-buttons {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .btn-back {
+            margin-right: auto;
+        }
+
+        .btn-cancel {
+            margin-left: auto;
+        }
+
+        label {
+            font-weight: 600;
+        }
+    </style>
+
 </head>
 <body>
 
-    <h2 style="text-decoration: underline;">Add Student Records</h2>
+<header>
+    <a href="/" class="logo-container">
+        <img src="/logo.jpg" alt="TigerBoard Logo" class="logo-img">
+        <p style="color: black; font-size: 26px; font-weight: bold">TigerBoard</p>
+    </a>
+</header>
 
-    <form class="ui form" method="post" action="/add-students">
+<main>
 
+    <div class="section-header">
+        <h2>Add a New Student</h2>
+    </div>
 
-        <div class="field">
-            <label>Student ID</label>
-            <input type="text" name="id" placeholder="e.g. 101">
-        </div>
+    <div class="table-card">
+        <form action="/users/add" method="POST">
 
-        <br>
+            <div class="field">
+                <label>Student ID</label>
+                <input type="text" name="id" class="field-input" placeholder="e.g. 101" required>
+            </div>
 
-        <div class="field">
-            <label>First Name</label>
-            <input type="text" name="user.firstName" placeholder="e.g. John">
-        </div>
+            <div class="field">
+                <label>First Name</label>
+                <input type="text" name="user.firstName" class="field-input" placeholder="e.g. John" required>
+            </div>
 
-        <br>
+            <div class="field">
+                <label>Last Name</label>
+                <input type="text" name="user.lastName" class="field-input" placeholder="e.g. Smith" required>
+            </div>
 
-        <div class="field">
-            <label>Last Name</label>
-            <input type="text" name="user.lastName" placeholder="e.g. Smith">
-        </div>
+            <div class="field">
+                <label>Password Hash</label>
+                <input type="text" name="user.passwordHash" class="field-input" placeholder="Enter Password Hash" required>
+            </div>
 
-        <br>
+            <div class="field">
+                <label>Commute Plan</label>
+                <select name="commutePlan" class="field-input">
+                    <option value="" disabled selected>Select a plan</option>
+                    <option value="MORNING_ONLY">Morning Only</option>
+                    <option value="EVENING_ONLY">Evening Only</option>
+                    <option value="ROUND_TRIP">Round Trip</option>
+                </select>
+            </div>
 
-        <div class="field">
-            <label>Password Hash</label>
-            <input type="text" name="user.passwordHash" placeholder="Enter Password Hash">
-        </div>
-        <br>
+            <div class="field">
+                <label>Location</label>
+                <input type="text" name="location" class="field-input" placeholder="e.g. Qasdsiya" required>
+            </div>
 
-        <div class="field">
-            <label>Commute Plan</label>
+            <div class="field-buttons">
+                <a href="/" class="btn btn-outline btn-back">Back to Home</a>
+                <a href="/users" class="btn btn-outline btn-cancel">Cancel</a>
+                <button type="submit" class="btn btn-primary">Add Student Record</button>
+            </div>
 
-        <!--Dropdown List that allows users to select a commute plan-->
+        </form>
+    </div>
 
-            <select name="commutePlan">
-                <option value="" disabled selected>Select a plan</option>
-                <option value="MORNING_ONLY">Morning Only</option>
-                <option value="EVENING_ONLY">Evening Only</option>
-                <option value="ROUND_TRIP">Round Trip</option>
-            </select>
-        </div>
-
-        <br>
-
-        <div class="field">
-            <label>Location</label>
-            <input type="text" name="location" placeholder="e.g. Qasdsiya">
-        </div>
-
-        <br>
-
-    <!-- Div and Buttons - save new records and return to home page-->
-        <div style="display: flex; gap: 1rem;">
-
-            <button type="submit">Add Record</button>
-
-            <a href="index.html">
-                <button type="button">Home Page</button>
-            </a>
-        </div>
-
-    </form>
+</main>
 
 </body>
 </html>
