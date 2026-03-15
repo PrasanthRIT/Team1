@@ -24,7 +24,7 @@ public class TigerBoardService {
     }
 
     public void addUserWithRole(String firstName, String lastName,
-                                String email, String role,
+                                String email, String passwordHash, String role,
                                 String commutePlan, String location,
                                 String assignedBusNumber,
                                 List<String> assignedBusNumbers,
@@ -34,7 +34,7 @@ public class TigerBoardService {
         user.setFirstName(firstName);
         user.setLastName(lastName);
         user.setEmailID(email);
-        user.setPasswordHash("hash");
+        user.setPasswordHash(passwordHash);
         user.setUserRole(User.Role.valueOf(role));
         users.add(user);
 

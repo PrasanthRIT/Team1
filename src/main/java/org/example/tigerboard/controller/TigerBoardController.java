@@ -54,6 +54,7 @@
                 @RequestParam String firstName,
                 @RequestParam String lastName,
                 @RequestParam String email,
+                @RequestParam String passwordHash,
                 @RequestParam String role,
                 @RequestParam(required = false) String commutePlan,
                 @RequestParam(required = false) String location,
@@ -63,7 +64,7 @@
                 @RequestParam(required = false) String phoneNumber) {
 
             tigerBoardService.addUserWithRole(
-                    firstName, lastName, email, role,
+                    firstName, lastName, email, passwordHash, role,
                     commutePlan, location, assignedBusNumber,
                     assignedBusNumbers, licenseNumber, phoneNumber
             );
@@ -175,4 +176,5 @@
 //        }
 
     }
+
 
