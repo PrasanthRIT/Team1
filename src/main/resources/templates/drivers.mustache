@@ -199,11 +199,12 @@
             </tr>
             </thead>
             <tbody>
+
             {{#driverList}}
                 <tr>
-                    <td>{{id}}</td>
-                    <td>{{licenseNumber}}</td>
-                    <td>{{phoneNumber}}</td>
+                    <td>{{user.id}}</td>
+                    <td>{{user.licenseNumber}}</td>
+                    <td>{{user.phoneNumber}}</td>
                 </tr>
             {{/driverList}}
 
@@ -212,6 +213,7 @@
                     <td colspan="3" class="empty-state">No drivers available.</td>
                 </tr>
             {{/driverList}}
+
             </tbody>
         </table>
     </div>

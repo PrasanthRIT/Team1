@@ -91,7 +91,6 @@ public class TigerBoardService {
         bus2.setCapacity(30);
         bus2.setRoute("Sharjah to Dubai");
         bus2.setIsActive(true);
-        //bus2.setStudents(new ArrayList<Student>(){{add(s1);add(s2);add(s3);}});
         buses.add(bus1);
         buses.add(bus2);
 
@@ -145,27 +144,5 @@ public class TigerBoardService {
         bus.setId(Id);
         this.buses.add(bus);
     }
-
-//    //Fetch Driver by ID (Assuming ID is correlated to the number of drivers in the list)
-//    public Driver getDriverById(Integer id){
-//        for (int i = 0; i<this.drivers.size(); i++){
-//            Driver currentDriver = this.drivers.get(i);
-//            if (currentDriver.getId().equals(id)){
-//                return currentDriver;
-//            }
-//        }
-//        return null;
-//    }
-//
-//    //Fetch Student by ID (Assuming ID is correlated to the number of Students in the list)
-//    public Student getStudentById(Integer id){
-//        for (int i = 0; i<this.students.size(); i++){
-//            Student currentStudent = this.students.get(i);
-//            if (currentStudent.getId().equals(id)){
-//                return currentStudent;
-//            }
-//        }
-//        return null;
-//    }
 
 }
