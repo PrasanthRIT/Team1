@@ -70,43 +70,17 @@ public class TigerBoardService {
         //Student Records Initialization
 
 
-        //Driver Records
-
-        Driver d1 = new Driver();
-        d1.setFirstName("Husain");
-        d1.setLastName("Dahod");
-        d1.setLicenseNumber("A1");
-        d1.setActive(true);
-
-        Driver d2 = new Driver();
-        d2.setFirstName("Manu");
-        d2.setLastName("Sharma");
-        d2.setLicenseNumber("DD1");
-        d2.setActive(true);
-
-        Driver d3 = new Driver();
-        d3.setFirstName("John");
-        d3.setLastName("Pork");
-        d3.setLicenseNumber("S67");
-        d3.setActive(true);
-
-        drivers.add(d1);
-        drivers.add(d2);
-        drivers.add(d3);
-
-
-
         // Bus Records
         Bus bus1 = new Bus();
         bus1.setId(1);
-        bus1.setBusNumber("26");
+        bus1.setBusNumber("S7");
         bus1.setCapacity(30);
         bus1.setRoute("Sharjah to Dubai");
         bus1.setIsActive(true);
 
         Bus bus2 = new Bus();
         bus2.setId(2);
-        bus2.setBusNumber("25");
+        bus2.setBusNumber("D1");
         bus2.setCapacity(30);
         bus2.setRoute("Sharjah to Dubai");
         bus2.setIsActive(true);
