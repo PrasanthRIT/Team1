@@ -8,7 +8,6 @@ import java.util.List;
 public class Driver {
     private User user;
     private String licenseNumber;
-    private String[] busAssigned;
     private String phoneNumber;
     private List<String> assignedBusNumbers;
 
@@ -39,28 +38,11 @@ public class Driver {
         this.licenseNumber = licenseNumber;
     }
 
-    public String[] getBusAssigned() {
-        return busAssigned;
-    }
-
-    public void setBusAssigned(String[] busAssigned) {
-        this.busAssigned = busAssigned;
-    }
-
     public String getPhoneNumber() {
         return phoneNumber;
     }
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
-    }
-
-    public void setActive(boolean b) {
-    }
-
-    public void setLastName(String pork) {
-    }
-
-    public void setFirstName(String john) {
     }
 }
