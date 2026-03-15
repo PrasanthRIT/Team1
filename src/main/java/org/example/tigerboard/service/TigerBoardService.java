@@ -24,7 +24,7 @@ public class TigerBoardService {
     }
 
     public void addUserWithRole(String firstName, String lastName,
-                                String email, String role,
+                                String email, String passwordHash, String role,
                                 String commutePlan, String location,
                                 String assignedBusNumber,
                                 List<String> assignedBusNumbers,
@@ -34,7 +34,7 @@ public class TigerBoardService {
         user.setFirstName(firstName);
         user.setLastName(lastName);
         user.setEmailID(email);
-        user.setPasswordHash("hash");
+        user.setPasswordHash(passwordHash);
         user.setUserRole(User.Role.valueOf(role));
         users.add(user);
 
@@ -67,11 +67,32 @@ public class TigerBoardService {
 
         //Placeholder - Delete once Modifying User Class - Replace with Parameterized constructor
 
-        //Student Records Initialization
+        //Student Records Initialization\
+
+        User u1 = new User();
+        u1.setId(users.size() + 1);
+        u1.setFirstName("James");
+        u1.setLastName("Carter");
+        u1.setEmailID("james.carter@rit.edu");
+        u1.setPasswordHash("hashed_pw_001");
+        u1.setUserRole(User.Role.Student);
+        users.add(u1);
+
+        User u2 = new User();
+        u2.setId(users.size() + 1);
+        u2.setFirstName("Sofia");
+        u2.setLastName("Patel");
+        u2.setEmailID("sofia.patel@rit.edu");
+        u2.setPasswordHash("hashed_pw_002");
+        u2.setUserRole(User.Role.Student);
+        users.add(u2);
+
+
         User du1 = new User();
         du1.setId(users.size() + 1);
         du1.setFirstName("Husain");
         du1.setLastName("Dahod");
+        du1.setEmailID("husain.dahod@rit.edu");
         du1.setUserRole(User.Role.Driver);
         users.add(du1);
         Driver d1 = new Driver();
@@ -85,6 +106,7 @@ public class TigerBoardService {
         du2.setId(users.size() + 1);
         du2.setFirstName("Manu");
         du2.setLastName("Sharma");
+        du2.setEmailID("manu.sharma@rit.edu");
         du2.setUserRole(User.Role.Driver);
         users.add(du2);
         Driver d2 = new Driver();

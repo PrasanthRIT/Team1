@@ -40,12 +40,21 @@
             return "users";
         }
 
+        @GetMapping("/users/add")
+        public String getAddUserPage(Model model) {
+            model.addAttribute("isStudent", true);
+            model.addAttribute("isDriver", false);
+            model.addAttribute("busList", tigerBoardService.getAllBuses());
+            return "add-user";
+        }
+
         // Single POST handler for all user types
         @PostMapping("/users/add")
         public String addUser(
                 @RequestParam String firstName,
                 @RequestParam String lastName,
                 @RequestParam String email,
+                @RequestParam String passwordHash,
                 @RequestParam String role,
                 @RequestParam(required = false) String commutePlan,
                 @RequestParam(required = false) String location,
@@ -55,7 +64,7 @@
                 @RequestParam(required = false) String phoneNumber) {
 
             tigerBoardService.addUserWithRole(
-                    firstName, lastName, email, role,
+                    firstName, lastName, email, passwordHash, role,
                     commutePlan, location, assignedBusNumber,
                     assignedBusNumbers, licenseNumber, phoneNumber
             );
@@ -167,4 +176,5 @@
 //        }
 
     }
+
 

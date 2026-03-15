@@ -35,6 +35,11 @@
         </div>
 
         <div class="form-field">
+            <label class="form-label" for="passwordHash">Password Hash</label>
+            <input id="passwordHash" class="form-control" type="text" name="passwordHash" placeholder="Password hash" required>
+        </div>
+
+        <div class="form-field">
             <label class="form-label" for="roleSelect">Role</label>
             <select class="form-control" name="role" id="roleSelect" onchange="toggleFields()">
                 <option value="Student" {{#isStudent}}selected{{/isStudent}}>Student</option>
@@ -63,6 +68,9 @@
                 <select class="form-control" name="assignedBusNumber">
                     {{#busList}}
                         <option value="{{busNumber}}">Bus {{busNumber}} — {{route}}</option>
+                    {{/busList}}
+                    {{^busList}}
+                        <option value="">No buses available</option>
                     {{/busList}}
                 </select>
             </div>
