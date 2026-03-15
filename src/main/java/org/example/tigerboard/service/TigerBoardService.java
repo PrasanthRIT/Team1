@@ -91,14 +91,14 @@ public class TigerBoardService {
         bus2.setCapacity(30);
         bus2.setRoute("Sharjah to Dubai");
         bus2.setIsActive(true);
-        bus2.setStudents(new ArrayList<Student>(){{add(s1);add(s2);add(s3);}});
+        //bus2.setStudents(new ArrayList<Student>(){{add(s1);add(s2);add(s3);}});
         buses.add(bus1);
         buses.add(bus2);
 
         //Student Records Initialization
 
-        Student s1 = new Student(u1,bus1, Student.CommutePlan.MORNING_ONLY, "Sahara Center");
-        Student s2 = new Student(u2, bus2, Student.CommutePlan.EVENING_ONLY, "Lulu Village");
+        Student s1 = new Student(u1,1, Student.CommutePlan.MORNING_ONLY, "Sahara Center");
+        Student s2 = new Student(u2, 2, Student.CommutePlan.EVENING_ONLY, "Lulu Village");
         //Student s3 = new Student(u3, bus3, Student.CommutePlan.ROUND_TRIP, "Pond Park");
 
         students.add(s1);
@@ -146,26 +146,26 @@ public class TigerBoardService {
         this.buses.add(bus);
     }
 
-    //Fetch Driver by ID (Assuming ID is correlated to the number of drivers in the list)
-    public Driver getDriverById(Integer id){
-        for (int i = 0; i<this.drivers.size(); i++){
-            Driver currentDriver = this.drivers.get(i);
-            if (currentDriver.getId().equals(id)){
-                return currentDriver;
-            }
-        }
-        return null;
-    }
-
-    //Fetch Student by ID (Assuming ID is correlated to the number of Students in the list)
-    public Student getStudentById(Integer id){
-        for (int i = 0; i<this.students.size(); i++){
-            Student currentStudent = this.students.get(i);
-            if (currentStudent.getId().equals(id)){
-                return currentStudent;
-            }
-        }
-        return null;
-    }
+//    //Fetch Driver by ID (Assuming ID is correlated to the number of drivers in the list)
+//    public Driver getDriverById(Integer id){
+//        for (int i = 0; i<this.drivers.size(); i++){
+//            Driver currentDriver = this.drivers.get(i);
+//            if (currentDriver.getId().equals(id)){
+//                return currentDriver;
+//            }
+//        }
+//        return null;
+//    }
+//
+//    //Fetch Student by ID (Assuming ID is correlated to the number of Students in the list)
+//    public Student getStudentById(Integer id){
+//        for (int i = 0; i<this.students.size(); i++){
+//            Student currentStudent = this.students.get(i);
+//            if (currentStudent.getId().equals(id)){
+//                return currentStudent;
+//            }
+//        }
+//        return null;
+//    }
 
 }

@@ -15,16 +15,19 @@ public class Student {
 
     //Attributes
     private User user; //Linking User and Student Entities
-    private Bus bus;    //Linking Bus and Student Entities
+    private Integer assignedBusId;  // stores Bus.id
 
     private CommutePlan commutePlan; // Restricted to CommutePlan enum values
     private String location;
 
+    //Default constructor
+    public Student() { }
+
     //Constructor
 
-    public Student(User user, Bus bus, CommutePlan commutePlan, String location) {
+    public Student(User user, Integer assignedBusId, CommutePlan commutePlan, String location) {
         this.user = user;
-        this.bus = bus;
+        this.assignedBusId = assignedBusId;
         this.commutePlan = commutePlan;
         this.location = location;
     }
@@ -32,13 +35,20 @@ public class Student {
 
     //getters and setters
 
-
     public User getUser() {
         return user;
     }
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public Integer getAssignedBusId() {
+        return assignedBusId;
+    }
+
+    public void setAssignedBusId(Integer assignedBusId) {
+        this.assignedBusId = assignedBusId;
     }
 
     public CommutePlan getCommutePlan() {
@@ -58,12 +68,11 @@ public class Student {
     }
 
     //toString()
-
     @Override
     public String toString() {
         return "Student{" +
                 "user=" + user +
-                ", bus=" + bus +
+                ", assignedBusId=" + assignedBusId +
                 ", commutePlan=" + commutePlan +
                 ", location='" + location + '\'' +
                 '}';
