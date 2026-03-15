@@ -4,169 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TigerBoard - RIT Commute Sync</title>
-    <style>
-        /* CSS Variables based on the logo colors */
-        :root {
-            --primary-orange: #f38220; /* Extracted from the tiger and text */
-            --primary-blue: #00a2e8; /* Extracted from the arrow */
-            --text-black: #111111;
-            --text-gray: #7a7a7a;
-            --bg-color: #f4f7f6;
-            --card-bg: #ffffff;
-            --border-color: #e0e0e0;
-        }
-
-        /* Reset and Base Styles */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-        }
-
-        body {
-            background-color: var(--bg-color);
-            color: var(--text-black);
-            line-height: 1.6;
-        }
-
-        /* Header Layout */
-        header {
-            background-color: var(--card-bg);
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-            padding: 1rem 2rem;
-            display: flex;
-            justify-content: flex-start;
-            align-items: center;
-            min-height: 96px;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-
-        /* Logo Styling */
-        .logo-container {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            text-decoration: none;
-        }
-
-        .logo-img {
-            height: 90px;
-            object-fit: contain;
-        }
-
-        /* Main Content */
-        main {
-            padding: 2rem;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .section-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1.5rem;
-        }
-
-        .section-header h2 {
-            font-size: 1.4rem;
-            color: var(--text-black);
-        }
-
-        /* Table Styles */
-        .table-card {
-            background-color: var(--card-bg);
-            border-radius: 10px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.03);
-            overflow: hidden;
-            border: 1px solid var(--border-color);
-        }
-
-        .table-responsive {
-            width: 100%;
-            overflow-x: auto;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            text-align: left;
-        }
-
-        th, td {
-            padding: 1rem 1.5rem;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        th {
-            background-color: #fafbfc;
-            font-weight: 600;
-            color: var(--text-gray);
-            font-size: 0.85rem;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        tbody tr:hover {
-            background-color: #fcfcfc;
-        }
-
-        tbody tr:last-child td {
-            border-bottom: none;
-        }
-
-        /* Button Styles */
-        .btn {
-            display: inline-block;
-            padding: 0.75rem 1.5rem;
-            border-radius: 6px;
-            text-align: center;
-            font-weight: 600;
-            text-decoration: none;
-            transition: background-color 0.3s, color 0.3s;
-        }
-
-        .btn-primary {
-            background-color: var(--primary-orange);
-            color: #ffffff;
-        }
-
-        .btn-primary:hover {
-            background-color: #e06e00;
-        }
-
-        .btn-outline {
-            border: 1px solid var(--primary-orange);
-            color: var(--primary-orange);
-        }
-
-        .btn-outline:hover {
-            background-color: var(--primary-orange);
-            color: #ffffff;
-        }
-
-        /* Responsive Design */
-        @media (max-width: 900px) {
-            header {
-                flex-direction: column;
-                gap: 15px;
-                padding: 1rem;
-            }
-            main {
-                padding: 1rem;
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="/css/tigerboard-theme.css">
 </head>
 <body>
 
 <!-- Header Section -->
 <header>
     <a href="#" class="logo-container">
-        <!-- Using the uploaded image file as the source -->
         <img src="/logo.jpg" alt="Tiger Logo" class="logo-img" onerror="this.style.display='none'">
     </a>
 </header>
@@ -205,7 +49,7 @@
         </div>
     </div>
 
-    <div style="margin-top: 1.5rem; display: flex; gap: 10px;">
+    <div class="action-row">
         <a href="/" class="btn btn-outline" title="Return to Home">Home</a>
         <label for="add-user-modal" class="btn btn-primary">Add User</label>
     </div>
