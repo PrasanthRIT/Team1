@@ -50,13 +50,14 @@
                 @RequestParam(required = false) String commutePlan,
                 @RequestParam(required = false) String location,
                 @RequestParam(required = false) String assignedBusNumber,
+                @RequestParam(required = false) List<String> assignedBusNumbers,
                 @RequestParam(required = false) String licenseNumber,
                 @RequestParam(required = false) String phoneNumber) {
 
             tigerBoardService.addUserWithRole(
                     firstName, lastName, email, role,
                     commutePlan, location, assignedBusNumber,
-                    licenseNumber, phoneNumber
+                    assignedBusNumbers, licenseNumber, phoneNumber
             );
             return "redirect:/add/success/" + role.toLowerCase();
         }

@@ -27,6 +27,7 @@ public class TigerBoardService {
                                 String email, String role,
                                 String commutePlan, String location,
                                 String assignedBusNumber,
+                                List<String> assignedBusNumbers,
                                 String licenseNumber, String phoneNumber) {
         User user = new User();
         user.setId(users.size() + 1);
@@ -65,20 +66,6 @@ public class TigerBoardService {
 //        User u3 = new User();
 
         //Placeholder - Delete once Modifying User Class - Replace with Parameterized constructor
-        User u1 = new User();
-        u1.setFirstName("James");
-        u1.setLastName("Carter");
-        u1.setPasswordHash("hashed_pw_001");
-
-        User u2 = new User();
-        u2.setFirstName("Sofia");
-        u2.setLastName("Patel");
-        u2.setPasswordHash("hashed_pw_002");
-
-        User u3 = new User();
-        u3.setFirstName("Marcus");
-        u3.setLastName("Lee");
-        u3.setPasswordHash("hashed_pw_003");
 
         //Student Records Initialization
 
