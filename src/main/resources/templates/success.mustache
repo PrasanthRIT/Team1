@@ -19,8 +19,7 @@
     </div>
 
     <div class="form-card">
-        <p>Thank you. {{entityName}} data was added successfully!</p>
-
+        <p>Thank you. {{#isBuse}}bus{{/isBuse}}{{^isBuse}}{{entityName}}{{/isBuse}} data was added successfully!</p>
         <div class="action-row">
             <a href="/" class="btn btn-outline">Home</a>
             <a href="/{{entityName}}s" class="btn btn-primary">View all {{entityName}}s</a>

@@ -59,6 +59,17 @@ main {
     margin-bottom: 1.5rem;
 }
 
+.section-header.stack {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.25rem;
+}
+
+.section-subtitle {
+    color: var(--text-gray);
+    font-size: 0.95rem;
+}
+
 .section-header h2 {
     font-size: 1.4rem;
     color: var(--text-black);
@@ -139,6 +150,7 @@ tbody tr:last-child td {
 
 .action-row {
     margin-top: 1.5rem;
+    margin-bottom: 1rem; /* add this */
     display: flex;
     gap: 10px;
     flex-wrap: wrap;
