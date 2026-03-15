@@ -51,4 +51,13 @@ public class Driver {
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
+
+    public void setActive(boolean b) {
+    }
+
+    public void setLastName(String pork) {
+    }
+
+    public void setFirstName(String john) {
+    }
 }

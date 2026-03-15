@@ -59,7 +59,30 @@ public class TigerBoardService {
 
         //Driver Records
 
+        Driver d1 = new Driver();
+        d1.setId(1);
+        d1.setFirstName("Husain");
+        d1.setLastName("Dahod");
+        d1.setLicenseNumber("A1");
+        d1.setActive(true);
 
+        Driver d2 = new Driver();
+        d2.setId(2);
+        d2.setFirstName("Manu");
+        d2.setLastName("Sharma");
+        d2.setLicenseNumber("DD1");
+        d2.setActive(true);
+
+        Driver d3 = new Driver();
+        d3.setId(3);
+        d3.setFirstName("John");
+        d3.setLastName("Pork");
+        d3.setLicenseNumber("S67");
+        d3.setActive(true);
+
+        drivers.add(d1);
+        drivers.add(d2);
+        drivers.add(d3);
 
 
 
