@@ -186,7 +186,7 @@
 
     <div class="btn-row">
         <a href="/" class="btn btn-outline">Home</a>
-        <a href="/add-drivers" class="btn btn-primary">Add Driver</a>
+        <a href="/drivers/add" class="btn btn-primary">Add Driver</a>
     </div>
 
     <div class="content-card">
@@ -198,6 +198,7 @@
                 <th>Last Name</th>
                 <th>License Number</th>
                 <th>Phone</th>
+                <th>Assigned Buses</th>
             </tr>
             </thead>
             <tbody>
@@ -209,6 +210,7 @@
                     <td>{{user.lastName}}</td>
                     <td>{{licenseNumber}}</td>
                     <td>{{phoneNumber}}</td>
+                    <td>{{#assignedBusNumbers}}{{.}} {{/assignedBusNumbers}}</td>
                 </tr>
             {{/driverList}}
 
