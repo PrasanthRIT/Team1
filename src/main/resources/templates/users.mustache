@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TigerBoard - RIT Commute Sync</title>
+    <style>
+        /* CSS Variables based on the logo colors */
+        :root {
+            --primary-orange: #f38220; /* Extracted from the tiger and text */
+            --primary-blue: #00a2e8; /* Extracted from the arrow */
+            --text-black: #111111;
+            --text-gray: #7a7a7a;
+            --bg-color: #f4f7f6;
+            --card-bg: #ffffff;
+            --border-color: #e0e0e0;
+        }
+
+        /* Reset and Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-black);
+            line-height: 1.6;
+        }
+
+        /* Header Layout */
+        header {
+            background-color: var(--card-bg);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            min-height: 96px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        /* Logo Styling */
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            text-decoration: none;
+        }
+
+        .logo-img {
+            height: 90px;
+            object-fit: contain;
+        }
+
+        .logo-text-wrapper {
+            display: none;
+        }
+
+        /* Main Content */
+        main {
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .section-header h2 {
+            font-size: 1.4rem;
+            color: var(--text-black);
+        }
+
+        /* Table Styles */
+        .table-card {
+            background-color: var(--card-bg);
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+        }
+
+        .table-responsive {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+
+        th, td {
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        th {
+            background-color: #fafbfc;
+            font-weight: 600;
+            color: var(--text-gray);
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        tbody tr:hover {
+            background-color: #fcfcfc;
+        }
+
+        tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .status-badge {
+            padding: 0.35rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .status-active { background-color: #e8f5e9; color: #2e7d32; }
+        .status-pending { background-color: #fff3e0; color: #ef6c00; }
+        .status-offline { background-color: #ffebee; color: #c62828; }
+
+        .time-cell {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .time-icon {
+            color: var(--primary-blue);
+            font-weight: bold;
+        }
+
+        /* CSS-Only Modal (No JavaScript required) */
+        #add-user-modal {
+            display: none; /* Hidden checkbox */
+        }
+
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(3px);
+            z-index: 999;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-card {
+            background-color: var(--card-bg);
+            width: 90%;
+            max-width: 500px;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            transform: translateY(-20px);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        /* Triggering the modal */
+        #add-user-modal:checked ~ .modal-overlay {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        #add-user-modal:checked ~ .modal-overlay .modal-card {
+            transform: translateY(0);
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 1.5rem;
+            color: var(--text-gray);
+            cursor: pointer;
+            line-height: 1;
+        }
+
+        .close-btn:hover {
+            color: var(--text-black);
+        }
+
+        /* Form inside modal */
+        .form-group {
+            margin-bottom: 1.2rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.4rem;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-black);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            font-size: 1rem;
+            transition: border-color 0.2s;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary-orange);
+        }
+
+        .modal-title {
+            margin-bottom: 1.5rem;
+            color: var(--text-black);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .modal-title::before {
+            content: "";
+            display: inline-block;
+            width: 4px;
+            height: 20px;
+            background-color: var(--primary-orange);
+            border-radius: 4px;
+        }
+
+        /* Button Styles */
+        .btn {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            border-radius: 6px;
+            text-align: center;
+            font-weight: 600;
+            text-decoration: none;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-orange);
+            color: #ffffff;
+        }
+
+        .btn-primary:hover {
+            background-color: #e06e00;
+        }
+
+        .btn-outline {
+            border: 1px solid var(--primary-orange);
+            color: var(--primary-orange);
+        }
+
+        .btn-outline:hover {
+            background-color: var(--primary-orange);
+            color: #ffffff;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 900px) {
+            header {
+                flex-direction: column;
+                gap: 15px;
+                padding: 1rem;
+            }
+            main {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Hidden checkbox for CSS-only modal toggling -->
+<input type="checkbox" id="add-user-modal">
+
+<!-- Header Section -->
+<header>
+    <a href="#" class="logo-container">
+        <!-- Using the uploaded image file as the source -->
+        <img src="/logo.jpg" alt="Tiger Logo" class="logo-img" onerror="this.style.display='none'">
+    </a>
+</header>
+
+<!-- Main Content -->
+<main>
+    <div class="section-header">
+        <h2>Active Commuters</h2>
+    </div>
+
+    <!-- Table Container -->
+    <div class="table-card">
+        <div class="table-responsive">
+            <table>
+                <thead>
+                <tr>
+                    <th>User ID</th>
+                    <th>Email</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Role</th>
+                </tr>
+                </thead>
+                <tbody>
+                {{#usersList}}
+                <tr>
+                    <td>{{id}}</td>
+                    <td>{{emailID}}</td>
+                    <td>{{firstName}}</td>
+                    <td>{{lastName}}</td>
+                    <td>{{userRole}}</td>
+                </tr>
+                {{/usersList}}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div style="margin-top: 1.5rem; display: flex; gap: 10px;">
+        <a href="/" class="btn btn-outline" title="Return to Home">Home</a>
+        <label for="add-user-modal" class="btn btn-primary">Add User</label>
+    </div>
+</main>
+
+</body>
+</html>
+

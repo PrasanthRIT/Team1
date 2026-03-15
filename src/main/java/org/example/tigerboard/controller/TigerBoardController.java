@@ -33,6 +33,13 @@
             return "forward:/index.html";
         }
 
+        @GetMapping("/users")
+        public String getUsers(Model model) {
+            model.addAttribute("usersList", this.tigerBoardService.getAllusers());
+
+            return "users";
+        }
+
         //Student
         @GetMapping("/students")
         public String getStudents(Model model){
