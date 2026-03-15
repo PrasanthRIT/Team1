@@ -68,7 +68,31 @@ public class TigerBoardService {
         //Placeholder - Delete once Modifying User Class - Replace with Parameterized constructor
 
         //Student Records Initialization
+        User du1 = new User();
+        du1.setId(users.size() + 1);
+        du1.setFirstName("Husain");
+        du1.setLastName("Dahod");
+        du1.setUserRole(User.Role.Driver);
+        users.add(du1);
+        Driver d1 = new Driver();
+        d1.setUser(du1);
+        d1.setLicenseNumber("A1");
+        d1.setPhoneNumber("050-111-1111");
+        d1.setAssignedBusNumbers(new ArrayList<>(List.of("S7")));
+        drivers.add(d1);
 
+        User du2 = new User();
+        du2.setId(users.size() + 1);
+        du2.setFirstName("Manu");
+        du2.setLastName("Sharma");
+        du2.setUserRole(User.Role.Driver);
+        users.add(du2);
+        Driver d2 = new Driver();
+        d2.setUser(du2);
+        d2.setLicenseNumber("DD1");
+        d2.setPhoneNumber("050-222-2222");
+        d2.setAssignedBusNumbers(new ArrayList<>(List.of("D1")));
+        drivers.add(d2);
 
         // Bus Records
         Bus bus1 = new Bus();
