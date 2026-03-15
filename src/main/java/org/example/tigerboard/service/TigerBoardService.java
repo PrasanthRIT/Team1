@@ -23,6 +23,35 @@ public class TigerBoardService {
             seedData();
     }
 
+    public void addUserWithRole(String firstName, String lastName,
+                                String email, String role,
+                                String commutePlan, String location,
+                                String assignedBusNumber,
+                                String licenseNumber, String phoneNumber) {
+        User user = new User();
+        user.setId(users.size() + 1);
+        user.setFirstName(firstName);
+        user.setLastName(lastName);
+        user.setEmailID(email);
+        user.setPasswordHash("hash");
+        user.setUserRole(User.Role.valueOf(role));
+        users.add(user);
+
+        if (role.equals("Student")) {
+            students.add(new Student(
+                    user, assignedBusNumber,
+                    Student.CommutePlan.valueOf(commutePlan),
+                    location
+            ));
+        } else if (role.equals("Driver")) {
+            Driver driver = new Driver();
+            driver.setUser(user);
+            driver.setLicenseNumber(licenseNumber);
+            driver.setPhoneNumber(phoneNumber);
+            drivers.add(driver);
+        }
+    }
+
     public void seedData(){
         //User Records - PlaceHolders (Note: Manognya, You could Parameterize
         //inside these objects,

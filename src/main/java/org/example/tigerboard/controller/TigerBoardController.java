@@ -49,12 +49,14 @@
                 @RequestParam String role,
                 @RequestParam(required = false) String commutePlan,
                 @RequestParam(required = false) String location,
+                @RequestParam(required = false) String assignedBusNumber,
                 @RequestParam(required = false) String licenseNumber,
                 @RequestParam(required = false) String phoneNumber) {
 
             tigerBoardService.addUserWithRole(
                     firstName, lastName, email, role,
-                    commutePlan, location, licenseNumber, phoneNumber
+                    commutePlan, location, assignedBusNumber,
+                    licenseNumber, phoneNumber
             );
             return "redirect:/add/success/" + role.toLowerCase();
         }

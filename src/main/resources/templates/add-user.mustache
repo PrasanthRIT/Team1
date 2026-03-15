@@ -18,7 +18,7 @@
         <h2>Add New User</h2>
     </div>
 
-    <form action="/add-user" method="post" class="form-card form-grid">
+    <form action="/users/add" method="post" class="form-card form-grid">
         <div class="form-field">
             <label class="form-label" for="firstName">First Name</label>
             <input id="firstName" class="form-control" type="text" name="firstName" placeholder="First Name" required>
@@ -56,6 +56,15 @@
             <div class="form-field">
                 <label class="form-label" for="location">Location</label>
                 <input id="location" class="form-control" type="text" name="location" placeholder="e.g. Al Barsha">
+            </div>
+
+            <div class="form-field">
+                <label class="form-label">Assigned Bus</label>
+                <select class="form-control" name="assignedBusNumber">
+                    {{#busList}}
+                        <option value="{{busNumber}}">Bus {{busNumber}} — {{route}}</option>
+                    {{/busList}}
+                </select>
             </div>
         </div>
 
