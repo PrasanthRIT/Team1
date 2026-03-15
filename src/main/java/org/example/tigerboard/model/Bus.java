@@ -9,8 +9,6 @@ public class Bus {
     private Integer capacity;
     private String route;
     private Boolean isActive;
-    private ArrayList<Driver> drivers = new ArrayList<>();
-    private ArrayList<Student> students = new ArrayList<>();
 
     //getters and setters
     public Integer getId() {
@@ -53,22 +51,6 @@ public class Bus {
         this.isActive = isActive;
     }
 
-    public ArrayList<Driver> getDrivers() {
-        return drivers;
-    }
-
-    public void setDrivers(ArrayList<Driver> driver) {
-        this.drivers = driver;
-    }
-
-    public ArrayList<Student> getStudents() {
-        return students;
-    }
-
-    public void setStudents(ArrayList<Student> students) {
-        this.students = students;
-    }
-
     @Override
     public String toString() {
         return "Bus{" +
@@ -77,8 +59,6 @@ public class Bus {
                 ", capacity=" + capacity +
                 ", route='" + route + "'" +
                 ", isActive=" + isActive +
-                ", drivers=" + drivers +
-                ", students=" + students +
                 '}';
     }
 }
