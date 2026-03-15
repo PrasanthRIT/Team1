@@ -31,7 +31,6 @@
         @GetMapping("/students")
         public String getStudents(Model model){
             model.addAttribute("StdList", this.tigerBoardService.getAllStudents());
-
             return "students";
         }
 
