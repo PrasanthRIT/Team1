@@ -48,6 +48,9 @@ public class TigerBoardService {
             driver.setUser(user);
             driver.setLicenseNumber(licenseNumber);
             driver.setPhoneNumber(phoneNumber);
+            if (assignedBusNumbers != null) {
+                driver.setAssignedBusNumbers(assignedBusNumbers);
+            }
             drivers.add(driver);
         }
     }

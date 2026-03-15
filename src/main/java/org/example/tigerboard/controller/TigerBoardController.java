@@ -90,18 +90,14 @@
             return "drivers";
         }
 
-        @GetMapping("/add-drivers")
-        public String getDriverForm(){
-            return "add-drivers";
+        @GetMapping("/drivers/add")
+        public String getDriverForm(Model model) {
+            model.addAttribute("isStudent", false);
+            model.addAttribute("isDriver", true);
+            return "add-user";
         }
 
-        @PostMapping("/add-drivers")
-        public String saveDrivers(Model model, Driver driver){
 
-            this.tigerBoardService.saveDrivers(driver);
-            model.addAttribute("driverList", this.tigerBoardService.getAllDrivers());
-            return "redirect:/drivers";
-        }
 
         //Buses
         //Fetches all busses to be displayed on buses template
