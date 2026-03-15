@@ -57,10 +57,6 @@
             object-fit: contain;
         }
 
-        .logo-text-wrapper {
-            display: none;
-        }
-
         /* Main Content */
         main {
             padding: 2rem;
@@ -122,130 +118,6 @@
             border-bottom: none;
         }
 
-        .status-badge {
-            padding: 0.35rem 0.8rem;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: 600;
-        }
-
-        .status-active { background-color: #e8f5e9; color: #2e7d32; }
-        .status-pending { background-color: #fff3e0; color: #ef6c00; }
-        .status-offline { background-color: #ffebee; color: #c62828; }
-
-        .time-cell {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .time-icon {
-            color: var(--primary-blue);
-            font-weight: bold;
-        }
-
-        /* CSS-Only Modal (No JavaScript required) */
-        #add-user-modal {
-            display: none; /* Hidden checkbox */
-        }
-
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(3px);
-            z-index: 999;
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.3s ease;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .modal-card {
-            background-color: var(--card-bg);
-            width: 90%;
-            max-width: 500px;
-            border-radius: 12px;
-            padding: 2rem;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-            transform: translateY(-20px);
-            transition: all 0.3s ease;
-            position: relative;
-        }
-
-        /* Triggering the modal */
-        #add-user-modal:checked ~ .modal-overlay {
-            opacity: 1;
-            visibility: visible;
-        }
-
-        #add-user-modal:checked ~ .modal-overlay .modal-card {
-            transform: translateY(0);
-        }
-
-        .close-btn {
-            position: absolute;
-            top: 15px;
-            right: 20px;
-            font-size: 1.5rem;
-            color: var(--text-gray);
-            cursor: pointer;
-            line-height: 1;
-        }
-
-        .close-btn:hover {
-            color: var(--text-black);
-        }
-
-        /* Form inside modal */
-        .form-group {
-            margin-bottom: 1.2rem;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 0.4rem;
-            font-size: 0.9rem;
-            font-weight: 600;
-            color: var(--text-black);
-        }
-
-        .form-control {
-            width: 100%;
-            padding: 0.75rem;
-            border: 1px solid var(--border-color);
-            border-radius: 6px;
-            font-size: 1rem;
-            transition: border-color 0.2s;
-        }
-
-        .form-control:focus {
-            outline: none;
-            border-color: var(--primary-orange);
-        }
-
-        .modal-title {
-            margin-bottom: 1.5rem;
-            color: var(--text-black);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .modal-title::before {
-            content: "";
-            display: inline-block;
-            width: 4px;
-            height: 20px;
-            background-color: var(--primary-orange);
-            border-radius: 4px;
-        }
-
         /* Button Styles */
         .btn {
             display: inline-block;
@@ -290,9 +162,6 @@
     </style>
 </head>
 <body>
-
-<!-- Hidden checkbox for CSS-only modal toggling -->
-<input type="checkbox" id="add-user-modal">
 
 <!-- Header Section -->
 <header>
