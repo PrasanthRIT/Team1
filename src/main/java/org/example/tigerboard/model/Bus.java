@@ -1,10 +1,7 @@
 package org.example.tigerboard.model;
 
-import org.springframework.stereotype.Component;
-
 import java.util.ArrayList;
 
-@Component
 public class Bus {
 
     private Integer id;  // Unique ID for the bus
@@ -12,8 +9,8 @@ public class Bus {
     private Integer capacity;
     private String route;
     private Boolean isActive;
-    private ArrayList<Driver> drivers;
-    private ArrayList<Student> students;
+    private ArrayList<Driver> drivers = new ArrayList<>();
+    private ArrayList<Student> students = new ArrayList<>();
 
     //getters and setters
     public Integer getId() {
