@@ -24,12 +24,12 @@
 
         {{#StdList}}
             <tr>
-                <td>{{id}}</td>
                 <td>{{user.firstName}}</td>
                 <td>{{user.lastName}}</td>
                 <td>{{user.passwordHash}}</td>
                 <td>{{commutePlan}}</td>
                 <td>{{location}}</td>
+                <td>{{assignedBusId}}</td>
             </tr>
         {{/StdList}}
 
@@ -45,7 +45,7 @@
             <button type="button">Home Page</button>
         </a>
 
-        <a href="/students/add">
+        <a href="/users/add?Role=STUDENT">
             <button type="button">Add more</button>
         </a>
     </div>
