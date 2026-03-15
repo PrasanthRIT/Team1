@@ -102,6 +102,9 @@ public class TigerBoardService {
         this.drivers.add(driver);
     }
 
+    public List<User> getAllusers() {
+        return this.users;
+    }
     //Fetch all Buses
     public List<Bus> getAllBuses() {
         return this.buses;

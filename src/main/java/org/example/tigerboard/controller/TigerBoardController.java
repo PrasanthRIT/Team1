@@ -27,6 +27,19 @@
         Controller Methods
          */
 
+        //Main Page
+        @GetMapping("/")
+        public String getHomePage() {
+            return "forward:/index.html";
+        }
+
+        @GetMapping("/users")
+        public String getUsers(Model model) {
+            model.addAttribute("usersList", this.tigerBoardService.getAllusers());
+
+            return "users";
+        }
+
         //Student
         @GetMapping("/students")
         public String getStudents(Model model){
@@ -49,6 +62,7 @@
         }
 
         //Driver
+
         @GetMapping("/drivers")
         public String getDrivers(Model model){
             model.addAttribute("driverList", this.tigerBoardService.getAllDrivers());

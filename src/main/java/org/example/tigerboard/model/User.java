@@ -17,6 +17,8 @@ public class User {
     }
     private Role userRole;
 
+    public User() { }
+
     public int getId() {
         return id;
     }
