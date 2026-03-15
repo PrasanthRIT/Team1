@@ -1,6 +1,6 @@
 package org.example.tigerboard.model;
 
-import org.apache.catalina.User;
+import org.example.tigerboard.model.User;
 
 public class Driver {
     private User user;
