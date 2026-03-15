@@ -3,53 +3,53 @@
 <head>
     <meta charset="UTF-8">
     <title>TigerBoard | Student-User</title>
+    <link rel="stylesheet" href="/css/tigerboard-theme.css">
 </head>
 <body>
-    <h2 style="text-decoration: underline">Student Table</h2>
-    <table border="1">
-        <!--header names-->
 
-        <thead>
-        <tr>
-<!-- <th>Student ID</th>-->
-            <th>FName</th>
-            <th>LName</th>
-            <th>Password Hash</th>
-            <th>Commute Plan</th>
-            <th>Location</th>
-            <th>Bus Assigned</th>
-        </tr>
-        </thead>
+<header>
+    <a href="/" class="logo-container">
+        <img src="/logo.jpg" alt="TigerBoard Logo" class="logo-img">
+        <p style="color: black; font-size: 26px; font-weight: bold">TigerBoard</p>
+    </a>
+</header>
 
-        <tbody>
-
-        {{#StdList}}
-            <tr>
-                <td>{{user.firstName}}</td>
-                <td>{{user.lastName}}</td>
-                <td>{{user.passwordHash}}</td>
-                <td>{{commutePlan}}</td>
-                <td>{{location}}</td>
-                <td>{{assignedBus}}</td>
-            </tr>
-        {{/StdList}}
-
-        </tbody>
-
-    </table>
-
-    <br>
-
-    <!-- Div and Buttons -  To return to home page and redirect to add-students page-->
-    <div style="display: flex; gap: 1rem;">
-        <a href="index.html">
-            <button type="button">Home Page</button>
-        </a>
-
-        <a href="/users/add?Role=STUDENT">
-            <button type="button">Add more</button>
-        </a>
+<main>
+    <div class="section-header">
+        <a href="/" class="btn btn-outline">Back to Home</a>
+        <h2>Student Table</h2>
+        <a href="/students/add" class="btn btn-primary">Add New Student</a>
     </div>
+
+    <div class="table-card">
+        <div class="table-responsive">
+            <table>
+                <thead>
+                <tr>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Password Hash</th>
+                    <th>Commute Plan</th>
+                    <th>Location</th>
+                    <th>Bus Assigned</th>
+                </tr>
+                </thead>
+                <tbody>
+                {{#StdList}}
+                    <tr>
+                        <td><strong>{{user.firstName}}</strong></td>
+                        <td>{{user.lastName}}</td>
+                        <td>{{user.passwordHash}}</td>
+                        <td>{{commutePlan}}</td>
+                        <td>{{location}}</td>
+                        <td>{{assignedBus}}</td>
+                    </tr>
+                {{/StdList}}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</main>
 
 </body>
 </html>
