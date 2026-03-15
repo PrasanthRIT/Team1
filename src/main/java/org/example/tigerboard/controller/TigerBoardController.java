@@ -95,6 +95,7 @@
         public String getDriverForm(Model model) {
             model.addAttribute("isStudent", false);
             model.addAttribute("isDriver", true);
+            model.addAttribute("busList", tigerBoardService.getAllBuses());
             return "add-user";
         }
 
