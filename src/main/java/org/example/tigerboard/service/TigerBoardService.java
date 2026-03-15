@@ -91,6 +91,7 @@ public class TigerBoardService {
         bus2.setCapacity(30);
         bus2.setRoute("Sharjah to Dubai");
         bus2.setIsActive(true);
+        //bus2.setStudents(new ArrayList<Student>(){{add(s1);add(s2);add(s3);}});
         buses.add(bus1);
         buses.add(bus2);
 

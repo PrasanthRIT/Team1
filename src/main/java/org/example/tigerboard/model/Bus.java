@@ -9,7 +9,6 @@ public class Bus {
     private Integer capacity;
     private String route;
     private Boolean isActive;
-
     //getters and setters
     public Integer getId() {
         return id;

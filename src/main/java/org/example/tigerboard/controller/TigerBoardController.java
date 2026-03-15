@@ -40,6 +40,25 @@
             return "users";
         }
 
+        // Single POST handler for all user types
+        @PostMapping("/users/add")
+        public String addUser(
+                @RequestParam String firstName,
+                @RequestParam String lastName,
+                @RequestParam String email,
+                @RequestParam String role,
+                @RequestParam(required = false) String commutePlan,
+                @RequestParam(required = false) String location,
+                @RequestParam(required = false) String licenseNumber,
+                @RequestParam(required = false) String phoneNumber) {
+
+            tigerBoardService.addUserWithRole(
+                    firstName, lastName, email, role,
+                    commutePlan, location, licenseNumber, phoneNumber
+            );
+            return "redirect:/add/success/" + role.toLowerCase();
+        }
+
         //Student
         @GetMapping("/students")
         public String getStudents(Model model){
@@ -98,13 +117,10 @@
             return "add-bus";
         }
 
-        //Adds a bus with students and drivers based on the IDs selected by the User
+
         @PostMapping("/buses/add")
-        public String saveBus(Bus bus, @RequestParam ArrayList<Integer> studentsId, @RequestParam ArrayList<Integer> driversId){
-
-
+        public String saveBus(Bus bus){
             this.tigerBoardService.saveBus(bus);
-
             return "redirect:/add/success/bus";
         }
 
@@ -115,7 +131,32 @@
             return "success";
         }
 
-
+        @GetMapping("/add/success/{entityName}")
+        public String showSuccess(@PathVariable String entityName, Model model) {
+            model.addAttribute("entityName", entityName);
+            return "success";
+        }
+        //Adds all students to bus according to their IDs
+//        private void addStudentsToBus(Bus bus, ArrayList<Integer> studentsId) {
+//            for (int i = 0; i < studentsId.size(); i++) {
+//                Integer tempStudentId = studentsId.get(i);
+//                Student student = this.tigerBoardService.getStudentById(tempStudentId);
+//                if (student != null) {
+//                    bus.getStudents().add(student);
+//                }
+//            }
+//        }
+//
+//        //Adds all drivers to bus according to their IDs
+//        private void addDriversToBus(Bus bus, ArrayList<Integer> driversId) {
+//            for (int i = 0; i < driversId.size(); i++) {
+//                Integer tempDriverId = driversId.get(i);
+//                Driver driver = this.tigerBoardService.getDriverById(tempDriverId);
+//                if (driver != null) {
+//                    bus.getDrivers().add(driver);
+//                }
+//            }
+//        }
 
     }
 
