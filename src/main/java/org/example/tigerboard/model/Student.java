@@ -1,6 +1,6 @@
 package org.example.tigerboard.model;
 
-public class Student {
+public class Student extends User {
 
     /*
     Enums representing the valid commute plan options for students.
@@ -14,19 +14,26 @@ public class Student {
     }
 
     //Attributes
-    private User user; //Linking User and Student Entities
     private String assignedBus;  // stores Bus.id
 
     private CommutePlan commutePlan; // Restricted to CommutePlan enum values
     private String location;
 
     //Default constructor
-    public Student() { }
+    public Student() {
+        setUserRole(Role.STUDENT);
+    }
 
     //Constructor
 
-    public Student(User user, String assignedBus, CommutePlan commutePlan, String location) {
-        this.user = user;
+    public Student(String firstName, String lastName, String emailID, String passwordHash,
+                   String assignedBus, CommutePlan commutePlan, String location) {
+        setFirstName(firstName);
+        setLastName(lastName);
+        setEmailID(emailID);
+        setPasswordHash(passwordHash);
+        setUserRole(Role.STUDENT);
+
         this.assignedBus = assignedBus;
         this.commutePlan = commutePlan;
         this.location = location;
@@ -35,13 +42,6 @@ public class Student {
 
     //getters and setters
 
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
 
     public String getAssignedBus() {
         return assignedBus;
@@ -72,7 +72,11 @@ public class Student {
     @Override
     public String toString() {
         return "Student{" +
-                "user=" + user +
+                "id=" + getId() +
+                ", firstName='" + getFirstName() + '\'' +
+                ", lastName='" + getLastName() + '\'' +
+                ", email='" + getEmailID() + '\'' +
+                ", userRole=" + getUserRole() +
                 ", assignedBus='" + assignedBus + '\'' +
                 ", commutePlan=" + commutePlan +
                 ", location='" + location + '\'' +

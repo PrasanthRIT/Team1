@@ -32,9 +32,9 @@ public abstract class User {
     private String passwordHash;
 
     public enum Role {
-        Student,
-        Driver,
-        Admin
+        STUDENT,
+        DRIVER,
+        ADMIN
     }
 
     @Enumerated(EnumType.STRING) // For it to be stored as an ENUM in the DB

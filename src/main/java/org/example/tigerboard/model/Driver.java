@@ -5,8 +5,8 @@ import org.example.tigerboard.model.User;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Driver {
-    private User user;
+public class Driver extends User {
+
     private String licenseNumber;
     private String phoneNumber;
     private List<String> assignedBusNumbers;
@@ -17,18 +17,11 @@ public class Driver {
     }
 
     public Driver() {
+        setUserRole(Role.DRIVER);
         this.assignedBusNumbers = new ArrayList<String>();
     }
 
 
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
 
     public String getLicenseNumber() {
         return licenseNumber;
