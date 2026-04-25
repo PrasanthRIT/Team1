@@ -63,10 +63,10 @@ public class BusRestController {
 
     @PutMapping("/api/buses/{id}")
     public ResponseEntity<Bus> updateBus(@PathVariable Integer id, @RequestBody Bus bus) {
+        Bus updatedBus = busService.updateBus(id, bus);
         HttpHeaders headers = new HttpHeaders();
-        headers.add("Result Message", "Bus created successfully with id: " + busService.getBusById(id));
-        busService.updateBus(id, bus);
-        return ResponseEntity.status(HttpStatus.OK).headers(headers).body(busService.getBusById(id));
+        headers.add("Result Message", "Bus updated successfully with id: " + updatedBus.getId());
+        return ResponseEntity.status(HttpStatus.OK).headers(headers).body(updatedBus);
     }
 
     @DeleteMapping("/api/buses/{id}")
