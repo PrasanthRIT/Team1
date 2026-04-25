@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Drivers CRUD | TigerBoard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { background: #f8f9fa; }
+        .page-card { border-radius: 16px; box-shadow: 0 0.125rem 0.5rem rgba(0,0,0,.08); }
+    </style>
+</head>
+<body>
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+        <div>
+            <h2 class="mb-1">Manage Drivers</h2>
+            <p class="text-muted mb-0">CRUD operations for driver records.</p>
+        </div>
+        <div class="d-flex gap-2">
+            <a href="/index.html" class="btn btn-outline-secondary">Home</a>
+            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#driverModal" onclick="openCreateModal()">Add Driver</button>
+        </div>
+    </div>
+
+    <div class="card page-card">
+        <div class="card-body">
+            <div class="row g-2 mb-3">
+                <div class="col-md-9">
+                    <input type="text" id="searchInput" class="form-control" placeholder="Search by name or license">
+                </div>
+                <div class="col-md-3 d-flex gap-2">
+                    <button class="btn btn-outline-primary w-100" onclick="searchDrivers()">Search</button>
+                    <button class="btn btn-outline-secondary w-100" onclick="loadDrivers()">Reset</button>
+                </div>
+            </div>
+
+            <div id="tableLoading" class="text-center py-4 d-none">
+                <div class="spinner-border text-primary"></div>
+                <p class="mt-2 mb-0">Loading drivers...</p>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table table-striped align-middle">
+                    <thead class="table-dark">
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>License</th>
+                        <th>Phone</th>
+                        <th>Assigned Buses</th>
+                        <th>Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody id="driversTableBody"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="driverModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form id="driverForm">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="driverModalTitle">Add Driver</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" id="driverId">
+
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label">First Name</label>
+                            <input id="firstName" class="form-control" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Last Name</label>
+                            <input id="lastName" class="form-control" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Email</label>
+                            <input id="emailID" type="email" class="form-control" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Password</label>
+                            <input id="passwordHash" class="form-control" placeholder="Leave blank to keep default on update">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">License Number</label>
+                            <input id="licenseNumber" class="form-control" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Phone Number</label>
+                            <input id="phoneNumber" class="form-control" required>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label">Assigned Buses</label>
+                            <select id="assignedBusIds" class="form-select" multiple></select>
+                            <div class="form-text">Hold Ctrl/Cmd to select multiple buses.</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button id="saveBtn" type="submit" class="btn btn-primary">Save Driver</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="toast-container position-fixed top-0 end-0 p-3" id="toastContainer"></div>
+
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    const API_BASE = "http://localhost:8080/api";
+
+    function showToast(message, type = "success") {
+        const id = "toast-" + Date.now();
+        const bgClass =
+            type === "success" ? "text-bg-success" :
+                type === "error" ? "text-bg-danger" :
+                    type === "warning" ? "text-bg-warning" : "text-bg-primary";
+
+        const html = `
+            <div id="${id}" class="toast align-items-center ${bgClass} border-0" role="alert">
+              <div class="d-flex">
+                <div class="toast-body">${message}</div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+              </div>
+            </div>`;
+        $("#toastContainer").append(html);
+        const toast = new bootstrap.Toast(document.getElementById(id), { delay: 3000 });
+        toast.show();
+        $(`#${id}`).on("hidden.bs.toast", function() { $(this).remove(); });
+    }
+
+    function setButtonLoading($btn, isLoading, loadingText = "Please wait...") {
+        if (isLoading) {
+            $btn.data("original-text", $btn.html());
+            $btn.prop("disabled", true);
+            $btn.html(`<span class="spinner-border spinner-border-sm me-2"></span>${loadingText}`);
+        } else {
+            $btn.prop("disabled", false);
+            $btn.html($btn.data("original-text"));
+        }
+    }
+
+    function setTableLoading(show) {
+        $("#tableLoading").toggleClass("d-none", !show);
+    }
+
+    async function loadBuses(selectedIds = []) {
+        try {
+            const buses = await $.ajax({ url: `${API_BASE}/buses`, method: "GET" });
+            const options = buses.map(bus => `
+                <option value="${bus.id}" ${selectedIds.includes(bus.id) ? "selected" : ""}>
+                    ${bus.busNumber} - ${bus.route}
+                </option>
+            `).join("");
+            $("#assignedBusIds").html(options);
+        } catch {
+            showToast("Could not load buses.", "error");
+        }
+    }
+
+    function renderDrivers(drivers) {
+        if (!drivers.length) {
+            $("#driversTableBody").html(`
+                <tr><td colspan="7" class="text-center text-muted py-4">No drivers found.</td></tr>
+            `);
+            return;
+        }
+
+        $("#driversTableBody").html(drivers.map(driver => `
+            <tr>
+                <td>${driver.id}</td>
+                <td>${driver.firstName} ${driver.lastName}</td>
+                <td>${driver.emailID}</td>
+                <td>${driver.licenseNumber}</td>
+                <td>${driver.phoneNumber}</td>
+                <td>${(driver.assignedBusNumbers || []).join(", ")}</td>
+                <td>
+                    <button class="btn btn-sm btn-outline-primary me-1" onclick="openEditModal(${driver.id})">Edit</button>
+                    <button class="btn btn-sm btn-outline-danger" onclick="deleteDriver(${driver.id})">Delete</button>
+                </td>
+            </tr>
+        `).join(""));
+    }
+
+    async function loadDrivers() {
+        setTableLoading(true);
+        try {
+            const drivers = await $.ajax({ url: `${API_BASE}/drivers`, method: "GET" });
+            renderDrivers(drivers);
+        } catch {
+            showToast("Failed to load drivers.", "error");
+        } finally {
+            setTableLoading(false);
+        }
+    }
+
+    async function searchDrivers() {
+        const keyword = $("#searchInput").val().trim();
+        if (!keyword) {
+            loadDrivers();
+            return;
+        }
+
+        setTableLoading(true);
+        try {
+            const drivers = await $.ajax({
+                url: `${API_BASE}/drivers/search`,
+                method: "GET",
+                data: { keyword }
+            });
+            renderDrivers(drivers);
+        } catch {
+            showToast("Search failed.", "error");
+        } finally {
+            setTableLoading(false);
+        }
+    }
+
+    async function openCreateModal() {
+        $("#driverModalTitle").text("Add Driver");
+        $("#driverForm")[0].reset();
+        $("#driverId").val("");
+        await loadBuses([]);
+    }
+
+    async function openEditModal(id) {
+        try {
+            const driver = await $.ajax({ url: `${API_BASE}/drivers/${id}`, method: "GET" });
+            $("#driverModalTitle").text("Edit Driver");
+            $("#driverId").val(driver.id);
+            $("#firstName").val(driver.firstName);
+            $("#lastName").val(driver.lastName);
+            $("#emailID").val(driver.emailID);
+            $("#passwordHash").val("");
+            $("#licenseNumber").val(driver.licenseNumber);
+            $("#phoneNumber").val(driver.phoneNumber);
+            await loadBuses(driver.assignedBusIds || []);
+            new bootstrap.Modal(document.getElementById("driverModal")).show();
+        } catch {
+            showToast("Could not load driver details.", "error");
+        }
+    }
+
+    async function deleteDriver(id) {
+        if (!confirm("Delete this driver?")) return;
+
+        try {
+            await $.ajax({ url: `${API_BASE}/drivers/${id}`, method: "DELETE" });
+            showToast("Driver deleted successfully.");
+            loadDrivers();
+        } catch {
+            showToast("Could not delete driver.", "error");
+        }
+    }
+
+    $("#driverForm").on("submit", async function(e) {
+        e.preventDefault();
+
+        const $btn = $("#saveBtn");
+        setButtonLoading($btn, true, "Saving...");
+
+        const id = $("#driverId").val().trim();
+        const payload = {
+            firstName: $("#firstName").val().trim(),
+            lastName: $("#lastName").val().trim(),
+            emailID: $("#emailID").val().trim(),
+            passwordHash: $("#passwordHash").val().trim(),
+            licenseNumber: $("#licenseNumber").val().trim(),
+            phoneNumber: $("#phoneNumber").val().trim(),
+            assignedBusIds: $("#assignedBusIds").val() ? $("#assignedBusIds").val().map(Number) : []
+        };
+
+        try {
+            await $.ajax({
+                url: id ? `${API_BASE}/drivers/${id}` : `${API_BASE}/drivers`,
+                method: id ? "PUT" : "POST",
+                contentType: "application/json",
+                data: JSON.stringify(payload)
+            });
+
+            bootstrap.Modal.getInstance(document.getElementById("driverModal")).hide();
+            showToast(id ? "Driver updated successfully." : "Driver created successfully.");
+            loadDrivers();
+        } catch (err) {
+            showToast(err.responseText || "Save failed.", "error");
+        } finally {
+            setButtonLoading($btn, false);
+        }
+    });
+
+    $(document).ready(function() {
+        loadDrivers();
+    });
+</script>
+</body>
+</html>
