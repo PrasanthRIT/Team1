@@ -9,7 +9,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
-import org.springframework.stereotype.Component;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED) // For it to be a parent, and the children having seperate tables
