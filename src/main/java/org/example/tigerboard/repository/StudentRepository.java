@@ -15,9 +15,8 @@ import java.util.Optional;
 @Repository
 public interface StudentRepository extends JpaRepository<Student,Integer> {
 
-    List<Student> findAllByStudentID(Integer id);
-
-    Optional<Student> findByStudentID(Integer id);
+    List<Student> findByBusAssignedId(Integer busId);
+    List<Student> findByTripBookedId(Integer busId);
 
     //Custom JPQL query to filter and search student emailID with case-insensitive matches
     @Query("""
@@ -30,14 +29,14 @@ public interface StudentRepository extends JpaRepository<Student,Integer> {
     @Modifying
     @Transactional
     @Query("UPDATE Student s SET s.tripBooked = null WHERE s.id = :studentId")
-    Integer cancelTripBooking(@Param("studentId") Integer id); //Sets tripBooked to NULL if a trip was cancelled
+    Integer cancelTripBooking(@Param("studentId") Integer studentId); //Sets tripBooked to NULL if a trip was cancelled
 
     //Update Logic for tripBooked
     @Modifying
     @Transactional
-    @Query("UPDATE Student s SET s.tripBooked = :tripId WHERE s.id = :studentId")
-    Integer updateTripBooking(@Param("studentId") Integer id, @Param("tripId") Bus tripBooked); //Sets tripBooked to (bus.id) when trip is booked
+    @Query("UPDATE Student s SET s.tripBooked = :bus WHERE s.id = :studentId")
+    Integer updateTripBookedByID(@Param("studentId") Integer studentId, @Param("bus") Bus bus);
 
-    void deleteByStudentID(Integer id);
+    void deleteById(Integer id);
 
 }

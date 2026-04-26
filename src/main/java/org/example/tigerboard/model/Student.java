@@ -29,10 +29,16 @@ public class Student extends User {
     @JoinColumn(name = "bus_assigned_id")
     private Bus busAssigned; // A Foreign key that references Bus(id) which represents the student's bus assigned profile
 
+    @Column(name = "bus_assigned_id", insertable = false, updatable = false)
+    private Integer busAssignedId;
+
     // Many-to-one unidirectional mapping to Bus entity
     @ManyToOne
     @JoinColumn(name = "trip_booked_id")
     private Bus tripBooked; // A Foreign key that references Bus(id) which is initially stored as Null, but updated when student books or Cancels his/her departure trip
+
+    @Column(name = "trip_booked_id", insertable = false, updatable = false)
+    private Integer tripBookedId;
 
     //default constructor
     public Student(){}
@@ -45,6 +51,7 @@ public class Student extends User {
     }
 
     //getters and setters
+
     public String getLocation() {
         return location;
     }
@@ -69,6 +76,14 @@ public class Student extends User {
         this.busAssigned = busAssigned;
     }
 
+    public Integer getBusAssignedId() {
+        return busAssignedId;
+    }
+
+    public void setBusAssignedId(Integer busAssignedId) {
+        this.busAssignedId = busAssignedId;
+    }
+
     public Bus getTripBooked() {
         return tripBooked;
     }
@@ -77,15 +92,27 @@ public class Student extends User {
         this.tripBooked = tripBooked;
     }
 
+    public Integer getTripBookedId() {
+        return tripBookedId;
+    }
+
+    public void setTripBookedId(Integer tripBookedId) {
+        this.tripBookedId = tripBookedId;
+    }
+
+
     //toString()
+
+
     @Override
     public String toString() {
         return "Student{" +
                 "location='" + location + '\'' +
                 ", commutePlan=" + commutePlan +
                 ", busAssigned=" + busAssigned +
+                ", busAssignedId=" + busAssignedId +
                 ", tripBooked=" + tripBooked +
+                ", tripBookedId=" + tripBookedId +
                 '}';
     }
-
 }
