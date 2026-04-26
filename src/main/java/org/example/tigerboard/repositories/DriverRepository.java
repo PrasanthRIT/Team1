@@ -19,6 +19,7 @@ public interface DriverRepository extends JpaRepository<Driver, Integer> {
 
     Optional<Driver> findByLicenseNumber(String licenseNumber);
 
+    Optional<Driver> findByEmailID(String emailID);
 
     boolean existsByLicenseNumber(String licenseNumber);
 
@@ -46,4 +47,5 @@ public interface DriverRepository extends JpaRepository<Driver, Integer> {
     @Query("UPDATE Driver d SET d.phoneNumber = :phoneNumber WHERE d.id = :driverId")
     int updatePhoneNumberById(@Param("driverId") Integer driverId,
                               @Param("phoneNumber") String phoneNumber);
+
 }
