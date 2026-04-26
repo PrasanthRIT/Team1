@@ -21,29 +21,67 @@
             color: var(--primary-orange);
             font-weight: 700;
             text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 12px;
         }
+
+        .navbar-logo {
+            height: 40px;
+            width: auto;
+            border-radius: 6px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        /*.btn-tb-primary {*/
+        /*    background-color: var(--primary-orange);*/
+        /*    border-color: var(--primary-orange);*/
+        /*    color: #fff;*/
+        /*}*/
+
+        /*.btn-tb-primary:hover {*/
+        /*    background-color: #e06e00;*/
+        /*    border-color: #e06e00;*/
+        /*    color: #fff;*/
+        /*}*/
+
+        /*.btn-tb-outline {*/
+        /*    border-color: var(--primary-orange);*/
+        /*    color: var(--primary-orange);*/
+        /*}*/
+
+        /*.btn-tb-outline:hover {*/
+        /*    background-color: var(--primary-orange);*/
+        /*    border-color: var(--primary-orange);*/
+        /*    color: #fff;*/
+        /*}*/
 
         .btn-tb-primary {
             background-color: var(--primary-orange);
             border-color: var(--primary-orange);
-            color: #fff;
+            color: #fff !important;
         }
 
-        .btn-tb-primary:hover {
-            background-color: #e06e00;
-            border-color: #e06e00;
-            color: #fff;
+        .btn-tb-primary:hover,
+        .btn-tb-primary:focus,
+        .btn-tb-primary:active {
+            background-color: #e06e00 !important;
+            border-color: #e06e00 !important;
+            color: #fff !important;
         }
 
         .btn-tb-outline {
             border-color: var(--primary-orange);
-            color: var(--primary-orange);
+            color: var(--primary-orange) !important;
+            background-color: transparent;
         }
 
-        .btn-tb-outline:hover {
-            background-color: var(--primary-orange);
-            border-color: var(--primary-orange);
-            color: #fff;
+        .btn-tb-outline:hover,
+        .btn-tb-outline:focus,
+        .btn-tb-outline:active {
+            background-color: var(--primary-orange) !important;
+            border-color: var(--primary-orange) !important;
+            color: #fff !important;
         }
 
         .table thead th {
@@ -53,13 +91,17 @@
 
         .badge-tb-active { background-color: #198754; }
         .badge-tb-inactive { background-color: #6c757d; }
+
     </style>
 </head>
 <body>
 
 <nav class="navbar border-bottom shadow-sm">
     <div class="container py-2">
-        <a class="tb-brand fs-4" href="/">TigerBoard</a>
+        <a class="tb-brand fs-4" href="/">
+<!--            <img src="/logo.jpg" alt="TigerBoard Logo" class="navbar-logo">-->
+            <span>TigerBoard</span>
+        </a>
         <div class="d-flex gap-2">
             <a class="btn btn-sm btn-outline-secondary" href="/">Home</a>
             <a class="btn btn-sm btn-tb-outline" href="/student-dashboard.html">View Only</a>
