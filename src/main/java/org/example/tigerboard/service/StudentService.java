@@ -2,7 +2,7 @@ package org.example.tigerboard.service;
 
 import org.example.tigerboard.model.Bus;
 import org.example.tigerboard.model.User;
-import org.example.tigerboard.repository.BusRepository;
+import org.example.tigerboard.repositories.BusRepository;
 import org.springframework.transaction.annotation.Transactional;
 import org.example.tigerboard.model.Student;
 import org.example.tigerboard.repositories.StudentRepository;
