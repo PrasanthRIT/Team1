@@ -38,3 +38,5 @@ mvnw.cmd
 
 UPDATED_ARCHITECTURE_README.md
 PROGRESS_REPORT.md
+
+/src/main/resources/application.properties
