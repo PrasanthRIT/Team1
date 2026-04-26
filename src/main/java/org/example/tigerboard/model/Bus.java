@@ -1,14 +1,32 @@
 package org.example.tigerboard.model;
 
-import java.util.ArrayList;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
+@Entity
+@Table(name = "buses")
 public class Bus {
 
-    private Integer id;  // Unique ID for the bus
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id; // Primary Key
+
+    @Column(name = "busNumber", nullable = false)
     private String busNumber;
+
+    @Column(name= "capacity", nullable = false)
     private Integer capacity;
+
+    @Column(name= "route", nullable = false)
     private String route;
+
+    @Column(name="isActive", nullable = false)
     private Boolean isActive;
+
     //getters and setters
     public Integer getId() {
         return id;
