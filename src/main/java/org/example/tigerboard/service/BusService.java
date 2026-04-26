@@ -1,7 +1,7 @@
 package org.example.tigerboard.service;
 
 import org.example.tigerboard.model.Bus;
-import org.example.tigerboard.repository.BusRepository;
+import org.example.tigerboard.repositories.BusRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;

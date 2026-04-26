@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "Drivers")
+@Table(name = "drivers")
 public class Driver extends User {
 
     @Column(nullable = false, unique = true)

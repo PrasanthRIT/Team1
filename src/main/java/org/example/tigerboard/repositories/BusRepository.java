@@ -1,4 +1,4 @@
-package org.example.tigerboard.repository;
+package org.example.tigerboard.repositories;
 
 import org.example.tigerboard.model.Bus;
 import org.springframework.data.jpa.repository.JpaRepository;

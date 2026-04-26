@@ -33,8 +33,8 @@ public class DriverService {
         }
 
         // Seed assumes buses already exist (recommended architecture order).
-        Bus s7 = busRepository.findByBusNumber("S7").orElse(null);
-        Bus d1Bus = busRepository.findByBusNumber("D1").orElse(null);
+        Bus s7 = busRepository.findByBusNumberIgnoreCase("S7").orElse(null);
+        Bus d1Bus = busRepository.findByBusNumberIgnoreCase("D1").orElse(null);
 
         Driver d1 = new Driver();
         d1.setFirstName("Husain");
