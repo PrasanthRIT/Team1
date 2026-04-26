@@ -1,81 +1,91 @@
 package org.example.tigerboard.model;
 
-public class Student {
+import jakarta.persistence.*;
+
+@Entity
+@Table(name="students")
+@PrimaryKeyJoinColumn(name = "id")
+public class Student extends User {
 
     /*
     Enums representing the valid commute plan options for students.
     Restricting commutePlan to predefined constant values only
-     */
+    */
 
-//    public enum CommutePlan {
-//        MORNING_ONLY,   // Student commutes in the morning only
-//        EVENING_ONLY,   // Student commutes in the evening only
-//        ROUND_TRIP      // Student commutes both morning and evening
-//    }
-//
-//    //Attributes
-//    private User user; //Linking User and Student Entities
-//    private String assignedBus;  // stores Bus.id
-//
-//    private CommutePlan commutePlan; // Restricted to CommutePlan enum values
-//    private String location;
-//
-//    //Default constructor
-//    public Student() { }
-//
-//    //Constructor
-//
-//    public Student(User user, String assignedBus, CommutePlan commutePlan, String location) {
-//        this.user = user;
-//        this.assignedBus = assignedBus;
-//        this.commutePlan = commutePlan;
-//        this.location = location;
-//    }
-//
-//
-//    //getters and setters
-//
-//    public User getUser() {
-//        return user;
-//    }
-//
-//    public void setUser(User user) {
-//        this.user = user;
-//    }
-//
-//    public String getAssignedBus() {
-//        return assignedBus;
-//    }
-//
-//    public void setAssignedBus(String assignedBus) {
-//        this.assignedBus = assignedBus;
-//    }
-//
-//    public CommutePlan getCommutePlan() {
-//        return commutePlan;
-//    }
-//
-//    public void setCommutePlan(CommutePlan commutePlan) {
-//        this.commutePlan = commutePlan;
-//    }
-//
-//    public String getLocation() {
-//        return location;
-//    }
-//
-//    public void setLocation(String location) {
-//        this.location = location;
-//    }
-//
-//    //toString()
-//
-//    @Override
-//    public String toString() {
-//        return "Student{" +
-//                "user=" + user +
-//                ", assignedBus='" + assignedBus + '\'' +
-//                ", commutePlan=" + commutePlan +
-//                ", location='" + location + '\'' +
-//                '}';
-//    }
+    public enum CommutePlan {
+          MORNING_ONLY,   // Student commutes in the morning only
+          EVENING_ONLY,   // Student commutes in the evening only
+          ROUND_TRIP      // Student commutes both morning and evening
+     }
+
+    @Column(nullable = false)
+    private String location;
+
+    @Column(name = "commute_plan")
+    private CommutePlan commutePlan;
+
+    // Many-to-one unidirectional mapping to Bus entity
+    @ManyToOne
+    @JoinColumn(name = "bus_assigned_id")
+    private Bus busAssigned; // A Foreign key that references Bus(id) which represents the student's bus assigned profile
+
+    // Many-to-one unidirectional mapping to Bus entity
+    @ManyToOne
+    @JoinColumn(name = "trip_booked_id")
+    private Bus tripBooked; // A Foreign key that references Bus(id) which is initially stored as Null, but updated when student books or Cancels his/her departure trip
+
+    //default constructor
+    public Student(){}
+
+    public Student(String location, CommutePlan commutePlan, Bus busAssigned, Bus tripBooked) {
+        this.location = location;
+        this.commutePlan = commutePlan;
+        this.busAssigned = busAssigned;
+        this.tripBooked = tripBooked;
+    }
+
+    //getters and setters
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    public CommutePlan getCommutePlan() {
+        return commutePlan;
+    }
+
+    public void setCommutePlan(CommutePlan commutePlan) {
+        this.commutePlan = commutePlan;
+    }
+
+    public Bus getBusAssigned() {
+        return busAssigned;
+    }
+
+    public void setBusAssigned(Bus busAssigned) {
+        this.busAssigned = busAssigned;
+    }
+
+    public Bus getTripBooked() {
+        return tripBooked;
+    }
+
+    public void setTripBooked(Bus tripBooked) {
+        this.tripBooked = tripBooked;
+    }
+
+    //toString()
+    @Override
+    public String toString() {
+        return "Student{" +
+                "location='" + location + '\'' +
+                ", commutePlan=" + commutePlan +
+                ", busAssigned=" + busAssigned +
+                ", tripBooked=" + tripBooked +
+                '}';
+    }
+
 }
