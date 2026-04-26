@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Dashboard - TigerBoard</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+    <style>
+        body {
+            background-color: #f5f7fa;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            color: #1f2937;
+        }
+
+        .page-wrapper {
+            min-height: 100vh;
+        }
+
+        .footer-note {
+            text-align: center;
+            color: #6c757d;
+            font-size: 0.95rem;
+            padding: 24px 0 8px 0;
+        }
+
+        .navbar-brand {
+            font-weight: bold;
+            letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .hero-section {
+            background: linear-gradient(135deg, #ff8c00, #e06e00);
+            color: white;
+            border-radius: 16px;
+            padding: 32px;
+            margin-bottom: 24px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+        }
+
+        .card {
+            border: none;
+            border-radius: 16px;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+            background: white;
+        }
+
+        .loading-box {
+            display: none;
+            padding: 12px 16px;
+            border-radius: 12px;
+            background: white;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            margin-bottom: 16px;
+        }
+
+        .section-title {
+            font-size: 1.1rem;
+            font-weight: bold;
+            margin-bottom: 16px;
+        }
+
+        .count-value {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 0;
+        }
+
+        .muted-text {
+            color: #6c757d;
+        }
+
+        .profile-line {
+            margin-bottom: 10px;
+        }
+
+        .profile-label {
+            font-weight: bold;
+        }
+
+        /* ── Bus Row Cards ── */
+        .buses-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .bus-row-card {
+            display: flex;
+            align-items: center;
+            background-color: white;
+            border-radius: 12px;
+            padding: 12px 16px;
+            gap: 12px;
+            border: 1px solid #e0e4e8;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+
+        .bus-row-card:hover {
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .bus-row-card.booked {
+            border-color: #198754;
+            background-color: #f0fff4;
+        }
+
+        .bus-row-left {
+            background-color: #fff5eb;
+            border-radius: 8px;
+            padding: 10px 14px;
+            font-weight: bold;
+            color: #7a4a1a;
+            font-size: 0.9rem;
+            min-width: 100px;
+            text-align: center;
+            border: 1px solid #ffe0c4;
+            line-height: 1.6;
+        }
+
+        .bus-row-card.booked .bus-row-left {
+            border-color: #198754;
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .bus-row-middle {
+            flex: 1;
+            background-color: #fafdff;
+            border-radius: 8px;
+            padding: 10px 14px;
+            color: #2c3e50;
+            font-size: 0.9rem;
+            border: 1px solid #eef2f8;
+            text-align: left;
+        }
+
+        .bus-row-card.booked .bus-row-middle {
+            border-color: #198754;
+        }
+
+        .bus-row-right {
+            background-color: white;
+            border-radius: 50%;
+            width: 42px;
+            height: 42px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+            color: #f97316;
+            border: 1px solid #ffdac2;
+            cursor: pointer;
+            flex-shrink: 0;
+            transition: all 0.2s;
+        }
+
+        .bus-row-right:hover {
+            background-color: #f97316;
+            color: white;
+        }
+
+        .bus-row-right:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            background-color: #f1f5f9;
+            color: #94a3b8;
+        }
+
+        .bus-row-right.booked {
+            background-color: #ef4444;
+            border-color: #ef4444;
+            color: white;
+        }
+
+        .bus-row-right.booked:hover {
+            background-color: #dc2626;
+        }
+
+        .booked-label {
+            display: inline-block;
+            background-color: #198754;
+            color: white;
+            font-size: 0.7rem;
+            font-weight: 600;
+            padding: 2px 7px;
+            border-radius: 20px;
+            margin-top: 5px;
+        }
+
+        .bus-info-item {
+            display: inline-block;
+            margin-right: 20px;
+        }
+
+        .bus-info-label {
+            font-weight: normal;
+            color: #6c757d;
+            font-size: 0.75rem;
+        }
+
+        .bus-info-value {
+            font-weight: bold;
+            color: #1f2937;
+            margin-left: 5px;
+        }
+    </style>
+</head>
+<body>
+<div class="page-wrapper">
+
+    <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #1e293b; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+        <div class="container">
+            <a class="navbar-brand" href="/" style="color: #ff8c00;">
+                <span>TigerBoard Student</span>
+            </a>
+            <div class="d-flex gap-2">
+                <button id="refreshButton" class="btn btn-outline-secondary btn-sm" style="color: white;">Refresh</button>
+                <button id="logoutButton" class="btn btn-warning btn-sm">Logout</button>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container py-4">
+
+        <div id="loadingBox" class="loading-box">
+            <div class="d-flex align-items-center gap-2">
+                <div class="spinner-border spinner-border-sm text-warning" role="status"></div>
+                <span>Loading dashboard data...</span>
+            </div>
+        </div>
+
+        <section class="hero-section">
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <h1 class="h3 mb-2">Student Dashboard</h1>
+                    <p class="mb-0">View available buses, your assignments, and commute details.</p>
+                </div>
+                <div class="col-md-4 text-md-end mt-3 mt-md-0">
+                    <span class="badge bg-light text-dark px-3 py-2">Role: STUDENT</span>
+                </div>
+            </div>
+        </section>
+
+        <section class="row g-4 mb-4">
+            <div class="col-lg-4">
+                <div class="card h-100 p-4">
+                    <div class="section-title">Student Profile</div>
+                    <div id="profileContent">
+                        <div class="profile-line">
+                            <span class="profile-label">First Name: </span>
+                            <span id="studentFirstName">Loading...</span>
+                        </div>
+                        <div class="profile-line">
+                            <span class="profile-label">Last Name: </span>
+                            <span id="studentLastName">Loading...</span>
+                        </div>
+                        <div class="profile-line">
+                            <span class="profile-label">Email: </span>
+                            <span id="studentEmail">Loading...</span>
+                        </div>
+                        <div class="profile-line">
+                            <span class="profile-label">Location: </span>
+                            <span id="studentLocation">Loading...</span>
+                        </div>
+                        <div class="profile-line">
+                            <span class="profile-label">Commute Plan: </span>
+                            <span id="studentCommutePlan">Loading...</span>
+                        </div>
+                        <div class="profile-line">
+                            <span class="profile-label">Role: </span>
+                            <span id="studentRole">STUDENT</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-8">
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <div class="card h-100 p-4 text-center">
+                            <div class="muted-text mb-2">Total Buses</div>
+                            <p id="totalBusesCount" class="count-value">0</p>
+                            <small class="muted-text">Records</small>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card h-100 p-4 text-center">
+                            <div class="muted-text mb-2">Active Buses</div>
+                            <p id="activeBusesCount" class="count-value">0</p>
+                            <small class="muted-text">Records</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="mb-4">
+            <div class="section-title">Available Buses</div>
+            <div id="busesGridContainer" class="buses-grid">
+                <!-- Empty container - placeholders removed, filled dynamically -->
+            </div>
+        </section>
+
+        <div class="footer-note">
+            TigerBoard student area for viewing available buses and commute information.
+        </div>
+    </main>
+
+    <!-- Booking Confirmation Modal -->
+    <div id="bookingModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.6); backdrop-filter: blur(3px); z-index:1050; align-items:center; justify-content:center;">
+        <div style="background:white; border-radius:16px; padding:32px; max-width:400px; width:90%; text-align:center; box-shadow:0 20px 35px rgba(0,0,0,0.2);">
+            <h5 style="color:#1f2937; margin-bottom:8px;">Confirm Booking</h5>
+            <p id="modalBusInfo" style="color:#6b7280; margin-bottom:24px;">Are you sure you want to book this bus?</p>
+            <div style="display:flex; gap:12px; justify-content:center;">
+                <button id="modalConfirmBtn" style="flex:1; background:#198754; border:none; color:white; border-radius:8px; padding:10px 20px; font-weight:600; cursor:pointer;">Confirm Booking</button>
+                <button id="modalCloseBtn" style="flex:1; background:#e5e7eb; border:none; color:#1f2937; border-radius:8px; padding:10px 20px; font-weight:600; cursor:pointer;">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div class="toast-container position-fixed top-0 end-0 p-3">
+        <div id="statusToast" class="toast align-items-center text-white border-0" style="background:#1f2937;" role="alert">
+            <div class="d-flex">
+                <div id="toastMessage" class="toast-body">Message</div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+    const API_BASE_URL = "/api";
+    const LOGIN_PAGE = "index.html";
+    const STORAGE_LOGGED_IN_USER_KEY = "loggedInUser";
+    const STORAGE_USER_ROLE_KEY = "userRole";
+
+    let statusToast;
+    let dom = {};
+    let busListCache = [];
+    let pendingBooking = { busId: null, studentId: null };
+
+    $(initializeDashboard);
+
+    function initializeDashboard() {
+        cacheDomElements();
+        statusToast = new bootstrap.Toast(document.getElementById("statusToast"));
+        bindEvents();
+        loadDashboardData();
+    }
+
+    function cacheDomElements() {
+        dom = {
+            $refreshButton:      $("#refreshButton"),
+            $logoutButton:       $("#logoutButton"),
+            $loadingBox:         $("#loadingBox"),
+            $toastMessage:       $("#toastMessage"),
+            $studentFirstName:   $("#studentFirstName"),
+            $studentLastName:    $("#studentLastName"),
+            $studentEmail:       $("#studentEmail"),
+            $studentLocation:    $("#studentLocation"),
+            $studentCommutePlan: $("#studentCommutePlan"),
+            $studentRole:        $("#studentRole"),
+            $totalBusesCount:    $("#totalBusesCount"),
+            $activeBusesCount:   $("#activeBusesCount"),
+            $busesGridContainer: $("#busesGridContainer")
+        };
+    }
+
+    function bindEvents() {
+        dom.$refreshButton.on("click", loadDashboardData);
+        dom.$logoutButton.on("click", logoutUser);
+
+        document.getElementById("modalCloseBtn").addEventListener("click", function () {
+            document.getElementById("bookingModal").style.display = "none";
+            pendingBooking = { busId: null, studentId: null };
+        });
+
+        document.getElementById("modalConfirmBtn").addEventListener("click", confirmBooking);
+    }
+
+    function loadDashboardData() {
+        const loggedInUser = safeGetLoggedInUser();
+        renderStudentProfile(loggedInUser);
+        loadBusData();
+    }
+
+    function safeGetLoggedInUser() {
+        const rawUser = localStorage.getItem(STORAGE_LOGGED_IN_USER_KEY);
+        if (!rawUser) return null;
+        try {
+            return JSON.parse(rawUser);
+        } catch (e) {
+            localStorage.removeItem(STORAGE_LOGGED_IN_USER_KEY);
+            return null;
+        }
+    }
+
+    function renderStudentProfile(loggedInUser) {
+        if (!loggedInUser) {
+            dom.$studentFirstName.text("Guest");
+            dom.$studentLastName.text("User");
+            dom.$studentEmail.text("N/A");
+            dom.$studentLocation.text("N/A");
+            dom.$studentCommutePlan.text("N/A");
+            dom.$studentRole.text("STUDENT");
+            return;
+        }
+        dom.$studentFirstName.text(loggedInUser.firstName || "N/A");
+        dom.$studentLastName.text(loggedInUser.lastName || "N/A");
+        dom.$studentEmail.text(loggedInUser.emailID || loggedInUser.email || "N/A");
+        dom.$studentLocation.text(loggedInUser.location || "N/A");
+        dom.$studentCommutePlan.text(loggedInUser.commutePlan || "N/A");
+        dom.$studentRole.text((loggedInUser.userRole || "STUDENT").toUpperCase());
+    }
+
+    function loadBusData() {
+        showLoading(true);
+        $.get(API_BASE_URL + "/buses")
+            .done(function (data) {
+                busListCache = Array.isArray(data) ? data : [];
+                renderBusTable(busListCache);
+                updateBusCounts(busListCache);
+            })
+            .fail(function () {
+                busListCache = [];
+                renderBusTable([]);
+                updateBusCounts([]);
+                showToast("Could not load buses from server.");
+            })
+            .always(function () {
+                showLoading(false);
+            });
+    }
+
+    function renderBusTable(busList) {
+        const loggedInUser = safeGetLoggedInUser();
+        const studentId = loggedInUser ? loggedInUser.id : null;
+        const bookedBusId = loggedInUser ? loggedInUser.tripBookedId : null;
+
+        let html = "";
+
+        if (!busList || busList.length === 0) {
+            html = "<div class='alert alert-info text-center'>No buses available at the moment.</div>";
+            dom.$busesGridContainer.html(html);
+            return;
+        }
+
+        for (let i = 0; i < busList.length; i++) {
+            const bus = busList[i];
+            const isBooked = bookedBusId && bookedBusId === bus.id;
+            const isInactive = bus.isActive === false;
+
+            const cardClass = isBooked ? "bus-row-card booked" : "bus-row-card";
+            const btnClass = isBooked ? "bus-row-right booked" : "bus-row-right";
+            const btnSign = isBooked ? "&#8722;" : "+";
+            const bookedTag = isBooked ? "<div class='booked-label'>&#10003; Booked</div>" : "";
+
+            let btnAttr = "";
+            if (isBooked) {
+                btnAttr = "onclick='cancelTrip(" + studentId + ")'";
+            } else if (isInactive) {
+                btnAttr = "disabled";
+            } else {
+                btnAttr = "onclick='bookTrip(" + bus.id + ", " + studentId + ")'";
+            }
+
+            const statusIcon = bus.isActive ? "🟢" : "🔴";
+            const statusText = bus.isActive ? "Active" : "Inactive";
+            const capacityText = bus.capacity ? bus.capacity + " seats" : "Not specified";
+
+            html += "<div class='" + cardClass + "'>";
+            html += "  <div class='bus-row-left'>";
+            html += "    <div style='font-size:1.2rem;'>🚌</div>";
+            html += "    <div>" + (bus.busNumber || "N/A") + "</div>";
+            html += "    " + bookedTag;
+            html += "  </div>";
+            html += "  <div class='bus-row-middle'>";
+            html += "    <div class='bus-info-item'>";
+            html += "      <span class='bus-info-label'>Capacity:</span>";
+            html += "      <span class='bus-info-value'>" + capacityText + "</span>";
+            html += "    </div>";
+            html += "    <div class='bus-info-item'>";
+            html += "      <span class='bus-info-label'>Status:</span>";
+            html += "      <span class='bus-info-value'>" + statusIcon + " " + statusText + "</span>";
+            html += "    </div>";
+            if (bus.route) {
+                html += "    <div class='bus-info-item'>";
+                html += "      <span class='bus-info-label'>Route:</span>";
+                html += "      <span class='bus-info-value'>" + bus.route + "</span>";
+                html += "    </div>";
+            }
+            html += "  </div>";
+            html += "  <button class='" + btnClass + "' " + btnAttr + ">" + btnSign + "</button>";
+            html += "</div>";
+        }
+
+        dom.$busesGridContainer.html(html);
+    }
+
+    function updateBusCounts(busList) {
+        dom.$totalBusesCount.text(busList.length);
+        dom.$activeBusesCount.text(busList.filter(b => b.isActive === true).length);
+    }
+
+    function bookTrip(busId, studentId) {
+        const bus = busListCache.find(b => b.id === busId);
+        const busDisplayValue = bus ? bus.busNumber : "N/A";
+
+        pendingBooking = { busId, studentId };
+        document.getElementById("modalBusInfo").textContent = "Are you sure you want to book Bus " + busDisplayValue + "?";
+        document.getElementById("bookingModal").style.display = "flex";
+    }
+
+    function confirmBooking() {
+        document.getElementById("bookingModal").style.display = "none";
+        const { busId, studentId } = pendingBooking;
+
+        if (!busId) return;
+
+        const confirmBtn = document.getElementById("modalConfirmBtn");
+        confirmBtn.disabled = true;
+        confirmBtn.textContent = "Confirming...";
+        showLoading(true);
+
+        if (!studentId) {
+            setTimeout(function () {
+                const user = safeGetLoggedInUser();
+                if (user) {
+                    user.tripBookedId = busId;
+                    localStorage.setItem(STORAGE_LOGGED_IN_USER_KEY, JSON.stringify(user));
+                }
+                loadBusData();
+                showToast("✓ Trip booked successfully! (Demo)");
+                confirmBtn.disabled = false;
+                confirmBtn.textContent = "Confirm Booking";
+                showLoading(false);
+                pendingBooking = { busId: null, studentId: null };
+            }, 800);
+            return;
+        }
+
+        $.ajax({ url: API_BASE_URL + "/students/" + studentId, method: "GET" })
+            .done(function (student) {
+                $.ajax({
+                    url: API_BASE_URL + "/students/" + studentId,
+                    method: "PUT",
+                    contentType: "application/json",
+                    data: JSON.stringify({
+                        emailID:       student.emailID,
+                        firstName:     student.firstName,
+                        lastName:      student.lastName,
+                        location:      student.location,
+                        commutePlan:   student.commutePlan,
+                        busAssignedId: student.busAssignedId,
+                        tripBookedId:  busId
+                    })
+                }).done(function () {
+                    const user = safeGetLoggedInUser();
+                    if (user) {
+                        user.tripBookedId = busId;
+                        localStorage.setItem(STORAGE_LOGGED_IN_USER_KEY, JSON.stringify(user));
+                    }
+                    showToast("✓ Trip booked successfully!");
+                    loadBusData();
+                }).fail(function () {
+                    showToast("✗ Failed to book trip. Please try again.");
+                }).always(function () {
+                    confirmBtn.disabled = false;
+                    confirmBtn.textContent = "Confirm Booking";
+                    showLoading(false);
+                    pendingBooking = { busId: null, studentId: null };
+                });
+            })
+            .fail(function () {
+                showToast("✗ Could not fetch student data.");
+                confirmBtn.disabled = false;
+                confirmBtn.textContent = "Confirm Booking";
+                showLoading(false);
+            });
+    }
+
+    function cancelTrip(studentId) {
+        if (!studentId) {
+            showToast("Please log in to cancel a trip.");
+            return;
+        }
+        if (!confirm("Are you sure you want to cancel this trip?")) return;
+
+        showLoading(true);
+
+        $.ajax({ url: API_BASE_URL + "/students/" + studentId, method: "GET" })
+            .done(function (student) {
+                $.ajax({
+                    url: API_BASE_URL + "/students/" + studentId,
+                    method: "PUT",
+                    contentType: "application/json",
+                    data: JSON.stringify({
+                        emailID:       student.emailID,
+                        firstName:     student.firstName,
+                        lastName:      student.lastName,
+                        location:      student.location,
+                        commutePlan:   student.commutePlan,
+                        busAssignedId: student.busAssignedId,
+                        tripBookedId:  null
+                    })
+                }).done(function () {
+                    const user = safeGetLoggedInUser();
+                    if (user) {
+                        user.tripBookedId = null;
+                        localStorage.setItem(STORAGE_LOGGED_IN_USER_KEY, JSON.stringify(user));
+                    }
+                    showToast("✓ Trip cancelled successfully!");
+                    loadBusData();
+                }).fail(function () {
+                    showToast("✗ Failed to cancel trip. Please try again.");
+                }).always(function () {
+                    showLoading(false);
+                });
+            })
+            .fail(function () {
+                showToast("✗ Could not fetch student data. Please try again.");
+                showLoading(false);
+            });
+    }
+
+    function logoutUser() {
+        localStorage.removeItem(STORAGE_LOGGED_IN_USER_KEY);
+        localStorage.removeItem(STORAGE_USER_ROLE_KEY);
+        window.location.href = LOGIN_PAGE;
+    }
+
+    function showLoading(isLoading) {
+        isLoading ? dom.$loadingBox.show() : dom.$loadingBox.hide();
+    }
+
+    function showToast(message) {
+        dom.$toastMessage.text(message);
+        statusToast.show();
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>TigerBoard Student CRUD</title>
+    <link rel="stylesheet" href="/css/tigerboard-theme.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <style>
+
+        body {
+            background-color: var(--bg-color);
+        }
+
+        .navbar {
+            background-color: var(--card-bg) !important;
+        }
+
+        .tb-brand {
+            color: var(--primary-orange);
+            font-weight: 700;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .navbar-logo {
+            height: 40px;
+            width: auto;
+            border-radius: 6px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        /*.btn-tb-primary {*/
+        /*    background-color: var(--primary-orange);*/
+        /*    border-color: var(--primary-orange);*/
+        /*    color: #fff;*/
+        /*}*/
+
+        /*.btn-tb-primary:hover {*/
+        /*    background-color: #e06e00;*/
+        /*    border-color: #e06e00;*/
+        /*    color: #fff;*/
+        /*}*/
+
+        /*.btn-tb-outline {*/
+        /*    border-color: var(--primary-orange);*/
+        /*    color: var(--primary-orange);*/
+        /*}*/
+
+        /*.btn-tb-outline:hover {*/
+        /*    background-color: var(--primary-orange);*/
+        /*    border-color: var(--primary-orange);*/
+        /*    color: #fff;*/
+        /*}*/
+
+        .btn-tb-primary {
+            background-color: var(--primary-orange);
+            border-color: var(--primary-orange);
+            color: #fff !important;
+        }
+
+        .btn-tb-primary:hover,
+        .btn-tb-primary:focus,
+        .btn-tb-primary:active {
+            background-color: #e06e00 !important;
+            border-color: #e06e00 !important;
+            color: #fff !important;
+        }
+
+        .btn-tb-outline {
+            border-color: var(--primary-orange);
+            color: var(--primary-orange) !important;
+            background-color: transparent;
+        }
+
+        .btn-tb-outline:hover,
+        .btn-tb-outline:focus,
+        .btn-tb-outline:active {
+            background-color: var(--primary-orange) !important;
+            border-color: var(--primary-orange) !important;
+            color: #fff !important;
+        }
+
+        .table thead th {
+            background-color: #fff2e8;
+            color: #7a4a1a;
+        }
+
+        .badge-tb-active { background-color: #198754; }
+        .badge-tb-inactive { background-color: #6c757d; }
+
+    </style>
+</head>
+<body>
+
+<nav class="navbar border-bottom shadow-sm">
+    <div class="container py-2">
+        <a class="tb-brand fs-4" href="/">
+<!--            <img src="/logo.jpg" alt="TigerBoard Logo" class="navbar-logo">-->
+            <span>TigerBoard</span>
+        </a>
+        <div class="d-flex gap-2">
+            <a class="btn btn-sm btn-outline-secondary" href="/">Home</a>
+            <a class="btn btn-sm btn-tb-outline" href="/student-dashboard.html">View Only</a>
+        </div>
+    </div>
+</nav>
+
+<main class="container py-4">
+    <div class="card border-0 shadow-sm mb-3">
+        <div class="card-body">
+            <h1 class="h4 mb-3">Student Management (CRUD)</h1>
+            <p class="text-muted mb-3">Use this simple form to create a new student or update an existing one.</p>
+
+            <form id="studentForm" class="row g-3">
+                <input id="studentId" type="hidden">
+
+                <div class="col-md-6">
+                    <label for="emailID" class="form-label">Email ID</label>
+                    <input id="emailID" class="form-control" type="email" placeholder="Example: student@rit.edu" required>
+                </div>
+
+                <div class="col-md-6">
+                    <label for="firstName" class="form-label">First Name</label>
+                    <input id="firstName" class="form-control" type="text" placeholder="Example: John" required>
+                </div>
+
+                <div class="col-md-6">
+                    <label for="lastName" class="form-label">Last Name</label>
+                    <input id="lastName" class="form-control" type="text" placeholder="Example: Doe" required>
+                </div>
+
+                <div class="col-md-6">
+                    <label for="location" class="form-label">Location</label>
+                    <input id="location" class="form-control" type="text" placeholder="Example: Henrietta, NY" required>
+                </div>
+
+                <div class="col-md-6">
+                    <label for="commutePlan" class="form-label">Commute Plan</label>
+                    <select id="commutePlan" class="form-select">
+                        <option value="">Select a commute plan</option>
+                        <option value="MORNING_ONLY">Morning Only</option>
+                        <option value="EVENING_ONLY">Evening Only</option>
+                        <option value="ROUND_TRIP">Round Trip</option>
+                    </select>
+                </div>
+
+                <div class="col-md-6">
+                    <label for="busAssignedNumber" class="form-label">Assigned Bus Number</label>
+                    <input id="busAssignedNumber" class="form-control" type="number" min="1" placeholder="Enter Bus ID (e.g., 1, 2, 3)">
+                </div>
+
+                <div class="col-md-6">
+                    <label for="tripBookedNumber" class="form-label">Trip Booked Bus Number</label>
+                    <input id="tripBookedNumber" class="form-control" type="number" min="1" placeholder="Enter Bus ID (e.g., 1, 2, 3)">
+                </div>
+
+                <div class="col-12 d-flex gap-2">
+                    <button id="saveBtn" type="submit" class="btn btn-tb-primary">Save Student</button>
+                    <button id="cancelEditBtn" type="button" class="btn btn-outline-secondary">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="messageBox" class="alert alert-danger d-none py-2" role="alert"></div>
+
+    <div class="card border-0 shadow-sm">
+        <div class="card-body">
+            <div class="d-flex flex-wrap gap-2 mb-3">
+                <label for="searchInput" class="visually-hidden">Search students</label>
+                <input id="searchInput" class="form-control" style="max-width: 340px" placeholder="Search by email or name">
+                <button id="searchBtn" class="btn btn-tb-outline" type="button">Search</button>
+                <button id="refreshBtn" class="btn btn-outline-dark" type="button">Refresh</button>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table table-hover align-middle">
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Email</th>
+                        <th>Name</th>
+                        <th>Location</th>
+                        <th>Commute Plan</th>
+                        <th>Assigned Bus</th>
+                        <th>Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody id="studentTableBody"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</main>
+
+<script>
+
+    // Create a variable list to store rendered student list in the table,
+    // so we can easily find the selected student for editing without sending another request to the server.
+    var studentListCache = [];
+
+    // updates messagebox with the error text and removes d-none class so its visible
+    function showError(errorText) {
+        var box = $("#messageBox");
+        box.removeClass("d-none")
+            .text(errorText);
+    }
+
+    // makes sure the messagebox is hidden when there is no error
+    function hideError() {
+        $("#messageBox").addClass("d-none").text("");
+    }
+
+    // resets the form to default values for creating a new student, and clears the hidden studentId input
+    function resetForm() {
+        $("#studentId").val("");
+        $("#studentForm")[0].reset();
+        $("#commutePlan").val("");
+        $("#busAssignedNumber").val("");
+        $("#tripBookedNumber").val("");
+        $("#saveBtn").text("Save Student");
+    }
+
+    // validates the FormData, when editing Student or adding new student
+    function validateFormData(formData) {
+        if (formData.emailID.length === 0) {
+            return "Email ID is required.";
+        }
+
+        if (formData.firstName.length === 0) {
+            return "First name is required.";
+        }
+
+        if (formData.lastName.length === 0) {
+            return "Last name is required.";
+        }
+
+        if (formData.location.length === 0) {
+            return "Location is required.";
+        }
+
+        if (formData.commutePlan.length === 0) {
+            return "Commute plan is required.";
+        }
+
+        return null;
+    }
+
+    // Get the form data and convert it to key-value format to return to the backend
+    function getFormData() {
+        return {
+            emailID: $("#emailID").val().trim(),
+            firstName: $("#firstName").val().trim(),
+            lastName: $("#lastName").val().trim(),
+            location: $("#location").val().trim(),
+            commutePlan: $("#commutePlan").val(),
+            busAssignedId: $("#busAssignedNumber").val() ? Number($("#busAssignedNumber").val()) : null,
+            tripBookedId: $("#tripBookedNumber").val() ? Number($("#tripBookedNumber").val()) : null
+        };
+    }
+
+
+    function buildRows(studentList) {
+        var html = "";
+
+        for (var i = 0; i < studentList.length; i++) {
+            var student = studentList[i];
+            var commutePlanText = student.commutePlan || "-";
+            var assignedBusNumber = (student.busAssigned && student.busAssigned.busNumber) ? student.busAssigned.busNumber : "-";
+
+            html += "<tr>";
+            html += "<td>" + (student.id == null ? "-" : student.id) + "</td>";
+            html += "<td>" + (student.emailID || "-") + "</td>";
+            html += "<td>" + (student.firstName || "-") + " " + (student.lastName || "-") + "</td>";
+            html += "<td>" + (student.location || "-") + "</td>";
+            html += "<td>" + commutePlanText + "</td>";
+            html += "<td>" + assignedBusNumber + "</td>";
+            html += "<td>";
+            html += "<button class='btn btn-sm btn-outline-primary me-2 edit-btn' data-id='" + student.id + "'>Edit</button>";
+            html += "<button class='btn btn-sm btn-outline-danger delete-btn' data-id='" + student.id + "'>Delete</button>";
+            html += "</td>";
+            html += "</tr>";
+        }
+
+        return html;
+    }
+
+    // This function is a intermediary to buildRows and runs final checks before it builds the table.
+    function renderTable(studentList) {
+
+        // compressed version of if-else condition where we ask is studentList is an array or else is empty
+        studentListCache = Array.isArray(studentList) ? studentList : [];
+
+        // if studentList is not an array or is empty we show a message in the table
+        if (!Array.isArray(studentList) || studentList.length === 0) {
+            $("#studentTableBody").html("<tr><td colspan='7' class='text-center py-4'>No students found.</td></tr>");
+            return;
+        }
+
+        // if studentList is valid then we build the table
+        $("#studentTableBody").html(buildRows(studentList));
+    }
+
+    // Sends a Get Request to the backend for all the students
+    function loadAllStudents() {
+        hideError();
+
+        $.ajax({url: "/api/students", method: "GET"}).done(function (data) {
+            renderTable(data);
+        }).fail(function (requestError) {
+            renderTable([]);
+            showError("Could not load students. HTTP " + (requestError.status || "error") + ".");
+        });
+    }
+
+    function searchStudents() {
+        var keyword = $("#searchInput").val().trim();
+
+        if (keyword.length === 0) {
+            loadAllStudents();
+            return;
+        }
+
+        hideError();
+
+        $.ajax({
+            url: "/api/students/search?keyword=" + keyword,
+            method: "GET"
+        }).done(function (data) {
+            renderTable(data);
+        }).fail(function (requestError) {
+            renderTable([]);
+            showError("Search failed. HTTP " + (requestError.status || "error") + ".");
+        });
+    }
+
+
+    function saveStudent(event) {
+        event.preventDefault();
+
+        var formData = getFormData();
+        var validationError = validateFormData(formData);
+        if (validationError) {
+            showError(validationError);
+            return;
+        }
+
+        hideError();
+
+        var id = $("#studentId").val();
+        var isUpdate = id.length > 0;
+
+        // if hidden id variable is not set then we are adding a student
+        if (!isUpdate) {
+            $.ajax({
+                url: "/api/students",
+                method: "POST",
+                contentType: "application/json",
+                data: JSON.stringify(formData)
+            }).done(function () {
+                resetForm();
+                loadAllStudents();
+            }).fail(function (requestError) {
+                showError("Create failed. HTTP " + (requestError.status || "error") + ".");
+            });
+            return;
+        }
+
+        // else updates an existing record
+        $.ajax({
+            url: "/api/students/" + id,
+            method: "PUT",
+            contentType: "application/json",
+            data: JSON.stringify(formData)
+        }).done(function () {
+            resetForm();
+            loadAllStudents();
+        }).fail(function (requestError) {
+            showError("Update failed. HTTP " + (requestError.status || "error") + ".");
+        });
+    }
+
+
+    function startEdit(studentId) {
+        var id = Number(studentId);
+        if (!Number.isFinite(id)) {
+            showError("Invalid student ID selected.");
+            return;
+        }
+
+        var selectedStudent = null;
+
+        for (var i = 0; i < studentListCache.length; i++) {
+            if (studentListCache[i].id === id) {
+                selectedStudent = studentListCache[i];
+                break;
+            }
+        }
+
+        if (selectedStudent == null) {
+            showError("Student not found in the current table.");
+            return;
+        }
+
+        hideError();
+
+        $("#studentId").val(selectedStudent.id);
+        $("#emailID").val(selectedStudent.emailID || "");
+        $("#firstName").val(selectedStudent.firstName || "");
+        $("#lastName").val(selectedStudent.lastName || "");
+        $("#location").val(selectedStudent.location || "");
+        $("#commutePlan").val(selectedStudent.commutePlan || "");
+        // Populate with bus IDs (the form expects numeric IDs)
+        $("#busAssignedNumber").val(selectedStudent.busAssignedId == null ? "" : selectedStudent.busAssignedId);
+        $("#tripBookedNumber").val(selectedStudent.tripBookedId == null ? "" : selectedStudent.tripBookedId);
+        $("#saveBtn").text("Update Student");
+
+        window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+
+    function deleteStudent(studentId) {
+        var id = Number(studentId);
+        if (!Number.isFinite(id)) {
+            showError("Invalid student ID selected.");
+            return;
+        }
+
+        if (!window.confirm("Delete student with ID " + id + "?")) {
+            return;
+        }
+
+        hideError();
+
+        $.ajax({
+            url: "/api/students/" + id,
+            method: "DELETE"
+        }).done(function () {
+            loadAllStudents();
+        }).fail(function (requestError) {
+            showError("Delete failed. HTTP " + (requestError.status || "error") + ".");
+        });
+    }
+
+    // this function runs when the page is completely loaded
+    $(function () {
+
+        $("#studentForm").on("submit", saveStudent);
+
+        $("#cancelEditBtn").on("click", function () {
+            resetForm();
+            hideError();
+        });
+
+        $("#searchBtn").on("click", searchStudents);
+
+        $("#refreshBtn").on("click", function () {
+            $("#searchInput").val("");
+            loadAllStudents();
+        });
+
+        $("#searchInput").on("keydown", function (event) {
+            if (event.key === "Enter") {
+                event.preventDefault();
+                searchStudents();
+            }
+        });
+
+        $("#studentTableBody").on("click", ".edit-btn", function () {
+            startEdit($(this).data("id"));
+        });
+
+        $("#studentTableBody").on("click", ".delete-btn", function () {
+            deleteStudent($(this).data("id"));
+        });
+
+        resetForm();
+        loadAllStudents();
+    });
+</script>
+</body>
+</html>
