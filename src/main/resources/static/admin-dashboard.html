@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - TigerBoard</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+    <style>
+        body {
+            background: #f4f7fb;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            color: #1f2937;
+        }
+
+        .page-wrapper {
+            min-height: 100vh;
+        }
+
+        .footer-note {
+            text-align: center;
+            color: #6c757d;
+            font-size: 0.95rem;
+            padding: 24px 0 8px 0;
+        }
+
+        .navbar-brand {
+            font-weight: bold;
+            letter-spacing: 0.5px;
+        }
+
+        .hero-section {
+            background: linear-gradient(135deg, #0d6efd, #0b5ed7);
+            color: white;
+            border-radius: 16px;
+            padding: 32px;
+            margin-bottom: 24px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+        }
+
+        .card {
+            border: none;
+            border-radius: 16px;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+        }
+
+        .action-card {
+            transition: all 0.3s;
+        }
+
+        .action-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 24px rgba(0, 0, 0, 0.12);
+        }
+
+        /* ========== Status & Result Styles ========== */
+        .loading-box {
+            display: none;
+            padding: 12px 16px;
+            border-radius: 12px;
+            background: white;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            margin-bottom: 16px;
+        }
+
+        .error {
+            background-color: #f8d7da;
+            color: #721c24;
+            padding: 12px 16px;
+            border-radius: 12px;
+            margin-bottom: 16px;
+        }
+
+        .section-title {
+            font-size: 1.1rem;
+            font-weight: bold;
+            margin-bottom: 16px;
+        }
+
+        .count-value {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 0;
+        }
+
+        .muted-text {
+            color: #6c757d;
+        }
+
+        .profile-line {
+            margin-bottom: 10px;
+        }
+
+        .profile-label {
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+<div class="page-wrapper">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">TigerBoard Admin</a>
+            <div class="d-flex gap-2">
+                <button id="refreshButton" class="btn btn-outline-light btn-sm">Refresh</button>
+                <button id="logoutButton" class="btn btn-warning btn-sm">Logout</button>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container py-4">
+        <div id="loadingBox" class="loading-box">
+            <div class="d-flex align-items-center gap-2">
+                <div class="spinner-border spinner-border-sm text-primary" role="status"></div>
+                <span>Loading dashboard data...</span>
+            </div>
+        </div>
+
+        <section class="hero-section">
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <h1 class="h3 mb-2">Admin Dashboard</h1>
+                    <p class="mb-0">
+                        Manage the TigerBoard system and navigate to Students, Drivers, and Buses CRUD pages.
+                    </p>
+                </div>
+                <div class="col-md-4 text-md-end mt-3 mt-md-0">
+                    <span class="badge bg-light text-dark px-3 py-2">Role: ADMIN</span>
+                </div>
+            </div>
+        </section>
+
+        <section class="row g-4 mb-4">
+            <div class="col-lg-4">
+                <div class="card h-100 p-4">
+                    <div class="section-title">Admin Profile</div>
+                    <div id="profileContent">
+                        <div class="profile-line">
+                            <span class="profile-label">First Name:</span>
+                            <span id="adminFirstName">Loading...</span>
+                        </div>
+                        <div class="profile-line">
+                            <span class="profile-label">Last Name:</span>
+                            <span id="adminLastName">Loading...</span>
+                        </div>
+                        <div class="profile-line">
+                            <span class="profile-label">Email:</span>
+                            <span id="adminEmail">Loading...</span>
+                        </div>
+                        <div class="profile-line">
+                            <span class="profile-label">Role:</span>
+                            <span id="adminRole">ADMIN</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-8">
+                <div class="row g-3">
+                    <div class="col-md-4">
+                        <div class="card h-100 p-4 text-center">
+                            <div class="muted-text mb-2">Students</div>
+                            <p id="studentsCount" class="count-value">0</p>
+                            <small class="muted-text">Total records</small>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card h-100 p-4 text-center">
+                            <div class="muted-text mb-2">Drivers</div>
+                            <p id="driversCount" class="count-value">0</p>
+                            <small class="muted-text">Total records</small>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card h-100 p-4 text-center">
+                            <div class="muted-text mb-2">Buses</div>
+                            <p id="busesCount" class="count-value">0</p>
+                            <small class="muted-text">Total records</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="mb-4">
+            <div class="section-title">Quick Actions</div>
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="card action-card h-100 p-4">
+                        <h2 class="h5">Students</h2>
+                        <p class="muted-text mb-4">
+                            Manage student records, search entries, and update assignments.
+                        </p>
+                        <a href="students-crud.html" class="btn btn-primary">Open Students CRUD</a>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="card action-card h-100 p-4">
+                        <h2 class="h5">Drivers</h2>
+                        <p class="muted-text mb-4">
+                            Manage driver records, assigned buses, and contact details.
+                        </p>
+                        <a href="drivers-crud.html" class="btn btn-success">Open Drivers CRUD</a>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="card action-card h-100 p-4">
+                        <h2 class="h5">Buses</h2>
+                        <p class="muted-text mb-4">
+                            Manage buses, routes, capacity, and availability status.
+                        </p>
+                        <a href="buses-crud.html" class="btn btn-dark">Open Buses CRUD</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="footer-note">
+            TigerBoard admin area for managing system records.
+        </div>
+    </main>
+</div>
+
+<div class="toast-container position-fixed top-0 end-0 p-3">
+    <div id="statusToast" class="toast align-items-center text-bg-dark border-0" role="alert">
+        <div class="d-flex">
+            <div id="toastMessage" class="toast-body">Message</div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+    const API_BASE_URL = "/api";
+    const ADMIN_ROLE = "ADMIN";
+    const LOGIN_PAGE = "index.html";
+    const REDIRECT_DELAY_MS = 1200;
+    const TOTAL_COUNT_REQUESTS = 3;
+    const STORAGE_LOGGED_IN_USER_KEY = "loggedInUser";
+    const STORAGE_USER_ROLE_KEY = "userRole";
+
+    let statusToast;
+    let dom = {};
+
+    $(initializeDashboard);
+
+    function initializeDashboard() {
+        cacheDomElements();
+        statusToast = new bootstrap.Toast(document.getElementById("statusToast"));
+        bindEvents();
+        loadDashboardData();
+    }
+
+    function cacheDomElements() {
+        dom = {
+            $refreshButton: $("#refreshButton"),
+            $logoutButton: $("#logoutButton"),
+            $loadingBox: $("#loadingBox"),
+            $toastMessage: $("#toastMessage"),
+            $adminFirstName: $("#adminFirstName"),
+            $adminLastName: $("#adminLastName"),
+            $adminEmail: $("#adminEmail"),
+            $adminRole: $("#adminRole"),
+            $studentsCount: $("#studentsCount"),
+            $driversCount: $("#driversCount"),
+            $busesCount: $("#busesCount")
+        };
+    }
+
+    function bindEvents() {
+        dom.$refreshButton.on("click", loadDashboardData);
+        dom.$logoutButton.on("click", logoutUser);
+    }
+
+    // ========== Dashboard Data Loading ==========
+    // function loadDashboardData() {
+    //     const loggedInUser = safeGetLoggedInUser();
+    //
+    //     if (!isAuthorizedAdmin(loggedInUser)) {
+    //         handleUnauthorizedAccess();
+    //         return;
+    //     }
+    //
+    //     renderAdminProfile(loggedInUser);
+    //     loadCounts();
+    // }
+
+    function safeGetLoggedInUser() {
+        const rawUser = localStorage.getItem(STORAGE_LOGGED_IN_USER_KEY);
+
+        if (!rawUser) {
+            return null;
+        }
+
+        try {
+            return JSON.parse(rawUser);
+        } catch (error) {
+            // Remove corrupt session payload to avoid repeated parse failures.
+            localStorage.removeItem(STORAGE_LOGGED_IN_USER_KEY);
+            return null;
+        }
+    }
+
+    function isAuthorizedAdmin(loggedInUser) {
+        if (!loggedInUser) {
+            return false;
+        }
+
+        const roleFromUser = (loggedInUser.userRole || "").toUpperCase();
+        const roleFromStorage = (localStorage.getItem(STORAGE_USER_ROLE_KEY) || "").toUpperCase();
+
+        return roleFromUser === ADMIN_ROLE || roleFromStorage === ADMIN_ROLE;
+    }
+
+    // function handleUnauthorizedAccess() {
+    //     showLoading(false);
+    //     showToast("Admin login required. Redirecting to login page.");
+    //     setTimeout(redirectToLogin, REDIRECT_DELAY_MS);
+    // }
+
+    function renderAdminProfile(loggedInUser) {
+        dom.$adminFirstName.text(loggedInUser.firstName || "N/A");
+        dom.$adminLastName.text(loggedInUser.lastName || "N/A");
+        dom.$adminEmail.text(loggedInUser.emailID || loggedInUser.email || "N/A");
+        dom.$adminRole.text((loggedInUser.userRole || ADMIN_ROLE).toUpperCase());
+    }
+
+    function loadCounts() {
+        let completedRequests = 0;
+        showLoading(true);
+
+        function markRequestDone() {
+            completedRequests++;
+            if (completedRequests === TOTAL_COUNT_REQUESTS) {
+                showLoading(false);
+            }
+        }
+
+        fetchCount("/students", dom.$studentsCount, "students", markRequestDone);
+        fetchCount("/drivers", dom.$driversCount, "drivers", markRequestDone);
+        fetchCount("/buses", dom.$busesCount, "buses", markRequestDone);
+    }
+
+    function fetchCount(endpoint, $targetElement, resourceLabel, onComplete) {
+        $.get(API_BASE_URL + endpoint)
+            .done(function (data) {
+                $targetElement.text(Array.isArray(data) ? data.length : 0);
+            })
+            .fail(function () {
+                $targetElement.text("0");
+                showToast("Could not load " + resourceLabel + " count.");
+            })
+            .always(onComplete);
+    }
+
+    function logoutUser() {
+        localStorage.removeItem(STORAGE_LOGGED_IN_USER_KEY);
+        localStorage.removeItem(STORAGE_USER_ROLE_KEY);
+        redirectToLogin();
+    }
+
+    function redirectToLogin() {
+        window.location.href = LOGIN_PAGE;
+    }
+
+    function showLoading(isLoading) {
+        if (isLoading) {
+            dom.$loadingBox.show();
+        } else {
+            dom.$loadingBox.hide();
+        }
+    }
+
+    function showToast(message) {
+        dom.$toastMessage.text(message);
+        statusToast.show();
+    }
+</script>
+</body>
+</html>

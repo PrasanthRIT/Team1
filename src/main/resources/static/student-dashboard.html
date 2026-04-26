@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Dashboard - TigerBoard</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/tigerboard-theme.css">
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+    <style>
+        body {
+            background-color: var(--bg-color);
+            font-family: Arial, sans-serif;
+            margin: 0;
+            color: #1f2937;
+        }
+
+        .page-wrapper {
+            min-height: 100vh;
+        }
+
+        .footer-note {
+            text-align: center;
+            color: #6c757d;
+            font-size: 0.95rem;
+            padding: 24px 0 8px 0;
+        }
+
+        .navbar-brand {
+            font-weight: bold;
+            letter-spacing: 0.5px;
+        }
+
+        .hero-section {
+            background: linear-gradient(135deg, #ff8c00, #e06e00);
+            color: white;
+            border-radius: 16px;
+            padding: 32px;
+            margin-bottom: 24px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+        }
+
+        .card {
+            border: none;
+            border-radius: 16px;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+        }
+
+        .bus-card {
+            transition: all 0.3s;
+            height: 100%;
+        }
+
+        .bus-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 24px rgba(0, 0, 0, 0.12);
+        }
+
+        /* Status & Result Styles */
+        .loading-box {
+            display: none;
+            padding: 12px 16px;
+            border-radius: 12px;
+            background: white;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            margin-bottom: 16px;
+        }
+
+        .error {
+            background-color: #f8d7da;
+            color: #721c24;
+            padding: 12px 16px;
+            border-radius: 12px;
+            margin-bottom: 16px;
+        }
+
+        .section-title {
+            font-size: 1.1rem;
+            font-weight: bold;
+            margin-bottom: 16px;
+        }
+
+        .count-value {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 0;
+        }
+
+        .muted-text {
+            color: #6c757d;
+        }
+
+        .profile-line {
+            margin-bottom: 10px;
+        }
+
+        .profile-label {
+            font-weight: bold;
+        }
+
+        .bus-info {
+            margin-bottom: 12px;
+        }
+
+        .bus-badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            margin-top: 8px;
+        }
+
+        .badge-active {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .badge-inactive {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+
+        .table-responsive-custom {
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+        }
+
+        .table {
+            margin-bottom: 0;
+        }
+
+        .table thead th {
+            background-color: #fff2e8;
+            color: #7a4a1a;
+            border: none;
+        }
+
+        .table tbody tr {
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .table tbody tr:hover {
+            background-color: #f8f9fa;
+        }
+
+        .buses-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 24px;
+            margin-bottom: 24px;
+        }
+
+        .bus-card-item {
+            border: none;
+            border-radius: 12px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .bus-card-item:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+        }
+
+        .bus-card-header {
+            background: linear-gradient(135deg, #ff8c00, #e06e00);
+            color: white;
+            padding: 16px;
+            font-size: 1.3rem;
+            font-weight: bold;
+        }
+
+        .bus-card-body {
+            padding: 16px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .bus-card-detail {
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .bus-card-label {
+            font-weight: 600;
+            color: #6c757d;
+            font-size: 0.9rem;
+        }
+
+        .bus-card-value {
+            color: #1f2937;
+            font-weight: 500;
+        }
+
+        .bus-card-status {
+            margin-bottom: 12px;
+        }
+
+        .bus-card-footer {
+            padding: 12px 16px;
+            background-color: #f8f9fa;
+            border-top: 1px solid #e9ecef;
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn-book {
+            flex: 1;
+            background-color: #198754;
+            border: none;
+            color: white;
+            border-radius: 6px;
+            padding: 8px 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-book:hover {
+            background-color: #157347;
+            transform: scale(1.05);
+        }
+
+        .btn-cancel {
+            flex: 1;
+            background-color: #dc3545;
+            border: none;
+            color: white;
+            border-radius: 6px;
+            padding: 8px 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-cancel:hover {
+            background-color: #c82333;
+            transform: scale(1.05);
+        }
+
+        .btn-book:disabled, .btn-cancel:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 48px 24px;
+            color: #6c757d;
+        }
+
+        .empty-state-icon {
+            font-size: 3rem;
+            margin-bottom: 16px;
+        }
+    </style>
+</head>
+<body>
+<div class="page-wrapper">
+    <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: var(--card-bg);">
+        <div class="container">
+            <a class="navbar-brand" href="/" style="color: var(--primary-orange);">TigerBoard Student</a>
+            <div class="d-flex gap-2">
+                <button id="refreshButton" class="btn btn-outline-secondary btn-sm">Refresh</button>
+                <button id="logoutButton" class="btn btn-warning btn-sm">Logout</button>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container py-4">
+        <div id="loadingBox" class="loading-box">
+            <div class="d-flex align-items-center gap-2">
+                <div class="spinner-border spinner-border-sm text-warning" role="status"></div>
+                <span>Loading dashboard data...</span>
+            </div>
+        </div>
+
+        <section class="hero-section">
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <h1 class="h3 mb-2">Student Dashboard</h1>
+                    <p class="mb-0">
+                        View available buses, your assignments, and commute details.
+                    </p>
+                </div>
+                <div class="col-md-4 text-md-end mt-3 mt-md-0">
+                    <span class="badge bg-light text-dark px-3 py-2">Role: STUDENT</span>
+                </div>
+            </div>
+        </section>
+
+        <section class="row g-4 mb-4">
+            <div class="col-lg-4">
+                <div class="card h-100 p-4">
+                    <div class="section-title">Student Profile</div>
+                    <div id="profileContent">
+                        <div class="profile-line">
+                            <span class="profile-label">First Name:</span>
+                            <span id="studentFirstName">Loading...</span>
+                        </div>
+                        <div class="profile-line">
+                            <span class="profile-label">Last Name:</span>
+                            <span id="studentLastName">Loading...</span>
+                        </div>
+                        <div class="profile-line">
+                            <span class="profile-label">Email:</span>
+                            <span id="studentEmail">Loading...</span>
+                        </div>
+                        <div class="profile-line">
+                            <span class="profile-label">Location:</span>
+                            <span id="studentLocation">Loading...</span>
+                        </div>
+                        <div class="profile-line">
+                            <span class="profile-label">Commute Plan:</span>
+                            <span id="studentCommutePlan">Loading...</span>
+                        </div>
+                        <div class="profile-line">
+                            <span class="profile-label">Role:</span>
+                            <span id="studentRole">STUDENT</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-8">
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <div class="card h-100 p-4 text-center">
+                            <div class="muted-text mb-2">Total Buses</div>
+                            <p id="totalBusesCount" class="count-value">0</p>
+                            <small class="muted-text">Records</small>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card h-100 p-4 text-center">
+                            <div class="muted-text mb-2">Active Buses</div>
+                            <p id="activeBusesCount" class="count-value">0</p>
+                            <small class="muted-text">Records</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="mb-4">
+            <div class="section-title">Available Buses</div>
+            <div id="busesGridContainer" class="buses-grid">
+                <div class="empty-state">
+                    <div class="empty-state-icon">📍</div>
+                    <p>Loading buses...</p>
+                </div>
+            </div>
+        </section>
+
+        <div class="footer-note">
+            TigerBoard student area for viewing available buses and commute information.
+        </div>
+    </main>
+</div>
+
+<div class="toast-container position-fixed top-0 end-0 p-3">
+    <div id="statusToast" class="toast align-items-center text-bg-dark border-0" role="alert">
+        <div class="d-flex">
+            <div id="toastMessage" class="toast-body">Message</div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+    const API_BASE_URL = "/api";
+    const STUDENT_ROLE = "STUDENT";
+    const LOGIN_PAGE = "index.html";
+    const REDIRECT_DELAY_MS = 1200;
+    const STORAGE_LOGGED_IN_USER_KEY = "loggedInUser";
+    const STORAGE_USER_ROLE_KEY = "userRole";
+
+    let statusToast;
+    let dom = {};
+    let busListCache = [];
+
+    $(initializeDashboard);
+
+    function initializeDashboard() {
+        cacheDomElements();
+        statusToast = new bootstrap.Toast(document.getElementById("statusToast"));
+        bindEvents();
+        loadDashboardData();
+    }
+
+    function cacheDomElements() {
+        dom = {
+            $refreshButton: $("#refreshButton"),
+            $logoutButton: $("#logoutButton"),
+            $loadingBox: $("#loadingBox"),
+            $toastMessage: $("#toastMessage"),
+            $studentFirstName: $("#studentFirstName"),
+            $studentLastName: $("#studentLastName"),
+            $studentEmail: $("#studentEmail"),
+            $studentLocation: $("#studentLocation"),
+            $studentCommutePlan: $("#studentCommutePlan"),
+            $studentRole: $("#studentRole"),
+            $totalBusesCount: $("#totalBusesCount"),
+            $activeBusesCount: $("#activeBusesCount"),
+            $busesGridContainer: $("#busesGridContainer")
+        };
+    }
+
+    function bindEvents() {
+        dom.$refreshButton.on("click", loadDashboardData);
+        dom.$logoutButton.on("click", logoutUser);
+    }
+
+    // ========== Dashboard Data Loading ==========
+    function loadDashboardData() {
+        const loggedInUser = safeGetLoggedInUser();
+        //
+        // if (!isAuthorizedStudent(loggedInUser)) {
+        //     handleUnauthorizedAccess();
+        //     return;
+        // }
+
+        renderStudentProfile(loggedInUser);
+        loadBusData();
+    }
+
+    function safeGetLoggedInUser() {
+        const rawUser = localStorage.getItem(STORAGE_LOGGED_IN_USER_KEY);
+
+        if (!rawUser) {
+            return null;
+        }
+
+        try {
+            return JSON.parse(rawUser);
+        } catch (error) {
+            localStorage.removeItem(STORAGE_LOGGED_IN_USER_KEY);
+            return null;
+        }
+    }
+
+    function isAuthorizedStudent(loggedInUser) {
+        if (!loggedInUser) {
+            return false;
+        }
+
+        const roleFromUser = (loggedInUser.userRole || "").toUpperCase();
+        const roleFromStorage = (localStorage.getItem(STORAGE_USER_ROLE_KEY) || "").toUpperCase();
+
+        return roleFromUser === STUDENT_ROLE || roleFromStorage === STUDENT_ROLE;
+    }
+
+    // function handleUnauthorizedAccess() {
+    //     showLoading(false);
+    //     showToast("Student login required. Redirecting to login page.");
+    //     setTimeout(redirectToLogin, REDIRECT_DELAY_MS);
+    // }
+
+    function renderStudentProfile(loggedInUser) {
+        if (!loggedInUser) {
+            dom.$studentFirstName.text("Guest");
+            dom.$studentLastName.text("User");
+            dom.$studentEmail.text("N/A");
+            dom.$studentLocation.text("N/A");
+            dom.$studentCommutePlan.text("N/A");
+            dom.$studentRole.text("STUDENT");
+            return;
+        }
+
+        dom.$studentFirstName.text(loggedInUser.firstName || "N/A");
+        dom.$studentLastName.text(loggedInUser.lastName || "N/A");
+        dom.$studentEmail.text(loggedInUser.emailID || loggedInUser.email || "N/A");
+        dom.$studentLocation.text(loggedInUser.location || "N/A");
+        dom.$studentCommutePlan.text(loggedInUser.commutePlan || "N/A");
+        dom.$studentRole.text((loggedInUser.userRole || "STUDENT").toUpperCase());
+    }
+
+    function loadBusData() {
+        showLoading(true);
+
+        $.get(API_BASE_URL + "/buses")
+            .done(function (data) {
+                busListCache = Array.isArray(data) ? data : [];
+                renderBusTable(busListCache);
+                updateBusCounts(busListCache);
+            })
+            .fail(function () {
+                busListCache = [];
+                renderBusTable([]);
+                updateBusCounts([]);
+                showToast("Could not load buses.");
+            })
+            .always(function () {
+                showLoading(false);
+            });
+    }
+
+    function renderBusTable(busList) {
+        if (!Array.isArray(busList) || busList.length === 0) {
+            dom.$busesGridContainer.html(
+                "<div class='empty-state' style='grid-column: 1/-1;'>" +
+                "<div class='empty-state-icon'>🚌</div>" +
+                "<p>No buses available at this time.</p>" +
+                "</div>"
+            );
+            return;
+        }
+
+        let html = "";
+        const loggedInUser = safeGetLoggedInUser();
+        const studentId = loggedInUser ? loggedInUser.id : null;
+
+        for (let i = 0; i < busList.length; i++) {
+            const bus = busList[i];
+            const statusClass = bus.isActive ? "badge-active" : "badge-inactive";
+            const statusText = bus.isActive ? "Active" : "Inactive";
+
+            html += "<div class='card bus-card-item'>";
+            html += "  <div class='bus-card-header'>" + (bus.busNumber || "N/A") + "</div>";
+            html += "  <div class='bus-card-body'>";
+            html += "    <div class='bus-card-detail'>";
+            html += "      <span class='bus-card-label'>Route:</span>";
+            html += "      <span class='bus-card-value'>" + (bus.route || "-") + "</span>";
+            html += "    </div>";
+            html += "    <div class='bus-card-detail'>";
+            html += "      <span class='bus-card-label'>Capacity:</span>";
+            html += "      <span class='bus-card-value'>" + (bus.capacity == null ? "-" : bus.capacity + " seats") + "</span>";
+            html += "    </div>";
+            html += "    <div class='bus-card-status'>";
+            html += "      <span class='bus-badge " + statusClass + "'>" + statusText + "</span>";
+            html += "    </div>";
+            html += "  </div>";
+            html += "  <div class='bus-card-footer'>";
+            html += "    <button class='btn-book' onclick='bookTrip(" + bus.id + ", " + studentId + ")' " + (bus.isActive ? "" : "disabled") + ">+ Book</button>";
+            html += "    <button class='btn-cancel' onclick='cancelTrip(" + studentId + ")'>- Cancel</button>";
+            html += "  </div>";
+            html += "</div>";
+        }
+
+        dom.$busesGridContainer.html(html);
+    }
+
+    function updateBusCounts(busList) {
+        const totalCount = busList.length;
+        const activeCount = busList.filter(bus => bus.isActive === true).length;
+
+        dom.$totalBusesCount.text(totalCount);
+        dom.$activeBusesCount.text(activeCount);
+    }
+
+    function logoutUser() {
+        localStorage.removeItem(STORAGE_LOGGED_IN_USER_KEY);
+        localStorage.removeItem(STORAGE_USER_ROLE_KEY);
+        redirectToLogin();
+    }
+
+    function redirectToLogin() {
+        window.location.href = LOGIN_PAGE;
+    }
+
+    function showLoading(isLoading) {
+        if (isLoading) {
+            dom.$loadingBox.show();
+        } else {
+            dom.$loadingBox.hide();
+        }
+    }
+
+    function showToast(message) {
+        dom.$toastMessage.text(message);
+        statusToast.show();
+    }
+
+    // ========== Trip Booking Functions ==========
+    function bookTrip(busId, studentId) {
+        if (!studentId) {
+            showToast("Please log in to book a trip.");
+            return;
+        }
+
+        const btn = event.target;
+        btn.disabled = true;
+
+        // Fetch current student data
+        $.ajax({
+            url: API_BASE_URL + "/students/" + studentId,
+            method: "GET"
+        }).done(function (student) {
+            // Update with new tripBookedId
+            const updatedStudent = {
+                emailID: student.emailID,
+                firstName: student.firstName,
+                lastName: student.lastName,
+                location: student.location,
+                commutePlan: student.commutePlan,
+                busAssignedId: student.busAssignedId,
+                tripBookedId: busId
+            };
+
+            // Send update
+            $.ajax({
+                url: API_BASE_URL + "/students/" + studentId,
+                method: "PUT",
+                contentType: "application/json",
+                data: JSON.stringify(updatedStudent)
+            }).done(function () {
+                showToast("✓ Trip booked successfully!");
+                loadBusData();
+            }).fail(function () {
+                showToast("✗ Failed to book trip. Please try again.");
+                btn.disabled = false;
+            });
+        }).fail(function () {
+            showToast("✗ Could not fetch student data. Please try again.");
+            btn.disabled = false;
+        });
+    }
+
+    function cancelTrip(studentId) {
+        if (!studentId) {
+            showToast("Please log in to cancel a trip.");
+            return;
+        }
+
+        if (!confirm("Are you sure you want to cancel this trip?")) {
+            return;
+        }
+
+        const btn = event.target;
+        btn.disabled = true;
+
+        // Fetch current student data
+        $.ajax({
+            url: API_BASE_URL + "/students/" + studentId,
+            method: "GET"
+        }).done(function (student) {
+            // Update with null tripBookedId
+            const updatedStudent = {
+                emailID: student.emailID,
+                firstName: student.firstName,
+                lastName: student.lastName,
+                location: student.location,
+                commutePlan: student.commutePlan,
+                busAssignedId: student.busAssignedId,
+                tripBookedId: null
+            };
+
+            // Send update
+            $.ajax({
+                url: API_BASE_URL + "/students/" + studentId,
+                method: "PUT",
+                contentType: "application/json",
+                data: JSON.stringify(updatedStudent)
+            }).done(function () {
+                showToast("✓ Trip cancelled successfully!");
+                loadBusData();
+            }).fail(function () {
+                showToast("✗ Failed to cancel trip. Please try again.");
+                btn.disabled = false;
+            });
+        }).fail(function () {
+            showToast("✗ Could not fetch student data. Please try again.");
+            btn.disabled = false;
+        });
+    }
+</script>
+</body>
+</html>
