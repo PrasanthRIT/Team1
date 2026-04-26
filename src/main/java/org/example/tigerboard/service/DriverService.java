@@ -111,7 +111,7 @@ public class DriverService {
                 .orElseThrow(() -> new RuntimeException("Driver not found with id: " + id));
 
         Optional<Driver> existingByLicense = driverRepository.findByLicenseNumber(request.getLicenseNumber());
-        if (existingByLicense.isPresent() && !existingByLicense.get().getId().equals(id)) {
+        if (existingByLicense.isPresent() && existingByLicense.get().getId() != id) {
             throw new RuntimeException("License number already exists.");
         }
 
@@ -138,39 +138,11 @@ public class DriverService {
         }).toList();
     }
 
+
     public List<Map<String, Object>> getStudentsForDriverBuses(Integer driverId) {
-        Driver driver = driverRepository.findById(driverId)
-                .orElseThrow(() -> new RuntimeException("Driver not found with id: " + driverId));
-
-        List<Integer> busIds = driver.getAssignedBuses()
-                .stream()
-                .map(Bus::getId)
-                .toList();
-
-        if (busIds.isEmpty()) {
-            return new ArrayList<>();
-        }
-
-        List<Student> students = entityManager.createQuery("""
-                SELECT s FROM Student s
-                WHERE s.assignedBus.id IN :busIds
-                """, Student.class)
-                .setParameter("busIds", busIds)
-                .getResultList();
-
-        return students.stream().map(student -> {
-            Map<String, Object> map = new LinkedHashMap<>();
-            map.put("id", student.getId());
-            map.put("firstName", student.getFirstName());
-            map.put("lastName", student.getLastName());
-            map.put("emailID", student.getEmailID());
-            map.put("location", student.getLocation());
-            map.put("commutePlan", student.getCommutePlan());
-            map.put("assignedBusNumber",
-                    student.getAssignedBus() != null ? student.getAssignedBus().getBusNumber() : null);
-            return map;
-        }).toList();
+        return new ArrayList<>();
     }
+
 
     private void applyRequestToDriver(Driver driver, DriverRequest request) {
         driver.setFirstName(request.getFirstName());
