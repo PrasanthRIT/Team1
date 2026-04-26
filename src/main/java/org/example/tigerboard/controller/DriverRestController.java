@@ -27,7 +27,7 @@ public class DriverRestController {
     }
 
     @GetMapping("/{id}")
-    public Driver getDriverById(@PathVariable Long id) {
+    public Driver getDriverById(@PathVariable Integer id) {
         return driverService.getDriverById(id);
     }
 
@@ -42,12 +42,12 @@ public class DriverRestController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Driver> updateDriver(@PathVariable Long id, @RequestBody Driver driver) {
+    public ResponseEntity<Driver> updateDriver(@PathVariable Integer id, @RequestBody Driver driver) {
         return ResponseEntity.ok(driverService.updateDriver(id, driver));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteDriver(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteDriver(@PathVariable Integer id) {
         driverService.deleteDriver(id);
         return ResponseEntity.noContent().build();
     }

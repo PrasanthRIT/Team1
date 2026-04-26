@@ -12,7 +12,7 @@ import org.springframework.data.repository.query.Param;
 import jakarta.transaction.Transactional;
 import java.util.List;
 
-public interface DriverRepository extends JpaRepository<Driver, Long> {
+public interface DriverRepository extends JpaRepository<Driver, Integer> {
 
     List<Driver> findByLicenseNumberContainingIgnoreCase(String licenseNumber);
 
@@ -24,5 +24,5 @@ public interface DriverRepository extends JpaRepository<Driver, Long> {
     @Transactional
     @Modifying
     @Query("UPDATE Driver d SET d.phoneNumber = :phoneNumber WHERE d.id = :id")
-    int updatePhoneNumberById(@Param("id") Long id, @Param("phoneNumber") String phoneNumber);
+    int updatePhoneNumberById(@Param("id") Integer id, @Param("phoneNumber") String phoneNumber);
 }
