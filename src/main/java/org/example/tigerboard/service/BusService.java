@@ -58,7 +58,7 @@ public class BusService {
             existingBus.setIsActive(updatedBus.getIsActive());
             return busRepository.save(existingBus);
         }
-        return null;
+        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Bus not found with id: " + id);
     }
 
     @Transactional
