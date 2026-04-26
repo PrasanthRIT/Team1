@@ -28,7 +28,7 @@ public class Driver extends User {
     private List<Bus> assignedBuses = new ArrayList<>();
 
     public Driver() {
-        setUserRole(Role.DRIVER);
+        setUserRole(Role.Driver);
     }
 
     public String getLicenseNumber() {
