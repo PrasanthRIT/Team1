@@ -1,54 +1,65 @@
 package org.example.tigerboard.model;
 
+import jakarta.persistence.*;
+
+@Entity
+@Table(name="students")
+@PrimaryKeyJoinColumn(name = "id")
 public class Student extends User {
 
     /*
     Enums representing the valid commute plan options for students.
     Restricting commutePlan to predefined constant values only
-     */
+    */
 
     public enum CommutePlan {
-        MORNING_ONLY,   // Student commutes in the morning only
-        EVENING_ONLY,   // Student commutes in the evening only
-        ROUND_TRIP      // Student commutes both morning and evening
-    }
+          MORNING_ONLY,   // Student commutes in the morning only
+          EVENING_ONLY,   // Student commutes in the evening only
+          ROUND_TRIP      // Student commutes both morning and evening
+     }
 
-    //Attributes
-    private String assignedBus;  // stores Bus.id
-
-    private CommutePlan commutePlan; // Restricted to CommutePlan enum values
+    @Column(nullable = false)
     private String location;
 
-    //Default constructor
+    @Column(name = "commute_plan")
+    private CommutePlan commutePlan;
+
+    // Many-to-one unidirectional mapping to Bus entity
+    @ManyToOne
+    @JoinColumn(name = "bus_assigned_id")
+    private Bus busAssigned; // A Foreign key that references Bus(id) which represents the student's bus assigned profile
+
+    @Column(name = "bus_assigned_id", insertable = false, updatable = false)
+    private Integer busAssignedId;
+
+    // Many-to-one unidirectional mapping to Bus entity
+    @ManyToOne
+    @JoinColumn(name = "trip_booked_id")
+    private Bus tripBooked; // A Foreign key that references Bus(id) which is initially stored as Null, but updated when student books or Cancels his/her departure trip
+
+    @Column(name = "trip_booked_id", insertable = false, updatable = false)
+    private Integer tripBookedId;
+
+    //default constructor
     public Student() {
         setUserRole(Role.STUDENT);
     }
 
-    //Constructor
-
-    public Student(String firstName, String lastName, String emailID, String passwordHash,
-                   String assignedBus, CommutePlan commutePlan, String location) {
-        setFirstName(firstName);
-        setLastName(lastName);
-        setEmailID(emailID);
-        setPasswordHash(passwordHash);
-        setUserRole(Role.STUDENT);
-
-        this.assignedBus = assignedBus;
-        this.commutePlan = commutePlan;
+    public Student(String location, CommutePlan commutePlan, Bus busAssigned, Bus tripBooked) {
         this.location = location;
+        this.commutePlan = commutePlan;
+        this.busAssigned = busAssigned;
+        this.tripBooked = tripBooked;
     }
-
 
     //getters and setters
 
-
-    public String getAssignedBus() {
-        return assignedBus;
+    public String getLocation() {
+        return location;
     }
 
-    public void setAssignedBus(String assignedBus) {
-        this.assignedBus = assignedBus;
+    public void setLocation(String location) {
+        this.location = location;
     }
 
     public CommutePlan getCommutePlan() {
@@ -59,27 +70,51 @@ public class Student extends User {
         this.commutePlan = commutePlan;
     }
 
-    public String getLocation() {
-        return location;
+    public Bus getBusAssigned() {
+        return busAssigned;
     }
 
-    public void setLocation(String location) {
-        this.location = location;
+    public void setBusAssigned(Bus busAssigned) {
+        this.busAssigned = busAssigned;
     }
+
+    public Integer getBusAssignedId() {
+        return busAssignedId;
+    }
+
+    public void setBusAssignedId(Integer busAssignedId) {
+        this.busAssignedId = busAssignedId;
+    }
+
+    public Bus getTripBooked() {
+        return tripBooked;
+    }
+
+    public void setTripBooked(Bus tripBooked) {
+        this.tripBooked = tripBooked;
+    }
+
+    public Integer getTripBookedId() {
+        return tripBookedId;
+    }
+
+    public void setTripBookedId(Integer tripBookedId) {
+        this.tripBookedId = tripBookedId;
+    }
+
 
     //toString()
+
 
     @Override
     public String toString() {
         return "Student{" +
-                "id=" + getId() +
-                ", firstName='" + getFirstName() + '\'' +
-                ", lastName='" + getLastName() + '\'' +
-                ", email='" + getEmailID() + '\'' +
-                ", userRole=" + getUserRole() +
-                ", assignedBus='" + assignedBus + '\'' +
+                "location='" + location + '\'' +
                 ", commutePlan=" + commutePlan +
-                ", location='" + location + '\'' +
+                ", busAssigned=" + busAssigned +
+                ", busAssignedId=" + busAssignedId +
+                ", tripBooked=" + tripBooked +
+                ", tripBookedId=" + tripBookedId +
                 '}';
     }
 }
