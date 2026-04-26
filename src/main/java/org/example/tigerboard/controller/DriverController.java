@@ -3,8 +3,8 @@ package org.example.tigerboard.controller;
 // Name: Hussain Aliasgar Dahodwala
 // ID: 418008681
 
-import org.example.tigerboard.dto.DriverRequest;
-import org.example.tigerboard.dto.DriverResponse;
+import org.example.tigerboard.model.Bus;
+import org.example.tigerboard.model.Driver;
 import org.example.tigerboard.service.DriverService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,28 +24,30 @@ public class DriverController {
     }
 
     @GetMapping
-    public List<DriverResponse> getAllDrivers() {
+    public List<Driver> getAllDrivers() {
         return driverService.getAllDrivers();
     }
 
     @GetMapping("/{id}")
-    public DriverResponse getDriverById(@PathVariable Integer id) {
+    public Driver getDriverById(@PathVariable Integer id) {
         return driverService.getDriverById(id);
     }
 
     @GetMapping("/search")
-    public List<DriverResponse> searchDrivers(@RequestParam String keyword) {
-        return driverService.searchDrivers(keyword);
+    public List<Driver> searchDrivers(@RequestParam(required = false) String keyword,
+                                      @RequestParam(required = false) String licenseNumber) {
+        String query = (keyword != null && !keyword.isBlank()) ? keyword : licenseNumber;
+        return driverService.searchDrivers(query);
     }
 
     @PostMapping
-    public ResponseEntity<DriverResponse> createDriver(@RequestBody DriverRequest request) {
-        return ResponseEntity.ok(driverService.createDriver(request));
+    public ResponseEntity<Driver> createDriver(@RequestBody Driver driver) {
+        return ResponseEntity.ok(driverService.createDriver(driver));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<DriverResponse> updateDriver(@PathVariable Integer id, @RequestBody DriverRequest request) {
-        return ResponseEntity.ok(driverService.updateDriver(id, request));
+    public ResponseEntity<Driver> updateDriver(@PathVariable Integer id, @RequestBody Driver driver) {
+        return ResponseEntity.ok(driverService.updateDriver(id, driver));
     }
 
     @DeleteMapping("/{id}")
@@ -55,7 +57,7 @@ public class DriverController {
     }
 
     @GetMapping("/{id}/buses")
-    public List<Map<String, Object>> getAssignedBuses(@PathVariable Integer id) {
+    public List<Bus> getAssignedBuses(@PathVariable Integer id) {
         return driverService.getAssignedBuses(id);
     }
 

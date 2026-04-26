@@ -8,11 +8,13 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
 import jakarta.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 
+@Repository
 public interface DriverRepository extends JpaRepository<Driver, Integer> {
 
     Optional<Driver> findByLicenseNumber(String licenseNumber);
@@ -21,6 +23,8 @@ public interface DriverRepository extends JpaRepository<Driver, Integer> {
     boolean existsByLicenseNumber(String licenseNumber);
 
     boolean existsByEmailID(String emailID);
+
+    List<Driver> findByLicenseNumberContainingIgnoreCase(String licenseNumber);
 
     @Query("""
            SELECT d FROM Driver d
