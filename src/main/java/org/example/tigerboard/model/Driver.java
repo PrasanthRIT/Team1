@@ -48,7 +48,7 @@ public class Driver extends User {
 
     public List<Bus> getAssignedBuses() {
         return assignedBuses;
-        }
+    }
 
     public void setAssignedBuses(List<Bus> assignedBuses) {
         this.assignedBuses = new ArrayList<>();
@@ -63,6 +63,6 @@ public class Driver extends User {
         if (bus != null) {
             this.assignedBuses.remove(bus);
         }
-        }
+    }
 
 }

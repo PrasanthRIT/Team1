@@ -5,12 +5,8 @@ import org.example.tigerboard.model.User;
 import org.example.tigerboard.repository.BusRepository;
 import org.springframework.transaction.annotation.Transactional;
 import org.example.tigerboard.model.Student;
-import org.example.tigerboard.repository.StudentRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.query.Param;
-import org.springframework.http.HttpStatus;
+import org.example.tigerboard.repositories.StudentRepository;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.*;
 

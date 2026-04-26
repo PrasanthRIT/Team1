@@ -1,11 +1,10 @@
 package org.example.tigerboard.service;
 
-import org.example.tigerboard.model.LoginRequest;
-import org.example.tigerboard.model.LoginResponse;
 import org.example.tigerboard.model.User;
 import org.example.tigerboard.repositories.UserRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -17,43 +16,51 @@ public class AuthService {
         this.userRepository = userRepository;
     }
 
-    public LoginResponse login(LoginRequest request) {
-        if (request == null || isBlank(request.getEmailID()) || isBlank(request.getPassword())) {
-            return LoginResponse.failure("Email and password are required");
+    public User login(String emailID, String passwordHash) {
+        if (emailID == null || emailID.trim().isEmpty()) {
+            return null;
         }
 
-        Optional<User> optionalUser = userRepository.findByEmailID(request.getEmailID().trim());
+        if (passwordHash == null || passwordHash.trim().isEmpty()) {
+            return null;
+        }
+
+        Optional<User> optionalUser = userRepository.findByEmailID(emailID);
+
         if (optionalUser.isEmpty()) {
-            return LoginResponse.failure("Invalid email or password");
+            return null;
         }
 
         User user = optionalUser.get();
 
-        if (user.getPasswordHash() == null || !user.getPasswordHash().equals(request.getPassword())) {
-            return LoginResponse.failure("Invalid email or password");
+        if (!user.getPasswordHash().equals(passwordHash)) {
+            return null;
         }
 
-        String role;
-        if (user.getUserRole() != null) {
-            role = user.getUserRole().name();
-        } else {
-            role = null;
-        }
+        return user;
+    }
 
-        return LoginResponse.success(
-                user.getId(),
-                user.getEmailID(),
-                user.getFirstName(),
-                user.getLastName(),
-                role
-        );
+    public Optional<User> getUserByEmailID(String emailID) {
+        return userRepository.findByEmailID(emailID);
     }
 
     public boolean emailExists(String emailID) {
-        return !isBlank(emailID) && userRepository.existsByEmailID(emailID.trim());
+        return userRepository.existsByEmailID(emailID);
     }
 
-    private boolean isBlank(String value) {
-        return value == null || value.trim().isEmpty();
+    public List<User> searchUsers(String keyword) {
+        return userRepository.searchUsers(keyword);
+    }
+
+    public boolean updatePassword(Integer id, String newPasswordHash) {
+        if (id == null || newPasswordHash == null || newPasswordHash.trim().isEmpty()) {
+            return false;
+        }
+
+        return userRepository.updatePasswordById(id, newPasswordHash) > 0;
+    }
+
+    public void deleteUserById(Integer id) {
+        userRepository.deleteById(id);
     }
 }

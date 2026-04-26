@@ -1,4 +1,4 @@
-package org.example.tigerboard.repository;
+package org.example.tigerboard.repositories;
 
 import org.springframework.transaction.annotation.Transactional;
 import org.example.tigerboard.model.Bus;
