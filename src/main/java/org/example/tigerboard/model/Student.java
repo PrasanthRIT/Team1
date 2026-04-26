@@ -41,7 +41,9 @@ public class Student extends User {
     private Integer tripBookedId;
 
     //default constructor
-    public Student(){}
+    public Student() {
+        setUserRole(Role.STUDENT);
+    }
 
     public Student(String location, CommutePlan commutePlan, Bus busAssigned, Bus tripBooked) {
         this.location = location;

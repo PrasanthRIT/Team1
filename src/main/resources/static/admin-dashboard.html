@@ -280,17 +280,17 @@
     }
 
     // ========== Dashboard Data Loading ==========
-    // function loadDashboardData() {
-    //     const loggedInUser = safeGetLoggedInUser();
-    //
-    //     if (!isAuthorizedAdmin(loggedInUser)) {
-    //         handleUnauthorizedAccess();
-    //         return;
-    //     }
-    //
-    //     renderAdminProfile(loggedInUser);
-    //     loadCounts();
-    // }
+    function loadDashboardData() {
+        const loggedInUser = safeGetLoggedInUser();
+
+        if (!isAuthorizedAdmin(loggedInUser)) {
+            handleUnauthorizedAccess();
+            return;
+        }
+
+        renderAdminProfile(loggedInUser);
+        loadCounts();
+    }
 
     function safeGetLoggedInUser() {
         const rawUser = localStorage.getItem(STORAGE_LOGGED_IN_USER_KEY);
@@ -319,11 +319,6 @@
         return roleFromUser === ADMIN_ROLE || roleFromStorage === ADMIN_ROLE;
     }
 
-    // function handleUnauthorizedAccess() {
-    //     showLoading(false);
-    //     showToast("Admin login required. Redirecting to login page.");
-    //     setTimeout(redirectToLogin, REDIRECT_DELAY_MS);
-    // }
 
     function renderAdminProfile(loggedInUser) {
         dom.$adminFirstName.text(loggedInUser.firstName || "N/A");
