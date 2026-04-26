@@ -39,10 +39,10 @@ public class DriverService {
             return;
         }
 
-        Optional<Bus> s7 = busRepository.findByBusNumber("S7");
-        Optional<Bus> d1 = busRepository.findByBusNumber("D1");
+        Bus s7 = getFirstBusByNumber("S7");
+        Bus d1 = getFirstBusByNumber("D1");
 
-        if (s7.isEmpty() || d1.isEmpty()) {
+        if (s7 == null || d1 == null) {
             return;
         }
 
@@ -53,7 +53,7 @@ public class DriverService {
         driver1.setPasswordHash("driver123");
         driver1.setLicenseNumber("A1");
         driver1.setPhoneNumber("050-111-1111");
-        driver1.setAssignedBuses(new ArrayList<>(List.of(s7.get())));
+        driver1.setAssignedBuses(new ArrayList<>(List.of(s7)));
 
         Driver driver2 = new Driver();
         driver2.setFirstName("Manu");
@@ -62,7 +62,7 @@ public class DriverService {
         driver2.setPasswordHash("driver123");
         driver2.setLicenseNumber("DD1");
         driver2.setPhoneNumber("050-222-2222");
-        driver2.setAssignedBuses(new ArrayList<>(List.of(d1.get())));
+        driver2.setAssignedBuses(new ArrayList<>(List.of(d1)));
 
         driverRepository.saveAll(List.of(driver1, driver2));
     }
@@ -206,5 +206,10 @@ public class DriverService {
                 driver.getAssignedBuses().stream().map(Bus::getBusNumber).toList()
         );
         return response;
+    }
+
+    private Bus getFirstBusByNumber(String busNumber) {
+        List<Bus> buses = busRepository.findByBusNumberIgnoreCase(busNumber);
+        return buses.isEmpty() ? null : buses.get(0);
     }
 }
