@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>TigerBoard Bus CRUD</title>
+    <link rel="stylesheet" href="/css/tigerboard-theme.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <style>
+
+        body {
+            background-color: var(--bg-color);
+        }
+
+        .navbar {
+            background-color: var(--card-bg) !important;
+        }
+
+        .tb-brand {
+            color: var(--primary-orange);
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        .btn-tb-primary {
+            background-color: var(--primary-orange);
+            border-color: var(--primary-orange);
+            color: #fff;
+        }
+
+        .btn-tb-primary:hover {
+            background-color: #e06e00;
+            border-color: #e06e00;
+            color: #fff;
+        }
+
+        .btn-tb-outline {
+            border-color: var(--primary-orange);
+            color: var(--primary-orange);
+        }
+
+        .btn-tb-outline:hover {
+            background-color: var(--primary-orange);
+            border-color: var(--primary-orange);
+            color: #fff;
+        }
+
+        .table thead th {
+            background-color: #fff2e8;
+            color: #7a4a1a;
+        }
+
+        .badge-tb-active { background-color: #198754; }
+        .badge-tb-inactive { background-color: #6c757d; }
+    </style>
+</head>
+<body>
+
+<nav class="navbar border-bottom shadow-sm">
+    <div class="container py-2">
+        <a class="tb-brand fs-4" href="/">TigerBoard</a>
+        <div class="d-flex gap-2">
+            <a class="btn btn-sm btn-outline-secondary" href="/">Home</a>
+            <a class="btn btn-sm btn-tb-outline" href="/buses-view.html">View Only</a>
+        </div>
+    </div>
+</nav>
+
+<main class="container py-4">
+    <div class="card border-0 shadow-sm mb-3">
+        <div class="card-body">
+            <h1 class="h4 mb-3">Bus Management (CRUD)</h1>
+            <p class="text-muted mb-3">Use this simple form to create a new bus or update an existing one.</p>
+
+            <form id="busForm" class="row g-3">
+                <input id="busId" type="hidden">
+
+                <div class="col-md-6">
+                    <label for="busNumber" class="form-label">Bus Number</label>
+                    <input id="busNumber" class="form-control" type="text" placeholder="Example: B-101" required>
+                </div>
+
+                <div class="col-md-6">
+                    <label for="capacity" class="form-label">Capacity</label>
+                    <input id="capacity" class="form-control" type="number" min="1" placeholder="Example: 40" required>
+                </div>
+
+                <div class="col-md-6">
+                    <label for="route" class="form-label">Route</label>
+                    <input id="route" class="form-control" type="text" placeholder="Example: RIT to Academic City" required>
+                </div>
+
+                <div class="col-md-6">
+                    <label for="isActive" class="form-label">Status</label>
+                    <select id="isActive" class="form-select">
+                        <option value="true">Active</option>
+                        <option value="false">Inactive</option>
+                    </select>
+                </div>
+
+                <div class="col-12 d-flex gap-2">
+                    <button id="saveBtn" type="submit" class="btn btn-tb-primary">Save Bus</button>
+                    <button id="cancelEditBtn" type="button" class="btn btn-outline-secondary">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="messageBox" class="alert alert-danger d-none py-2" role="alert"></div>
+
+    <div class="card border-0 shadow-sm">
+        <div class="card-body">
+            <div class="d-flex flex-wrap gap-2 mb-3">
+                <label for="searchInput" class="visually-hidden">Search buses</label>
+                <input id="searchInput" class="form-control" style="max-width: 340px" placeholder="Search by bus number or route">
+                <button id="searchBtn" class="btn btn-tb-outline" type="button">Search</button>
+                <button id="refreshBtn" class="btn btn-outline-dark" type="button">Refresh</button>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table table-hover align-middle">
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Bus Number</th>
+                        <th>Capacity</th>
+                        <th>Route</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody id="busTableBody"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</main>
+
+<script>
+
+    // Create a variable list to store rendered bus list in the table,
+    // so we can easily find the selected bus for editing without sending another request to the server.
+    var busListCache = [];
+
+    // updates messagebox with the error text and removes d-none class so its visible
+    function showError(errorText) {
+        var box = $("#messageBox");
+        box.removeClass("d-none")
+            .text(errorText);
+    }
+
+    // makes sure the messagebox is hidden when there is no error
+    function hideError() {
+        $("#messageBox").addClass("d-none").text("");
+    }
+
+    // resets the form to default values for creating a new bus, and clears the hidden busId input
+    function resetForm() {
+        $("#busId").val("");
+        $("#busForm")[0].reset(); // set all inputs to their default values //Simplify this
+        $("#isActive").val("true");    // default to active for new bus
+        $("#saveBtn").text("Save Bus");  // set to Save Bus so the Admin can understand to update the bus
+    }
+
+    // validates the FormData, when editing Bus or adding new bus
+    function validateFormData(formData) {
+        if (formData.busNumber.length === 0) {
+            return "Bus number is required.";
+        }
+
+        // here we check if the number is not Null (we use isFinite) and capacity less than or equal to 0
+        if (!Number.isFinite(formData.capacity) || formData.capacity <= 0) {
+            return "Capacity must be a number greater than 0.";
+        }
+
+        if (formData.route.length === 0) {
+            return "Route is required.";
+        }
+
+        return null;
+    }
+
+    // Get the form data and convert it to key-value format to return to the backend
+    function getFormData() {
+        return {
+            busNumber: $("#busNumber").val().trim(),
+            capacity: Number($("#capacity").val()),
+            route: $("#route").val().trim(),
+            isActive: $("#isActive").val() === "true" // we compare to extract the boolean value
+        };
+    }
+
+
+    function buildRows(busList) {
+        var html = "";
+
+        for (var i = 0; i < busList.length; i++) {
+            var bus = busList[i];
+            var statusClass = bus.isActive ? "badge-tb-active" : "badge-tb-inactive";
+            var statusText = bus.isActive ? "Active" : "Inactive";
+
+            html += "<tr>";
+            html += "<td>" + (bus.id == null ? "-" : bus.id) + "</td>";
+            html += "<td>" + (bus.busNumber || "-") + "</td>";
+            html += "<td>" + (bus.capacity == null ? "-" : bus.capacity) + "</td>";
+            html += "<td>" + (bus.route || "-") + "</td>";
+            html += "<td><span class='badge " + statusClass + "'>" + statusText + "</span></td>";
+            html += "<td>";
+            html += "<button class='btn btn-sm btn-outline-primary me-2 edit-btn' data-id='" + bus.id + "'>Edit</button>";
+            html += "<button class='btn btn-sm btn-outline-danger delete-btn' data-id='" + bus.id + "'>Delete</button>";
+            html += "</td>";
+            html += "</tr>";
+        }
+
+        return html;
+    }
+
+    // This function is a intermediary to buildRows and runs final checks before it builds the table.
+    function renderTable(busList) {
+
+        // compressed version of if-else condition where we ask is busList is an array or else is empty
+        busListCache = Array.isArray(busList) ? busList : [];
+
+        // if busList is not an array or is empty we show a message in the table
+        if (!Array.isArray(busList) || busList.length === 0) {
+            $("#busTableBody").html("<tr><td colspan='6' class='text-center py-4'>No buses found.</td></tr>");
+            return;
+        }
+
+        // if busList is valid then we build the table
+        $("#busTableBody").html(buildRows(busList));
+    }
+
+    // Sends a Get Request to the backend for all the busses
+    function loadAllBuses() {
+        hideError();
+
+        // here we use .ajax but .get is also viable however to be more consistent, we use .ajax for all types of requests in this file
+        $.ajax({url: "/api/buses", method: "GET"}).done(function (data) {
+            renderTable(data);
+        }).fail(function (requestError) {
+            renderTable([]);
+            showError("Could not load buses. HTTP " + (requestError.status || "error") + ".");
+        });
+    }
+
+    function searchBuses() {
+        var keyword = $("#searchInput").val().trim();
+
+        if (keyword.length === 0) {
+            loadAllBuses();
+            return;
+        }
+
+        hideError(); // hides any previous presistent errors
+
+        $.ajax({
+            url: "/api/buses/search?keyword=" + keyword,
+            method: "GET"
+        }).done(function (data) {
+            renderTable(data);
+        }).fail(function (requestError) {
+            renderTable([]);
+            showError("Search failed. HTTP " + (requestError.status || "error") + ".");
+        });
+    }
+
+
+    function saveBus(event) {
+        event.preventDefault(); //prevents page reload and allows us to handle update and add feature using the same button
+
+        var formData = getFormData();
+        var validationError = validateFormData(formData);
+        if (validationError) {
+            showError(validationError);
+            return;
+        }
+
+        hideError();
+
+        var id = $("#busId").val(); // busID is some integer given by hibernate in the backend
+        var isUpdate = id.length > 0; //returns a boolean
+
+        // if hidden id variable is not set then we are adding a bus
+        if (!isUpdate) {
+            $.ajax({
+                url: "/api/buses",
+                method: "POST",
+                contentType: "application/json",
+                data: JSON.stringify(formData)  //formats the data into JSON
+            }).done(function () {
+                resetForm();
+                loadAllBuses();
+            }).fail(function (requestError) {
+                showError("Create failed. HTTP " + (requestError.status || "error") + ".");
+            });
+            return;
+        }
+
+        // else updates an existing record
+        $.ajax({
+            url: "/api/buses/" + id,
+            method: "PUT",
+            contentType: "application/json",
+            data: JSON.stringify(formData)
+        }).done(function () {
+            resetForm();
+            loadAllBuses();
+        }).fail(function (requestError) {
+            showError("Update failed. HTTP " + (requestError.status || "error") + ".");
+        });
+    }
+
+
+    function startEdit(busId) {
+        var id = Number(busId);
+        if (!Number.isFinite(id)) {
+            showError("Invalid bus ID selected.");
+            return;
+        }
+
+        var selectedBus = null; // make an bus placeholder
+
+        // run a simple for-loop that gets the bus from the cache using the Id
+        for (var i = 0; i < busListCache.length; i++) {
+            if (busListCache[i].id === id) {
+                selectedBus = busListCache[i];
+                break;
+            }
+        }
+
+        // if selection fails, show an error
+        if (selectedBus == null) {
+            showError("Bus not found in the current table.");
+            return;
+        }
+
+        // else hide the error box
+        hideError();
+
+        // populate the form with the selectBus data, if some data is missing we set it to a empty string
+        $("#busId").val(selectedBus.id);
+        $("#busNumber").val(selectedBus.busNumber || "");
+        $("#capacity").val(selectedBus.capacity == null ? "" : selectedBus.capacity);
+        $("#route").val(selectedBus.route || "");
+        $("#isActive").val(String(Boolean(selectedBus.isActive)));
+        $("#saveBtn").text("Update Bus"); //change button text to indicate User
+
+        window.scrollTo({ top: 0, behavior: "smooth" }); // moves the user to the form
+    }
+
+
+    function deleteBus(busId) {
+        var id = Number(busId);
+        if (!Number.isFinite(id)) {
+            showError("Invalid bus ID selected.");
+            return;
+        }
+
+        //prompt user that they actually want to delete the bus with that specific Id
+        if (!window.confirm("Delete bus with ID " + id + "?")) {
+            return;
+        }
+
+        hideError();
+
+        $.ajax({
+            url: "/api/buses/" + id,
+            method: "DELETE"
+        }).done(function () {
+            loadAllBuses();
+        }).fail(function (requestError) {
+            showError("Delete failed. HTTP " + (requestError.status || "error") + ".");
+        });
+    }
+
+    // this function runs when the page is completely loaded
+    $(function () {
+
+        $("#busForm").on("submit", saveBus);
+
+        $("#cancelEditBtn").on("click", function () {
+            resetForm();
+            hideError();
+        });
+
+        $("#searchBtn").on("click", searchBuses);
+
+        $("#refreshBtn").on("click", function () {
+            $("#searchInput").val("");
+            loadAllBuses();
+        });
+
+        // this is a quality of life feature, where the function gets the keydown press and if its "Enter" searches Buses
+        $("#searchInput").on("keydown", function (event) {
+            if (event.key === "Enter") {
+                event.preventDefault(); // prevents Enter from submitting
+                searchBuses();
+            }
+        });
+
+        $("#busTableBody").on("click", ".edit-btn", function () {
+            startEdit($(this).data("id")); // "this" refers to the selected edit button
+        });
+
+        $("#busTableBody").on("click", ".delete-btn", function () {
+            deleteBus($(this).data("id")); // "this" refers to the selected delete button
+        });
+
+        resetForm(); //make form empty
+        loadAllBuses();
+    });
+</script>
+</body>
+</html>
+
