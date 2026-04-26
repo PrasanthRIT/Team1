@@ -1,15 +1,9 @@
 package org.example.tigerboard.model;
 
-//Name: Hussain Aliasgar Dahodwala
-//ID: 418008681
+// Name: Hussain Aliasgar Dahodwala
+// ID: 418008681
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +18,7 @@ public class Driver extends User {
     @Column(nullable = false)
     private String phoneNumber;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany
     @JoinTable(
             name = "driver_buses",
             joinColumns = @JoinColumn(name = "driver_id"),
@@ -33,7 +27,7 @@ public class Driver extends User {
     private List<Bus> assignedBuses = new ArrayList<>();
 
     public Driver() {
-        setUserRole(Role.DRIVER);
+        setUserRole(Role.Driver);
     }
 
     public String getLicenseNumber() {
@@ -54,7 +48,7 @@ public class Driver extends User {
 
     public List<Bus> getAssignedBuses() {
         return assignedBuses;
-    }
+        }
 
     public void setAssignedBuses(List<Bus> assignedBuses) {
         this.assignedBuses = new ArrayList<>();
@@ -63,15 +57,12 @@ public class Driver extends User {
         }
     }
 
-    public void addAssignedBus(Bus bus) {
-        if (bus != null && !this.assignedBuses.contains(bus)) {
-            this.assignedBuses.add(bus);
-        }
-    }
+
 
     public void removeAssignedBus(Bus bus) {
         if (bus != null) {
             this.assignedBuses.remove(bus);
         }
-    }
+        }
+
 }

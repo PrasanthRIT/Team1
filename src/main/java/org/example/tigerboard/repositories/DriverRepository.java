@@ -1,7 +1,7 @@
 package org.example.tigerboard.repositories;
 
-//Name: Hussain Aliasgar Dahodwala
-//ID: 418008681
+// Name: Hussain Aliasgar Dahodwala
+// ID: 418008681
 
 import org.example.tigerboard.model.Driver;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -11,18 +11,35 @@ import org.springframework.data.repository.query.Param;
 
 import jakarta.transaction.Transactional;
 import java.util.List;
+import java.util.Optional;
 
 public interface DriverRepository extends JpaRepository<Driver, Integer> {
 
-    List<Driver> findByLicenseNumberContainingIgnoreCase(String licenseNumber);
+    Optional<Driver> findByLicenseNumber(String licenseNumber);
 
-    List<Driver> findByLastNameContainingIgnoreCase(String lastName);
 
-    @Query("SELECT d FROM Driver d WHERE LOWER(d.phoneNumber) LIKE LOWER(CONCAT('%', :phoneNumber, '%'))")
-    List<Driver> searchByPhoneNumber(@Param("phoneNumber") String phoneNumber);
+    boolean existsByLicenseNumber(String licenseNumber);
+
+    boolean existsByEmailID(String emailID);
+
+    @Query("""
+           SELECT d FROM Driver d
+           WHERE LOWER(d.firstName) LIKE LOWER(CONCAT('%', :keyword, '%'))
+              OR LOWER(d.lastName) LIKE LOWER(CONCAT('%', :keyword, '%'))
+              OR LOWER(d.licenseNumber) LIKE LOWER(CONCAT('%', :keyword, '%'))
+           """)
+    List<Driver> searchByKeyword(@Param("keyword") String keyword);
+
+    @Query("""
+           SELECT d FROM Driver d
+           JOIN d.assignedBuses b
+           WHERE b.id = :busId
+           """)
+    List<Driver> findByAssignedBusId(@Param("busId") Integer busId);
 
     @Transactional
     @Modifying
-    @Query("UPDATE Driver d SET d.phoneNumber = :phoneNumber WHERE d.id = :id")
-    int updatePhoneNumberById(@Param("id") Integer id, @Param("phoneNumber") String phoneNumber);
+    @Query("UPDATE Driver d SET d.phoneNumber = :phoneNumber WHERE d.id = :driverId")
+    int updatePhoneNumberById(@Param("driverId") Integer driverId,
+                              @Param("phoneNumber") String phoneNumber);
 }
