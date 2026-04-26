@@ -6,7 +6,9 @@ import org.example.tigerboard.repositories.BusRepository;
 import org.springframework.transaction.annotation.Transactional;
 import org.example.tigerboard.model.Student;
 import org.example.tigerboard.repositories.StudentRepository;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.*;
 
@@ -14,8 +16,8 @@ import java.util.*;
 @Service
 public class StudentService {
 
-    private StudentRepository studentRepository;
-    private BusRepository busRepository;
+    private final StudentRepository studentRepository;
+    private final BusRepository busRepository;
 
     public StudentService(StudentRepository studentRepository, BusRepository busRepository) {
         this.studentRepository = studentRepository;
@@ -34,7 +36,13 @@ public class StudentService {
     }
 
     public Student createStudent(Student student) {
-        student.setTripBooked(null);
+        if (!hasText(student.getPasswordHash())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Password is required when creating a student");
+        }
+
+        student.setUserRole(User.Role.STUDENT);
+        student.setBusAssigned(resolveBus(student.getBusAssigned(), student.getBusAssignedId(), "assigned bus"));
+        student.setTripBooked(resolveBus(student.getTripBooked(), student.getTripBookedId(), "trip booked bus"));
         return studentRepository.save(student);
     }
 
@@ -48,13 +56,17 @@ public class StudentService {
             student.setEmailID(updatedStudent.getEmailID());
             student.setFirstName(updatedStudent.getFirstName());
             student.setLastName(updatedStudent.getLastName());
-            student.setPasswordHash(updatedStudent.getPasswordHash());
+            if (hasText(updatedStudent.getPasswordHash())) {
+                student.setPasswordHash(updatedStudent.getPasswordHash());
+            }
             // Role should remain STUDENT – ignore incoming role
             student.setUserRole(User.Role.STUDENT);
 
             // Update Student-specific fields
             student.setLocation(updatedStudent.getLocation());
             student.setCommutePlan(updatedStudent.getCommutePlan());
+            student.setBusAssigned(resolveBus(updatedStudent.getBusAssigned(), updatedStudent.getBusAssignedId(), "assigned bus"));
+            student.setTripBooked(resolveBus(updatedStudent.getTripBooked(), updatedStudent.getTripBookedId(), "trip booked bus"));
             return studentRepository.save(student);
         }
         return null;
@@ -123,6 +135,28 @@ public class StudentService {
             throw new RuntimeException("Cancel failed.");
         }
         return studentRepository.findById(studentId).orElseThrow();
+    }
+
+    private Bus resolveBus(Bus busFromPayload, Integer busIdFromPayload, String fieldName) {
+        Integer busId = null;
+        if (busFromPayload != null && busFromPayload.getId() != null) {
+            busId = busFromPayload.getId();
+        } else if (busIdFromPayload != null) {
+            busId = busIdFromPayload;
+        }
+
+        if (busId == null) {
+            return null;
+        }
+
+        final Integer resolvedBusId = busId;
+
+        return busRepository.findById(resolvedBusId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid " + fieldName + " ID: " + resolvedBusId));
+    }
+
+    private boolean hasText(String value) {
+        return value != null && !value.trim().isEmpty();
     }
 
 }

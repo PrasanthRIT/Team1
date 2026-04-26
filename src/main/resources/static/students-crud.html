@@ -134,6 +134,11 @@
                 </div>
 
                 <div class="col-md-6">
+                    <label for="passwordHash" class="form-label">Password</label>
+                    <input id="passwordHash" class="form-control" type="password" placeholder="Required for new student">
+                </div>
+
+                <div class="col-md-6">
                     <label for="location" class="form-label">Location</label>
                     <input id="location" class="form-control" type="text" placeholder="Example: Henrietta, NY" required>
                 </div>
@@ -197,11 +202,22 @@
     </div>
 </main>
 
+<div class="position-fixed top-0 end-0 p-3" style="z-index: 1080;">
+    <div id="statusToast" class="toast align-items-center text-bg-dark border-0" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="d-flex">
+            <div id="toastMessage" class="toast-body">Message</div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script>
 
     // Create a variable list to store rendered student list in the table,
     // so we can easily find the selected student for editing without sending another request to the server.
     var studentListCache = [];
+    var statusToast = null;
 
     // updates messagebox with the error text and removes d-none class so its visible
     function showError(errorText) {
@@ -215,6 +231,35 @@
         $("#messageBox").addClass("d-none").text("");
     }
 
+    function showToast(message, type) {
+        if (!statusToast) {
+            return;
+        }
+
+        var toast = $("#statusToast");
+        var toastClass = type === "success" ? "text-bg-success" : "text-bg-danger";
+
+        toast.removeClass("text-bg-success text-bg-danger text-bg-dark").addClass(toastClass);
+        $("#toastMessage").text(message);
+        statusToast.show();
+    }
+
+    function buildHttpErrorMessage(requestError, fallbackText) {
+        var responseJson = requestError && requestError.responseJSON ? requestError.responseJSON : null;
+        var responseMessage = responseJson && responseJson.message ? responseJson.message : "";
+        var responseText = requestError && requestError.responseText ? String(requestError.responseText).trim() : "";
+
+        if (responseMessage.length > 0) {
+            return responseMessage;
+        }
+
+        if (responseText.length > 0 && responseText.length < 180) {
+            return responseText;
+        }
+
+        return fallbackText + " HTTP " + ((requestError && requestError.status) || "error") + ".";
+    }
+
     // resets the form to default values for creating a new student, and clears the hidden studentId input
     function resetForm() {
         $("#studentId").val("");
@@ -222,11 +267,12 @@
         $("#commutePlan").val("");
         $("#busAssignedNumber").val("");
         $("#tripBookedNumber").val("");
+        $("#passwordHash").val("");
         $("#saveBtn").text("Save Student");
     }
 
     // validates the FormData, when editing Student or adding new student
-    function validateFormData(formData) {
+    function validateFormData(formData, isUpdate) {
         if (formData.emailID.length === 0) {
             return "Email ID is required.";
         }
@@ -247,6 +293,10 @@
             return "Commute plan is required.";
         }
 
+        if (!isUpdate && formData.passwordHash.length === 0) {
+            return "Password is required for new students.";
+        }
+
         return null;
     }
 
@@ -256,6 +306,7 @@
             emailID: $("#emailID").val().trim(),
             firstName: $("#firstName").val().trim(),
             lastName: $("#lastName").val().trim(),
+            passwordHash: $("#passwordHash").val().trim(),
             location: $("#location").val().trim(),
             commutePlan: $("#commutePlan").val(),
             busAssignedId: $("#busAssignedNumber").val() ? Number($("#busAssignedNumber").val()) : null,
@@ -313,7 +364,7 @@
             renderTable(data);
         }).fail(function (requestError) {
             renderTable([]);
-            showError("Could not load students. HTTP " + (requestError.status || "error") + ".");
+            showToast(buildHttpErrorMessage(requestError, "Could not load students."), "error");
         });
     }
 
@@ -328,13 +379,14 @@
         hideError();
 
         $.ajax({
-            url: "/api/students/search?keyword=" + keyword,
+            url: "/api/students/search?keyword=" + encodeURIComponent(keyword),
             method: "GET"
         }).done(function (data) {
             renderTable(data);
+            showToast("Search completed.", "success");
         }).fail(function (requestError) {
             renderTable([]);
-            showError("Search failed. HTTP " + (requestError.status || "error") + ".");
+            showToast(buildHttpErrorMessage(requestError, "Search failed."), "error");
         });
     }
 
@@ -342,17 +394,16 @@
     function saveStudent(event) {
         event.preventDefault();
 
+        var id = $("#studentId").val();
+        var isUpdate = id.length > 0;
         var formData = getFormData();
-        var validationError = validateFormData(formData);
+        var validationError = validateFormData(formData, isUpdate);
         if (validationError) {
             showError(validationError);
             return;
         }
 
         hideError();
-
-        var id = $("#studentId").val();
-        var isUpdate = id.length > 0;
 
         // if hidden id variable is not set then we are adding a student
         if (!isUpdate) {
@@ -364,8 +415,9 @@
             }).done(function () {
                 resetForm();
                 loadAllStudents();
+                showToast("Student created successfully.", "success");
             }).fail(function (requestError) {
-                showError("Create failed. HTTP " + (requestError.status || "error") + ".");
+                showToast(buildHttpErrorMessage(requestError, "Create failed."), "error");
             });
             return;
         }
@@ -379,8 +431,9 @@
         }).done(function () {
             resetForm();
             loadAllStudents();
+            showToast("Student updated successfully.", "success");
         }).fail(function (requestError) {
-            showError("Update failed. HTTP " + (requestError.status || "error") + ".");
+            showToast(buildHttpErrorMessage(requestError, "Update failed."), "error");
         });
     }
 
@@ -414,6 +467,7 @@
         $("#lastName").val(selectedStudent.lastName || "");
         $("#location").val(selectedStudent.location || "");
         $("#commutePlan").val(selectedStudent.commutePlan || "");
+        $("#passwordHash").val("");
         // Populate with bus IDs (the form expects numeric IDs)
         $("#busAssignedNumber").val(selectedStudent.busAssignedId == null ? "" : selectedStudent.busAssignedId);
         $("#tripBookedNumber").val(selectedStudent.tripBookedId == null ? "" : selectedStudent.tripBookedId);
@@ -441,13 +495,16 @@
             method: "DELETE"
         }).done(function () {
             loadAllStudents();
+            showToast("Student deleted successfully.", "success");
         }).fail(function (requestError) {
-            showError("Delete failed. HTTP " + (requestError.status || "error") + ".");
+            showToast(buildHttpErrorMessage(requestError, "Delete failed."), "error");
         });
     }
 
     // this function runs when the page is completely loaded
     $(function () {
+
+        statusToast = new bootstrap.Toast(document.getElementById("statusToast"), { delay: 2500 });
 
         $("#studentForm").on("submit", saveStudent);
 

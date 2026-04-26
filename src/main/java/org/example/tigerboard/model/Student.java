@@ -1,5 +1,7 @@
 package org.example.tigerboard.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonProperty.Access;
 import jakarta.persistence.*;
 
 @Entity
@@ -100,6 +102,12 @@ public class Student extends User {
 
     public void setTripBookedId(Integer tripBookedId) {
         this.tripBookedId = tripBookedId;
+    }
+
+    @JsonProperty(access = Access.WRITE_ONLY)
+    @Override
+    public String getPasswordHash() {
+        return super.getPasswordHash();
     }
 
 

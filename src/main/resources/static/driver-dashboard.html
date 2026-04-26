@@ -78,7 +78,7 @@
 <nav class="navbar border-bottom shadow-sm">
     <div class="container py-2">
         <a class="tb-brand fs-4" href="/">TigerBoard Driver</a>
-        <a href="/index.html" class="btn btn-sm btn-outline-secondary">Home</a>
+        <button id="logoutButton" class="btn btn-sm btn-tb-primary">Logout</button>
     </div>
 </nav>
 
@@ -155,13 +155,78 @@
     </div>
 </main>
 
+<!-- Debug panel (hidden by default) to help diagnose API issues locally -->
+<div class="container mt-4 d-none" id="debugPanel">
+    <div class="card page-card">
+        <div class="card-body">
+            <h5 class="card-title section-title">Debug: API Tester</h5>
+            <p class="text-muted">Use these buttons to directly test the driver API endpoints and view raw responses.</p>
+            <div class="mb-3">
+                <button class="btn btn-sm btn-outline-secondary" id="testProfileBtn">Test Profile</button>
+                <button class="btn btn-sm btn-outline-secondary" id="testBusesBtn">Test Buses</button>
+                <button class="btn btn-sm btn-outline-secondary" id="testStudentsBtn">Test Students</button>
+                <button class="btn btn-sm btn-outline-secondary" id="toggleDebugBtn">Hide</button>
+            </div>
+            <pre id="debugOutput" style="max-height:300px;overflow:auto;background:#f8f9fa;padding:12px;border-radius:8px;"></pre>
+        </div>
+    </div>
+</div>
+
 <div class="toast-container position-fixed top-0 end-0 p-3" id="toastContainer"></div>
 
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-    const API_BASE = "http://localhost:8080/api";
-    const driverId = localStorage.getItem("loggedInUserId") || 1;
+    const API_BASE = "/api";
+    const LOGIN_PAGE = "index.html";
+    const SESSION_USER_KEY = "currentUser";
+    const DRIVER_ROLE = "DRIVER";
+    let driverId = null;
+
+    function redirectToLogin() {
+        window.location.href = LOGIN_PAGE;
+    }
+
+    function getSessionUser() {
+        const rawUser = sessionStorage.getItem(SESSION_USER_KEY);
+        if (!rawUser) {
+            return null;
+        }
+
+        try {
+            return JSON.parse(rawUser);
+        } catch (error) {
+            sessionStorage.removeItem(SESSION_USER_KEY);
+            return null;
+        }
+    }
+
+    function isDriver(user) {
+        return user && String(user.userRole || "").toUpperCase() === DRIVER_ROLE;
+    }
+
+    function initAuthGate() {
+        const sessionUser = getSessionUser();
+        if (!isDriver(sessionUser)) {
+            redirectToLogin();
+            return false;
+        }
+
+        const parsedId = Number.parseInt(sessionUser.id, 10);
+        if (!Number.isInteger(parsedId) || parsedId <= 0) {
+            sessionStorage.removeItem(SESSION_USER_KEY);
+            redirectToLogin();
+            return false;
+        }
+
+        driverId = parsedId;
+        return true;
+    }
+
+    function logoutUser() {
+        sessionStorage.removeItem(SESSION_USER_KEY);
+        redirectToLogin();
+    }
 
     function showToast(message, type = "success") {
         const id = "toast-" + Date.now();
@@ -193,9 +258,15 @@
                 <p class="mb-1"><strong>License:</strong> ${driver.licenseNumber}</p>
                 <p class="mb-0"><strong>Phone:</strong> ${driver.phoneNumber}</p>
             `);
-        } catch {
-            $("#profileLoading").text("Could not load profile.");
-            showToast("Failed to load driver profile.", "error");
+        } catch (jqXHR) {
+            console.error('Error loading driver profile', jqXHR);
+            const status = jqXHR && jqXHR.status ? jqXHR.status : 'unknown';
+            const serverMsg = jqXHR && jqXHR.responseJSON && jqXHR.responseJSON.message
+                ? jqXHR.responseJSON.message
+                : (jqXHR && jqXHR.responseText ? jqXHR.responseText : null);
+            $("#profileLoading").text(`Could not load profile (status: ${status})` + (serverMsg ? ` - ${serverMsg}` : ''));
+            const message = serverMsg || 'Failed to load driver profile.';
+            showToast(message, "error");
         }
     }
 
@@ -218,9 +289,15 @@
                     <td>${bus.isActive ? "Active" : "Inactive"}</td>
                 </tr>
             `).join(""));
-        } catch {
-            $("#busesLoading").text("Could not load buses.");
-            showToast("Failed to load assigned buses.", "error");
+        } catch (jqXHR) {
+            console.error('Error loading assigned buses', jqXHR);
+            const status = jqXHR && jqXHR.status ? jqXHR.status : 'unknown';
+            const serverMsg = jqXHR && jqXHR.responseJSON && jqXHR.responseJSON.message
+                ? jqXHR.responseJSON.message
+                : (jqXHR && jqXHR.responseText ? jqXHR.responseText : null);
+            $("#busesLoading").text(`Could not load buses (status: ${status})` + (serverMsg ? ` - ${serverMsg}` : ''));
+            const message = serverMsg || 'Failed to load assigned buses.';
+            showToast(message, "error");
         }
     }
 
@@ -248,9 +325,15 @@
                     <td>${student.assignedBusNumber ?? ""}</td>
                 </tr>
             `).join(""));
-        } catch {
-            $("#studentsLoading").text("Could not load students.");
-            showToast("Failed to load students in assigned buses.", "error");
+        } catch (jqXHR) {
+            console.error('Error loading students for driver buses', jqXHR);
+            const status = jqXHR && jqXHR.status ? jqXHR.status : 'unknown';
+            const serverMsg = jqXHR && jqXHR.responseJSON && jqXHR.responseJSON.message
+                ? jqXHR.responseJSON.message
+                : (jqXHR && jqXHR.responseText ? jqXHR.responseText : null);
+            $("#studentsLoading").text(`Could not load students (status: ${status})` + (serverMsg ? ` - ${serverMsg}` : ''));
+            const message = serverMsg || 'Failed to load students in assigned buses.';
+            showToast(message, "error");
         }
     }
 
@@ -261,9 +344,56 @@
     });
 
     $(document).ready(function() {
+        if (!initAuthGate()) {
+            return;
+        }
+
+        $("#logoutButton").on("click", logoutUser);
         loadProfile();
         loadAssignedBuses();
         loadStudents();
+        // Show debug panel if you hold Shift while reloading (convenience for devs)
+        if (sessionStorage.getItem('showDebug') === '1') {
+            $('#debugPanel').removeClass('d-none');
+        }
+    });
+
+    function printDebug(obj) {
+        try {
+            $('#debugOutput').text(JSON.stringify(obj, null, 2));
+        } catch (e) {
+            $('#debugOutput').text(String(obj));
+        }
+    }
+
+    async function testApi(path) {
+        $('#debugPanel').removeClass('d-none');
+        try {
+            const res = await $.ajax({ url: path, method: 'GET' });
+            printDebug({ status: 200, body: res });
+            showToast('API call successful', 'success');
+        } catch (jqXHR) {
+            const status = jqXHR && jqXHR.status ? jqXHR.status : 'unknown';
+            const text = jqXHR && jqXHR.responseText ? jqXHR.responseText : jqXHR;
+            printDebug({ status: status, error: text });
+            console.error('API test error', jqXHR);
+            showToast('API call failed (see debug panel)', 'error');
+        }
+    }
+
+    $('#testProfileBtn').on('click', function() { testApi(`${API_BASE}/drivers/${driverId}`); });
+    $('#testBusesBtn').on('click', function() { testApi(`${API_BASE}/drivers/${driverId}/buses`); });
+    $('#testStudentsBtn').on('click', function() { testApi(`${API_BASE}/drivers/${driverId}/students`); });
+    $('#toggleDebugBtn').on('click', function() {
+        if ($('#debugPanel').hasClass('d-none')) {
+            $('#debugPanel').removeClass('d-none');
+            sessionStorage.setItem('showDebug', '1');
+            $(this).text('Hide');
+        } else {
+            $('#debugPanel').addClass('d-none');
+            sessionStorage.removeItem('showDebug');
+            $(this).text('Show');
+        }
     });
 </script>
 </body>
