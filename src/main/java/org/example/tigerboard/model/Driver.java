@@ -3,14 +3,19 @@ package org.example.tigerboard.model;
 //Name: Hussain Aliasgar Dahodwala
 //ID: 418008681
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.Table;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "drivers")
+@Table(name = "Drivers")
 public class Driver extends User {
 
     @Column(nullable = false, unique = true)
@@ -18,25 +23,18 @@ public class Driver extends User {
 
     @Column(nullable = false)
     private String phoneNumber;
-    private List<String> assignedBusNumbers;
 
-    @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(
-            name = "driver_assigned_buses",
-            joinColumns = @JoinColumn(name = "driver_id")
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "driver_buses",
+            joinColumns = @JoinColumn(name = "driver_id"),
+            inverseJoinColumns = @JoinColumn(name = "bus_id")
     )
-    @Column(name = "bus_number")
-    private List<String> assignedBusNumbers = new ArrayList<>();
-
-    @Transient
-    private User user;
+    private List<Bus> assignedBuses = new ArrayList<>();
 
     public Driver() {
         setUserRole(Role.DRIVER);
-        this.assignedBusNumbers = new ArrayList<String>();
     }
-
-
 
     public String getLicenseNumber() {
         return licenseNumber;
@@ -54,46 +52,26 @@ public class Driver extends User {
         this.phoneNumber = phoneNumber;
     }
 
-    public List<String> getAssignedBusNumbers() {
-        return assignedBusNumbers;
+    public List<Bus> getAssignedBuses() {
+        return assignedBuses;
     }
 
-    public void setAssignedBusNumbers(List<String> assignedBusNumbers) {
-        this.assignedBusNumbers = assignedBusNumbers == null
-                ? new ArrayList<>()
-                : assignedBusNumbers;
-    }
-
-    @JsonIgnore
-    public User getUser() {
-        if (user == null) {
-            User temp = new User();
-            if (id != null) {
-                temp.setId(id.intValue());
-            }
-            temp.setFirstName(firstName);
-            temp.setLastName(lastName);
-            temp.setEmailID(emailID);
-            temp.setUserRole(User.Role.Driver);
-            user = temp;
-        }
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-        if (user != null) {
-            this.firstName = user.getFirstName();
-            this.lastName = user.getLastName();
-            this.emailID = user.getEmailID();
+    public void setAssignedBuses(List<Bus> assignedBuses) {
+        this.assignedBuses = new ArrayList<>();
+        if (assignedBuses != null) {
+            this.assignedBuses = assignedBuses;
         }
     }
 
-    private void syncTransientUser() {
-        if (this.user != null) {
-            this.user.setFirstName(this.firstName);
-            this.user.setLastName(this.lastName);
-            this.user.setEmailID(this.emailID);
+    public void addAssignedBus(Bus bus) {
+        if (bus != null && !this.assignedBuses.contains(bus)) {
+            this.assignedBuses.add(bus);
+        }
+    }
+
+    public void removeAssignedBus(Bus bus) {
+        if (bus != null) {
+            this.assignedBuses.remove(bus);
         }
     }
 }

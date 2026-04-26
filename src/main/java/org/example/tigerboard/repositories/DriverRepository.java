@@ -1,4 +1,4 @@
-package org.example.tigerboard.repository;
+package org.example.tigerboard.repositories;
 
 //Name: Hussain Aliasgar Dahodwala
 //ID: 418008681
